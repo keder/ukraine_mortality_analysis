@@ -2,25 +2,25 @@
 # Georgia State University
 # akirpich@gsu.edu
 
-# 2021.08.26. ask
+# 2021.11.24. ask
 rm(list=ls(all=TRUE))
 # Extra check that we deleted everything.
 # 20 Digits Precision Representation
 # options(scipen=20)
 
-# Library to perform colum medians and other usefull matrix algebra computations. 
+# Library to perform column medians and other useful matrix algebra computations. 
 # library(matrixStats)
 
 # Library for the latex exports in the nice format.
 # library(xtable)
 
-# library(Matrix) for blog-diagonal matrixes creation and other matrix manipulations.
+# library(Matrix) for blog-diagonal matrices creation and other matrix manipulations.
 # library(Matrix)
 
-# This package is requred to run in RScript mode rathen than interactive mode.
+# This package is required to run in RScript mode rather than interactive mode.
 # library(methods)
 
-# Loading package requred to read library(readxl)
+# Loading package required to read library(readxl)
 # library(readxl)
 
 # Loading library(rjson) for json files. 
@@ -53,7 +53,6 @@ library("prophet")
 
 
 # Setting the correct working directory.
-# Debugging step to run on local machine instead instead of the code right above used for HiPer Gator.
 work_directory_path  <- "C:/Users/akirpich/Google Drive/2021 Kirpich-Belarus Mortality Analysis"
 
 

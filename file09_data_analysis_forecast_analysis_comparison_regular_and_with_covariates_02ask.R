@@ -2,7 +2,7 @@
 # Georgia State University
 # akirpich@gsu.edu
 
-# 2021.05.05. ask
+# 2021.11.24. ask
 rm(list=ls(all=TRUE))
 # Extra check that we deleted everything.
 # 20 Digits Precision Representation
@@ -10,7 +10,6 @@ rm(list=ls(all=TRUE))
 
 
 # Setting the correct working directory.
-# Debugging step to run on local machine instead instead of the code right above used for HiPer Gator.
 work_directory_path  <- "C:/Users/akirpich/Google Drive/2021 Kirpich-Belarus Death Rates"
 
 # Setting up the working directory.
@@ -25,7 +24,7 @@ getwd()
 # Daily COVID-19 incidence data
 load( file = paste("R_Data/belarus_incidence_data_frame_covid19.RData") )
 
-# Cummulative data: incidence, recovered, and mortality
+# Cumulative data: incidence, recovered, and mortality
 load( file = paste("R_Data/belarus_statistics_data_frame_covid19.RData") )
 
 # Monthly COVID-19 mortality data

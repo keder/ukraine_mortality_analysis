@@ -2,22 +2,22 @@
 # Georgia State University
 # akirpich@gsu.edu
 
-# 2021.08.26. ask
+# 2021.11.24. ask
 rm(list=ls(all=TRUE))
 # Extra check that we deleted everything.
 # 20 Digits Precision Representation
 # options(scipen=20)
 
-# Library to perform colum medians and other usefull matrix algebra computations. 
+# Library to perform column medians and other useful matrix algebra computations. 
 library(matrixStats)
 
 # Library for the latex exports in the nice format.
 library(xtable)
 
-# library(Matrix) for blog-diagonal matrixes creation and other matrix manipulations.
+# library(Matrix) for blog-diagonal matrices creation and other matrix manipulations.
 library(Matrix)
 
-# This package is requred to run in RScript mode rathen than interactive mode.
+# This package is required to run in RScript mode rather than interactive mode.
 library(methods)
 
 # Loading package requred to read library(readxl)
@@ -35,91 +35,21 @@ library(tm)
 
 # Libraries to read hml pages
 library(XML)
-library(RCurl)
+# library(RCurl)
 library(rlist)
 
+# Alternative way to read html tables
+library(htmltab)
 
 
 
 # Setting the correct working directory.
-# Debugging step to run on local machine instead instead of the code right above used for HiPer Gator.
 work_directory_path  <- "C:/Users/akirpich/Google Drive/2021 Kirpich-Belarus Mortality Analysis"
 
 # Setting up the working directory.
 setwd(work_directory_path)
 # Extra check
 getwd()
-
-
-# Reading web piece
-tables_http_addrees <- "https://www.belstat.gov.by/ofitsialnaya-statistika/ssrd-mvf_2/natsionalnaya-stranitsa-svodnyh-dannyh/naselenie_6/dinamika-chislennosti-naseleniya/"
-theurl_unstructured <- getURL(tables_http_addrees,.opts = list(ssl.verifypeer = FALSE) )
-tables_extract <- readHTMLTable(theurl_unstructured)
-tables_extract <- list.clean(tables_extract, fun = is.null, recursive = FALSE)
-# n.rows <- unlist(lapply(tables_extract, function(t) dim(t)[1]))
-
-# Parsing rows of interest
-html_table_of_interest_parse <- data.frame(tables_extract)[c(4:23), c(1:2) ]
-names(html_table_of_interest_parse) <- c("Year", "Population_html")
-
-# Fixing data
-html_table_of_interest_parse$Year            <- as.numeric( as.character(html_table_of_interest_parse$Year) )
-html_table_of_interest_parse$Population_html <- as.character( gsub(",", ".", x = html_table_of_interest_parse$Population_html, fixed = TRUE ) )
-html_table_of_interest_parse$Population_html <- as.numeric( gsub(" ", "", x = html_table_of_interest_parse$Population_html, fixed = TRUE) )
-
-
-
-
-# Reading dowloaded data
-# data relative path
-demographics_belarus_data_relative_path <- "Data/Population/Chisl_po_obl-21.xlsx"
-# File locaction "https://www.belstat.gov.by/upload-belstat/upload-belstat-excel/Oficial_statistika/Godovwe/Chisl_po_obl-21.xlsx"
-
-
-# Reading data
-demographics_belarus_data <- read_excel( path = demographics_belarus_data_relative_path )
-demographics_belarus_data_frame <- data.frame(demographics_belarus_data)[ ,  ]
-demographics_belarus_data_frame <- data.frame(demographics_belarus_data)[ -c(1), -c(1) ]
-dim(demographics_belarus_data_frame)
-head(demographics_belarus_data_frame)
-
-
-# Parsing rows of interest
-xlsx_table_of_interest_parse <- data.frame(t(demographics_belarus_data_frame)[ ,c(1,3)])
-rownames(xlsx_table_of_interest_parse ) <- NULL
-names(xlsx_table_of_interest_parse) <- c("Year", "Population_xlsx")
-
-xlsx_table_of_interest_parse$Year       <- as.numeric(as.character(xlsx_table_of_interest_parse$Year))
-xlsx_table_of_interest_parse$Population_xlsx <- as.numeric(as.character(xlsx_table_of_interest_parse$Population_xlsx))
-
-
-
-
-# Merging two datasets
-demographics_table_parse <- merge( xlsx_table_of_interest_parse, html_table_of_interest_parse, by = "Year", all = TRUE )
-demographics_table_parse
-
-# Removing the last redundant row
-demographics_table_parse <- demographics_table_parse[ which(demographics_table_parse$Year %in% c(1991:2021)), ]
-
-
-
-# Mathcing check
-sum( na.omit(demographics_table_parse$Population_xlsx - demographics_table_parse$Population_html))
-
-# Creatin a column for population
-demographics_table_parse$Population <- rep( 0, dim(demographics_table_parse)[1] )
-
-# Demographics fix
-demographics_table_parse$Population[ which(!is.na(demographics_table_parse$Population_xlsx))] <- demographics_table_parse$Population_xlsx[which(!is.na(demographics_table_parse$Population_xlsx))]
-demographics_table_parse$Population[ which(!is.na(demographics_table_parse$Population_html))] <- demographics_table_parse$Population_html[which(!is.na(demographics_table_parse$Population_html))]
-
-
-
-# Saving the data as RData file.
-save( demographics_table_parse, file = paste("R_Data/demographics_table_parse.RData") )
-
-
 
 
 # Fix 2021.04.27

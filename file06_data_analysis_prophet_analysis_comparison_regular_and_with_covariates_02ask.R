@@ -2,7 +2,7 @@
 # Georgia State University
 # akirpich@gsu.edu
 
-# 2021.04.29. ask
+# 2021.11.24. ask
 rm(list=ls(all=TRUE))
 # Extra check that we deleted everything.
 # 20 Digits Precision Representation
@@ -10,8 +10,7 @@ rm(list=ls(all=TRUE))
 
 
 # Setting the correct working directory.
-# Debugging step to run on local machine instead instead of the code right above used for HiPer Gator.
-work_directory_path  <- "C:/Users/akirpich/Google Drive/2021 Kirpich-Belarus Death Rates"
+work_directory_path  <- "C:/Users/akirpich/Google Drive/2021 Kirpich-Belarus Mortality Analysis"
 
 # Setting up the working directory.
 setwd(work_directory_path)

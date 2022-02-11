@@ -2,7 +2,7 @@
 # Georgia State University
 # akirpich@gsu.edu
 
-# 2021.08.26. ask
+# 2021.11.24. ask
 rm(list=ls(all=TRUE))
 # Extra check that we deleted everything.
 # 20 Digits Precision Representation
@@ -28,9 +28,7 @@ library(rjson)
 
 
 # Setting the correct working directory.
-# Debugging step to run on local machine instead instead of the code right above used for HiPer Gator.
-# work_directory_path  <- "C:/Users/akirpich/Google Drive/2021 Kirpich-Ukraine Mortality Analysis"
-work_directory_path  <- "C:/Users/akirpich/Google Drive/2021 Kirpich-Ukraine Mortality Analysis"
+work_directory_path  <- "C:/Users/akirpich/Google Drive/2021 Kirpich-Belarus Mortality Analysis"
 
 # Setting up the working directory.
 setwd(work_directory_path)
@@ -53,7 +51,7 @@ json2_data_relative_path <- "Data/Other/onliner.scrap2.json"
 
 # data relative path
 belarus_un_mortality_relative_path  <- "Data/Death/Belarus_UNdata_Export_20210415_203326048/UNdata_Export_20210415_203326048.csv"
-# belarus_un_mortality_relative_path  <- "Data/Death/Belarus_UNdata_Export_20210415_203326048/UNdata_Export_20210415_203326048_tweaked.csv"
+
 
 
 
