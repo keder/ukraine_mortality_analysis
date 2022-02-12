@@ -27,34 +27,22 @@ library(readxl)
 library(rjson)
 
 
-# Setting the correct working directory.
-work_directory_path <- "C:/Users/akirpich/Google Drive/2021 Kirpich-Belarus Mortality Analysis"
-
-
-# Setting up the working directory.
-setwd(work_directory_path)
-# Extra check
-getwd()
-
-# Listening current variables
-ls()
-
 
 # Loding data saved in file01
 
 # Reading COVID-19 data from onliner.by
 
 # Reading the data in R
-load(file = paste("R_Data/belarus_incidence_data_frame_covid19.RData"))
+load(file = paste("../R_Data/belarus_incidence_data_frame_covid19.RData"))
 # Reading the data in R
-load(file = paste("R_Data/belarus_statistics_data_frame_covid19.RData"))
+load(file = paste("../R_Data/belarus_statistics_data_frame_covid19.RData"))
 
 # Reading mortailty UN Data
 
 # Reading the RAW data in R
-load(file = paste("R_Data/belarus_un_mortality_data.RData"))
+load(file = paste("../R_Data/belarus_un_mortality_data.RData"))
 # Reading the PROCESSED data in R
-load(file = paste("R_Data/monthly_death_data_frame_covid19.RData"))
+load(file = paste("../R_Data/monthly_death_data_frame_covid19.RData"))
 
 ls()
 
@@ -75,73 +63,65 @@ dim(belarus_un_mortality_data_truncated_month)
 # 2015-2019
 belarus_un_mortality_data_truncated_month_2015_2019 <- belarus_un_mortality_data_truncated_month[which(belarus_un_mortality_data_truncated_month$Year < 2020), ]
 # Only 2020
-belarus_un_mortality_data_truncated_month_2020 <- belarus_un_mortality_data_truncated_month[which(belarus_un_mortality_data_truncated_month$Year == 2020), ]
+belarus_un_mortality_data_truncated_month_2020 <- belarus_un_mortality_data_truncated_month[which(belarus_un_mortality_data_truncated_month$Year >= 2020), ]
 
 data_month_count <- 14
 
 
 # Creating p-scores to be saved.
+p_scores_frame_five_length = dim(belarus_un_mortality_data_truncated_month_2020)[1]
 p_scores_frame_five <- data.frame(
-      Month = month.name,
-      Year = c(2020, 2021),
-      average_five_years = rep(0, length(month.name)),
-      Value = rep(0, length(month.name)),
-      p_score_value = rep(0, length(month.name)),
-      month_text = rep("X", length(month.name))
+      Month = belarus_un_mortality_data_truncated_month_2020$Month,
+      Year = belarus_un_mortality_data_truncated_month_2020$Year,
+      average_five_years = rep(0, p_scores_frame_five_length),
+      Value = rep(0, p_scores_frame_five_length),
+      p_score_value = rep(0, p_scores_frame_five_length),
+      month_text = rep("X", p_scores_frame_five_length)
 )
 
 
 
 
 # Computing non-parametrix p-scores
-total_month <- 0
-for (y in c(2020, 2021)) {
-      for (m in month.name[c(1:12)])
-      {
-            # Debuggins step
-            # m <- month.name[1]
+for (i in 1:nrow(belarus_un_mortality_data_truncated_month_2020)) {
+      # Debuggins step
+      # m <- month.name[1]
+      item = belarus_un_mortality_data_truncated_month_2020[i,]
 
-            # Getting current month for the past five years
-            month_current_frame_2015_2019 <- belarus_un_mortality_data_truncated_month_2015_2019[which(belarus_un_mortality_data_truncated_month_2015_2019$Month == m &
-                  belarus_un_mortality_data_truncated_month_2020$Year == y), ]
+      # Getting current month for the past five years
+      month_current_frame_2015_2019 <- belarus_un_mortality_data_truncated_month_2015_2019[which(belarus_un_mortality_data_truncated_month_2015_2019$Month == item$Month), ]
 
-            # Getting current month for 2020
-            month_current_frame_2020 <- belarus_un_mortality_data_truncated_month_2020[which(belarus_un_mortality_data_truncated_month_2020$Month == m &
-                  belarus_un_mortality_data_truncated_month_2020$Year == y), ]
+      # Saving the average value
+      p_scores_frame_five[which(p_scores_frame_five$Month == item$Month & p_scores_frame_five$Year == item$Year), "Value"] <- item$Value
+      value_current <- item$Value
 
+      # Saving the average value
+      p_scores_frame_five[which(p_scores_frame_five$Month == item$Month & p_scores_frame_five$Year == item$Year), "average_five_years"] <- mean(month_current_frame_2015_2019$Value)
+      mean_current <- mean(month_current_frame_2015_2019$Value)
 
-            # Saving the average value
-            p_scores_frame_five[which(p_scores_frame_five$Month == m), "Value"] <- month_current_frame_2020$Value
-            value_current <- month_current_frame_2020$Value
-
-            # Saving the average value
-            p_scores_frame_five[which(p_scores_frame_five$Month == m), "average_five_years"] <- mean(month_current_frame_2015_2019$Value)
-            mean_current <- mean(month_current_frame_2015_2019$Value)
-
-
-            # Computing p-scores for non-parametric
-            p_scores_frame_five[which(p_scores_frame_five$Month == m), "p_score_value"] <- 100 * (value_current - mean_current) / mean_current
-
-            total_month <- total_month + 1
-      }
+      # Computing p-scores for non-parametric
+      p_scores_frame_five[which(p_scores_frame_five$Month == item$Month & p_scores_frame_five$Year == item$Year), "p_score_value"] <- 100 * (value_current - mean_current) / mean_current
 }
 
 
 
 # Fix 2021.04.26.
-temp_month_number <- match(p_scores_frame_five$Month, month.name)
+for (i in 1:nrow(p_scores_frame_five))
+{
+      temp_month_number <- match(p_scores_frame_five[i,]$Month, month.name)
 
-temp_month_number_text_only <- as.character(temp_month_number)
-temp_month_number_text <- temp_month_number_text_only
-temp_month_number_text[which(temp_month_number < 10)] <- paste0("0", temp_month_number_text_only[which(temp_month_number < 10)])
-# Fixing month
-p_scores_frame_five$month_text <- as.character(p_scores_frame_five$month_text)
-p_scores_frame_five$month_text <- paste0("2020-", temp_month_number_text)
+      temp_month_number_text_only <- as.character(temp_month_number)
+      temp_month_number_text <- temp_month_number_text_only
+      temp_month_number_text[which(temp_month_number < 10)] <- paste0("0", temp_month_number_text_only[which(temp_month_number < 10)])
+      # Fixing month
+      p_scores_frame_five[i,]$month_text <- as.character(p_scores_frame_five[i,]$month_text)
+      p_scores_frame_five[i,]$month_text <- paste0(p_scores_frame_five[i,]$Year, "-", temp_month_number_text)
+}
 
 
 # Fix 2021.05.06
 # Saving the data as RData file.
-save(p_scores_frame_five, file = paste("R_Data/p_scores_frame_five.RData"))
+save(p_scores_frame_five, file = paste("../R_Data/p_scores_frame_five.RData"))
 
 
 
@@ -160,97 +140,86 @@ dim(belarus_un_mortality_data_truncated_month)
 # 2011-2019
 belarus_un_mortality_data_truncated_month_2011_2019 <- belarus_un_mortality_data_truncated_month[which(belarus_un_mortality_data_truncated_month$Year < 2020), ]
 # Only 2020
-belarus_un_mortality_data_truncated_month_2020 <- belarus_un_mortality_data_truncated_month[which(belarus_un_mortality_data_truncated_month$Year == 2020), ]
+belarus_un_mortality_data_truncated_month_2020 <- belarus_un_mortality_data_truncated_month[which(belarus_un_mortality_data_truncated_month$Year >= 2020), ]
 
 
 
 # Creating p-scores to be saved.
+p_scores_frame_five_length = dim(belarus_un_mortality_data_truncated_month_2020)[1]
 p_scores_frame_eight <- data.frame(
-      Month = month.name,
-      average_eight_years = rep(0, length(month.name)),
-      Value = rep(0, length(month.name)),
-      p_score_value = rep(0, length(month.name)),
-      month_text = rep("X", length(month.name))
+      Month = belarus_un_mortality_data_truncated_month_2020$Month,
+      Year = belarus_un_mortality_data_truncated_month_2020$Year,
+      average_eight_years = rep(0, p_scores_frame_five_length),
+      Value = rep(0, p_scores_frame_five_length),
+      p_score_value = rep(0, p_scores_frame_five_length),
+      month_text = rep("X", p_scores_frame_five_length)
 )
 
 
 
 # Computing non-parametrix p-scores
-for (m in month.name[c(1:6)])
+for (i in 1:nrow(belarus_un_mortality_data_truncated_month_2020))
 {
       # Debuggins step
       # m <- month.name[1]
+      item = belarus_un_mortality_data_truncated_month_2020[i,]
 
       # Getting current month for the past eight years
-      month_current_frame_2011_2019 <- belarus_un_mortality_data_truncated_month_2011_2019[which(belarus_un_mortality_data_truncated_month_2011_2019$Month == m), ]
-
-      # Getting current month for 2020
-      month_current_frame_2020 <- belarus_un_mortality_data_truncated_month_2020[which(belarus_un_mortality_data_truncated_month_2020$Month == m), ]
-
+      month_current_frame_2011_2019 <- belarus_un_mortality_data_truncated_month_2011_2019[which(belarus_un_mortality_data_truncated_month_2011_2019$Month == item$Month), ]
 
       # Saving the average value
-      p_scores_frame_eight[which(p_scores_frame_eight$Month == m), "Value"] <- month_current_frame_2020$Value
-      value_current <- month_current_frame_2020$Value
+      p_scores_frame_eight[which(p_scores_frame_five$Month == item$Month & p_scores_frame_five$Year == item$Year), "Value"] <- item$Value
+      value_current <- item$Value
 
       # Saving the average value
-      p_scores_frame_eight[which(p_scores_frame_eight$Month == m), "average_eight_years"] <- mean(month_current_frame_2011_2019$Value)
+      p_scores_frame_eight[which(p_scores_frame_five$Month == item$Month & p_scores_frame_five$Year == item$Year), "average_eight_years"] <- mean(month_current_frame_2011_2019$Value)
       mean_current <- mean(month_current_frame_2011_2019$Value)
 
-
       # Computing p-scores for non-parametric
-      p_scores_frame_eight[which(p_scores_frame_eight$Month == m), "p_score_value"] <- 100 * (value_current - mean_current) / mean_current
+      p_scores_frame_eight[which(p_scores_frame_five$Month == item$Month & p_scores_frame_five$Year == item$Year), "p_score_value"] <- 100 * (value_current - mean_current) / mean_current
 }
 
 
 
 # Fix 2021.04.26.
-temp_month_number <- match(p_scores_frame_eight$Month, month.name)
+for (i in 1:nrow(p_scores_frame_eight))
+{
+      temp_month_number <- match(p_scores_frame_eight[i,]$Month, month.name)
 
-temp_month_number_text_only <- as.character(temp_month_number)
-temp_month_number_text <- temp_month_number_text_only
-temp_month_number_text[which(temp_month_number < 10)] <- paste0("0", temp_month_number_text_only[which(temp_month_number < 10)])
-# Fixing month
-p_scores_frame_eight$month_text <- as.character(p_scores_frame_eight$month_text)
-p_scores_frame_eight$month_text <- paste0("2020-", temp_month_number_text)
-
+      temp_month_number_text_only <- as.character(temp_month_number)
+      temp_month_number_text <- temp_month_number_text_only
+      temp_month_number_text[which(temp_month_number < 10)] <- paste0("0", temp_month_number_text_only[which(temp_month_number < 10)])
+      # Fixing month
+      p_scores_frame_eight[i,]$month_text <- as.character(p_scores_frame_eight[i,]$month_text)
+      p_scores_frame_eight[i,]$month_text <- paste0(p_scores_frame_eight[i,]$Year, "-", temp_month_number_text)
+}
 
 # Fix 2021.05.06
 # Saving the data as RData file.
-save(p_scores_frame_eight, file = paste("R_Data/p_scores_frame_eight.RData"))
-
-
-
+save(p_scores_frame_eight, file = paste("../R_Data/p_scores_frame_eight.RData"))
 
 
 
 
 # Creating a subset to plot
-# five
-p_scores_frame_five_jan_june <- p_scores_frame_five[c(1:6), ]
-# eight
-p_scores_frame_eight_jan_june <- p_scores_frame_eight[c(1:6), ]
 
 # Min and Max
-p_score_min <- min(c(p_scores_frame_five_jan_june$p_score_value, p_scores_frame_eight_jan_june$p_score_value))
-p_score_max <- max(c(p_scores_frame_five_jan_june$p_score_value, p_scores_frame_eight_jan_june$p_score_value))
-
-
-
-
+p_score_min <- min(c(p_scores_frame_five$p_score_value, p_scores_frame_eight$p_score_value))
+p_score_max <- max(c(p_scores_frame_five$p_score_value, p_scores_frame_eight$p_score_value))
 
 
 
 
 # Generating pdf output.
-pdf(paste(getwd(), "/Plots/Figure02c.pdf", sep = ""), height = 15, width = 15)
+pdf("../Plots/Figure02c.pdf", height = 15, width = 15)
 # Definign the number of plots
 par(par(mfrow = c(2, 2)), mar = c(5.1, 5.1, 5.1, 2.1))
 
 
 # First plot
 
-barplot(p_scores_frame_five_jan_june$p_score_value,
-      col = c("darkblue", "darkblue", "orange", "orange", "orange", "orange"),
+barplot(p_scores_frame_five$p_score_value,
+      col = c("darkblue", "darkblue", "orange", "orange", "orange", "orange", "orange", "orange", "orange", "orange", "orange", "orange", "orange", "orange"),
       legend = TRUE,
       border = TRUE,
       # xlim = c(1, 5),
@@ -259,8 +228,8 @@ barplot(p_scores_frame_five_jan_june$p_score_value,
       ylab = "",
       xlab = "",
       main = "P-Scores (in Percent) for 2020\nWith 2015-2019 Years Average",
-      # names.arg = as.character(p_scores_frame_five_jan_june$Month),
-      names.arg = as.character(p_scores_frame_five_jan_june$month_text),
+      # names.arg = as.character(p_scores_frame_five$Month),
+      names.arg = as.character(p_scores_frame_five$month_text),
       cex.names = 1.5,
       cex.lab = 2,
       cex.axis = 1.75,
@@ -305,8 +274,8 @@ text(x, y, txt, cex = 4)
 
 # Second plot
 
-barplot(p_scores_frame_eight_jan_june$p_score_value,
-      col = c("darkblue", "darkblue", "orange", "orange", "orange", "orange"),
+barplot(p_scores_frame_eight$p_score_value,
+      col = c("darkblue", "darkblue", "orange", "orange", "orange", "orange", "orange", "orange", "orange", "orange", "orange", "orange", "orange", "orange"),
       legend = TRUE,
       border = TRUE,
       # xlim = c(1, 5),
@@ -315,8 +284,8 @@ barplot(p_scores_frame_eight_jan_june$p_score_value,
       ylab = "",
       xlab = "",
       main = "P-Scores (in Percent) for 2020\nWith 2011-2019 Years Average",
-      # names.arg = as.character(p_scores_frame_eight_jan_june$Month),
-      names.arg = as.character(p_scores_frame_eight_jan_june$month_text),
+      # names.arg = as.character(p_scores_frame_eight$Month),
+      names.arg = as.character(p_scores_frame_eight$month_text),
       cex.names = 1.5,
       cex.lab = 2,
       cex.axis = 1.75,
@@ -362,16 +331,16 @@ text(x, y, txt, cex = 4)
 # Third graph
 
 value_combine <- c(
-      p_scores_frame_five_jan_june$Value,
-      p_scores_frame_five_jan_june$average_five_years,
-      p_scores_frame_eight_jan_june$Value,
-      p_scores_frame_eight_jan_june$average_eight_years
+      p_scores_frame_five$Value,
+      p_scores_frame_five$average_five_years,
+      p_scores_frame_eight$Value,
+      p_scores_frame_eight$average_eight_years
 )
 
 
 plot(
-      x = as.integer(rownames(p_scores_frame_five_jan_june)),
-      y = p_scores_frame_five_jan_june$average_five_years,
+      x = as.integer(rownames(p_scores_frame_five)),
+      y = p_scores_frame_five$average_five_years,
       col = "darkblue",
       # col = color_01,
       lwd = 5,
@@ -399,8 +368,8 @@ plot(
       cex.sub = 2
 )
 lines(
-      x = as.integer(rownames(p_scores_frame_five_jan_june)),
-      y = p_scores_frame_five_jan_june$average_five_years,
+      x = as.integer(rownames(p_scores_frame_five)),
+      y = p_scores_frame_five$average_five_years,
       col = "darkblue",
       # col = "darkturquoise",
       # col = color_01,
@@ -411,8 +380,8 @@ lines(
       type = "p"
 )
 lines(
-      x = as.integer(rownames(p_scores_frame_five_jan_june)),
-      y = p_scores_frame_five_jan_june$Value,
+      x = as.integer(rownames(p_scores_frame_five)),
+      y = p_scores_frame_five$Value,
       # col = "darkblue",
       col = "darkturquoise",
       # col = color_01,
@@ -423,8 +392,8 @@ lines(
       type = "l"
 )
 lines(
-      x = as.integer(rownames(p_scores_frame_five_jan_june)),
-      y = p_scores_frame_five_jan_june$Value,
+      x = as.integer(rownames(p_scores_frame_five)),
+      y = p_scores_frame_five$Value,
       # col = "darkblue",
       col = "darkturquoise",
       # col = color_01,
@@ -435,8 +404,8 @@ lines(
       type = "p"
 )
 lines(
-      x = as.integer(rownames(p_scores_frame_five_jan_june)),
-      y = p_scores_frame_five_jan_june$Value,
+      x = as.integer(rownames(p_scores_frame_five)),
+      y = p_scores_frame_five$Value,
       # col = "darkblue",
       col = "darkturquoise",
       # col = color_01,
@@ -472,19 +441,19 @@ legend(
 # X-axis
 # labels FAQ -> http://www.r-bloggers.com/rotated-axis-labels-in-r-plots/
 # Creating labels by month and converting.
-initial_date <- as.integer(min(as.integer(rownames(p_scores_frame_five_jan_june))))
-final_date <- as.integer(max(as.integer(rownames(p_scores_frame_five_jan_june))))
+initial_date <- as.integer(min(as.integer(rownames(p_scores_frame_five))))
+final_date <- as.integer(max(as.integer(rownames(p_scores_frame_five))))
 number_of_dates <- final_date - initial_date + 1
 
 
 # Indexes to display
-x_indexes_to_display <- seq(from = 1, to = length(p_scores_frame_five_jan_june$Month), by = 1)
+x_indexes_to_display <- seq(from = 1, to = length(p_scores_frame_five$Month), by = 1)
 # x_indexes_to_display[1] <- 1
 # Actual lab elements
 x_tlab <- x_indexes_to_display
 # ctual lab labels
-# x_lablist  <- as.character( p_scores_frame_five_jan_june$Month )
-x_lablist <- as.character(p_scores_frame_five_jan_june$month_text)
+# x_lablist  <- as.character( p_scores_frame_five$Month )
+x_lablist <- as.character(p_scores_frame_five$month_text)
 axis(1, at = x_tlab, labels = FALSE)
 text(x = x_tlab, y = par()$usr[3] - 0.025 * (par()$usr[4] - par()$usr[3]), labels = x_lablist, srt = 45, adj = 1, xpd = TRUE, cex = 1.5)
 
@@ -492,8 +461,8 @@ text(x = x_tlab, y = par()$usr[3] - 0.025 * (par()$usr[4] - par()$usr[3]), label
 # Y-axis
 # Adding axis label
 # labels FAQ -> https://stackoverflow.com/questions/26180178/r-boxplot-how-to-move-the-x-axis-label-down
-y_min_value <- min(c(p_scores_frame_five_jan_june$average_five_years, p_scores_frame_five_jan_june$Value))
-y_max_value <- max(c(p_scores_frame_five_jan_june$average_five_years, p_scores_frame_five_jan_june$Value))
+y_min_value <- min(c(p_scores_frame_five$average_five_years, p_scores_frame_five$Value))
+y_max_value <- max(c(p_scores_frame_five$average_five_years, p_scores_frame_five$Value))
 y_tlab <- seq(from = y_min_value, to = y_max_value, by = (y_max_value - y_min_value) / 5)
 y_lablist <- as.character(round(y_tlab, digits = 0))
 axis(2, at = y_tlab, labels = y_lablist, cex.axis = 1.5)
@@ -523,16 +492,16 @@ text(x, y, txt, cex = 4)
 # Fourth graph
 
 value_combine <- c(
-      p_scores_frame_five_jan_june$Value,
-      p_scores_frame_five_jan_june$average_five_years,
-      p_scores_frame_eight_jan_june$Value,
-      p_scores_frame_eight_jan_june$average_eight_years
+      p_scores_frame_five$Value,
+      p_scores_frame_five$average_five_years,
+      p_scores_frame_eight$Value,
+      p_scores_frame_eight$average_eight_years
 )
 
 
 plot(
-      x = as.integer(rownames(p_scores_frame_eight_jan_june)),
-      y = p_scores_frame_eight_jan_june$average_eight_years,
+      x = as.integer(rownames(p_scores_frame_eight)),
+      y = p_scores_frame_eight$average_eight_years,
       col = "darkblue",
       # col = color_01,
       lwd = 5,
@@ -560,8 +529,8 @@ plot(
       cex.sub = 2
 )
 lines(
-      x = as.integer(rownames(p_scores_frame_eight_jan_june)),
-      y = p_scores_frame_eight_jan_june$average_eight_years,
+      x = as.integer(rownames(p_scores_frame_eight)),
+      y = p_scores_frame_eight$average_eight_years,
       col = "darkblue",
       # col = "darkturquoise",
       # col = color_01,
@@ -572,8 +541,8 @@ lines(
       type = "p"
 )
 lines(
-      x = as.integer(rownames(p_scores_frame_eight_jan_june)),
-      y = p_scores_frame_eight_jan_june$Value,
+      x = as.integer(rownames(p_scores_frame_eight)),
+      y = p_scores_frame_eight$Value,
       # col = "darkblue",
       col = "darkturquoise",
       # col = color_01,
@@ -584,8 +553,8 @@ lines(
       type = "l"
 )
 lines(
-      x = as.integer(rownames(p_scores_frame_eight_jan_june)),
-      y = p_scores_frame_eight_jan_june$Value,
+      x = as.integer(rownames(p_scores_frame_eight)),
+      y = p_scores_frame_eight$Value,
       # col = "darkblue",
       col = "darkturquoise",
       # col = color_01,
@@ -621,19 +590,19 @@ legend(
 # X-axis
 # labels FAQ -> http://www.r-bloggers.com/rotated-axis-labels-in-r-plots/
 # Creating labels by month and converting.
-initial_date <- as.integer(min(as.integer(rownames(p_scores_frame_eight_jan_june))))
-final_date <- as.integer(max(as.integer(rownames(p_scores_frame_eight_jan_june))))
+initial_date <- as.integer(min(as.integer(rownames(p_scores_frame_eight))))
+final_date <- as.integer(max(as.integer(rownames(p_scores_frame_eight))))
 number_of_dates <- final_date - initial_date + 1
 
 
 # Indexes to display
-x_indexes_to_display <- seq(from = 1, to = length(p_scores_frame_eight_jan_june$Month), by = 1)
+x_indexes_to_display <- seq(from = 1, to = length(p_scores_frame_eight$Month), by = 1)
 # x_indexes_to_display[1] <- 1
 # Actual lab elements
 x_tlab <- x_indexes_to_display
 # ctual lab labels
-# x_lablist  <- as.character( p_scores_frame_eight_jan_june$Month )
-x_lablist <- as.character(p_scores_frame_eight_jan_june$month_text)
+# x_lablist  <- as.character( p_scores_frame_eight$Month )
+x_lablist <- as.character(p_scores_frame_eight$month_text)
 
 axis(1, at = x_tlab, labels = FALSE)
 text(x = x_tlab, y = par()$usr[3] - 0.025 * (par()$usr[4] - par()$usr[3]), labels = x_lablist, srt = 45, adj = 1, xpd = TRUE, cex = 1.5)
@@ -642,8 +611,8 @@ text(x = x_tlab, y = par()$usr[3] - 0.025 * (par()$usr[4] - par()$usr[3]), label
 # Y-axis
 # Adding axis label
 # labels FAQ -> https://stackoverflow.com/questions/26180178/r-boxplot-how-to-move-the-x-axis-label-down
-y_min_value <- min(c(p_scores_frame_eight_jan_june$average_eight_years, p_scores_frame_eight_jan_june$Value))
-y_max_value <- max(c(p_scores_frame_eight_jan_june$average_eight_years, p_scores_frame_eight_jan_june$Value))
+y_min_value <- min(c(p_scores_frame_eight$average_eight_years, p_scores_frame_eight$Value))
+y_max_value <- max(c(p_scores_frame_eight$average_eight_years, p_scores_frame_eight$Value))
 y_tlab <- seq(from = y_min_value, to = y_max_value, by = (y_max_value - y_min_value) / 5)
 y_lablist <- as.character(round(y_tlab, digits = 0))
 axis(2, at = y_tlab, labels = y_lablist, cex.axis = 1.5)

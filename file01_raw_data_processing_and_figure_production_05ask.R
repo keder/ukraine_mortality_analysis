@@ -27,30 +27,20 @@ library(readxl)
 library(rjson)
 
 
-# Setting the correct working directory.
-work_directory_path  <- "C:/Users/akirpich/Google Drive/2021 Kirpich-Belarus Mortality Analysis"
-
-# Setting up the working directory.
-setwd(work_directory_path)
-# Extra check
-getwd()
-
-
-
 
 # Path for the data
 
 # Covid data from onliner.by
 
 # json data relative path
-json1_data_relative_path <- "Data/Other/onliner.scrap1.json"
-json2_data_relative_path <- "Data/Other/onliner.scrap2.json"
+json1_data_relative_path <- "../Data/Other/onliner.scrap1.json"
+json2_data_relative_path <- "../Data/Other/onliner.scrap2.json"
 
 
 # Mortality data from United Nations
 
 # data relative path
-belarus_un_mortality_relative_path  <- "Data/Death/Belarus_UNdata_Export_20210415_203326048/UNdata_Export_20210415_203326048.csv"
+belarus_un_mortality_relative_path  <- "../Data/Death/Belarus_UNdata_Export_20210415_203326048/UNdata_Export_20210415_203326048_tweaked.csv"
 
 
 
@@ -110,7 +100,7 @@ for( d in c(1:num_of_rep_days) )
 belarus_incidence_data_frame_covid19$date <- as.Date( belarus_incidence_data_frame_covid19$date, origin = "1970-01-01" )
 
 # Saving the data as RData file.
-save( belarus_incidence_data_frame_covid19, file = paste("R_Data/belarus_incidence_data_frame_covid19.RData") )
+save( belarus_incidence_data_frame_covid19, file = paste("../R_Data/belarus_incidence_data_frame_covid19.RData") )
 
 
 
@@ -167,7 +157,7 @@ for( d in c(1:num_of_rep_days) )
 belarus_statistics_data_frame_covid19$date <- as.Date( belarus_statistics_data_frame_covid19$date, origin = "1970-01-01" )
 
 # Saving the data as RData file.
-save( belarus_statistics_data_frame_covid19, file = paste("R_Data/belarus_statistics_data_frame_covid19.RData") )
+save( belarus_statistics_data_frame_covid19, file = paste("../R_Data/belarus_statistics_data_frame_covid19.RData") )
 
 
 
@@ -219,7 +209,7 @@ for( i in c(3:length(unique_month)) )
 
 
 # Saving the data as RData file.
-save( monthly_death_data_frame_covid19, file = paste("R_Data/monthly_death_data_frame_covid19.RData") )
+save( monthly_death_data_frame_covid19, file = paste("../R_Data/monthly_death_data_frame_covid19.RData") )
 
 
 
@@ -263,7 +253,7 @@ summary(belarus_un_mortality_data$Value)
 belarus_un_mortality_data <- belarus_un_mortality_data[ order(belarus_un_mortality_data$date_fixed),  ]
 
 # Saving the data as RData file.
-save( belarus_un_mortality_data, file = paste("R_Data/belarus_un_mortality_data.RData") )
+save( belarus_un_mortality_data, file = paste("../R_Data/belarus_un_mortality_data.RData") )
 
 
 
@@ -278,7 +268,7 @@ belarus_un_mortality_data_month_only_since_2015 <- belarus_un_mortality_data[whi
 belarus_un_mortality_data_month_only_since_2015 <- belarus_un_mortality_data_month_only_since_2015[ order(belarus_un_mortality_data_month_only_since_2015$date_fixed),  ]
 
 # Saving the data as RData file.
-save( belarus_un_mortality_data_month_only_since_2015, file = paste("R_Data/belarus_un_mortality_data_month_only_since_2015.RData") )
+save( belarus_un_mortality_data_month_only_since_2015, file = paste("../R_Data/belarus_un_mortality_data_month_only_since_2015.RData") )
 
 
 
@@ -293,7 +283,7 @@ belarus_un_mortality_data_month_only_since_2011 <- belarus_un_mortality_data[whi
 belarus_un_mortality_data_month_only_since_2011 <- belarus_un_mortality_data_month_only_since_2011[ order(belarus_un_mortality_data_month_only_since_2011$date_fixed),  ]
 
 # Saving the data as RData file.
-save( belarus_un_mortality_data_month_only_since_2011, file = paste("R_Data/belarus_un_mortality_data_month_only_since_2011.RData") )
+save( belarus_un_mortality_data_month_only_since_2011, file = paste("../R_Data/belarus_un_mortality_data_month_only_since_2011.RData") )
 
 
 
@@ -312,7 +302,7 @@ intersected_data <- merge( x = belarus_un_mortality_data_month_only_since_2015,
 
 
 # Generating pdf output.
-pdf( paste( getwd(), "/Plots/Figure01a.pdf", sep = ""), height = 8, width = 20)
+pdf("../Plots/Figure01a.pdf", height = 8, width = 20)
 # Definign the number of plots
 #par( par(mfrow=c(2,2)),  mar=c(5.1, 5.1, 5.1, 2.1)  )
 
@@ -409,7 +399,7 @@ dev.off()
 
 
 # Generating pdf output.
-pdf( paste( getwd(), "/Plots/Figure01b.pdf", sep = ""), height = 8, width = 20)
+pdf("../Plots/Figure01b.pdf", height = 8, width = 20)
 # Definign the number of plots
 #par( par(mfrow=c(2,2)),  mar=c(5.1, 5.1, 5.1, 2.1)  )
 
@@ -506,7 +496,7 @@ dev.off()
 
 
 # Generating pdf output.
-pdf( paste( getwd(), "/Plots/Figure01c.pdf", sep = ""), height = 8, width = 20)
+pdf("../Plots/Figure01c.pdf", height = 8, width = 20)
 # Definign the number of plots
 #par( par(mfrow=c(2,2)),  mar=c(5.1, 5.1, 5.1, 2.1)  )
 
@@ -607,7 +597,7 @@ dev.off()
 
 
 # Generating pdf output.
-pdf( paste( getwd(), "/Plots/Figure01d.pdf", sep = ""), height = 12, width = 15)
+pdf("../Plots/Figure01d.pdf", height = 12, width = 15)
 # Definign the number of plots
 par( par(mfrow=c(1,2)),  mar=c(5.1, 5.1, 5.1, 2.1)  )
 
@@ -874,7 +864,7 @@ dev.off()
 
 
 # Generating pdf output.
-pdf( paste( getwd(), "/Plots/Figure01e.pdf", sep = ""), height = 12, width = 15)
+pdf("../Plots/Figure01e.pdf", height = 12, width = 15)
 # Definign the number of plots
 par( par(mfrow=c(1,2)),  mar=c(5.1, 5.1, 5.1, 2.1)  )
 
@@ -1142,7 +1132,7 @@ dev.off()
 
 
 # Generating pdf output.
-pdf( paste( getwd(), "/Plots/Figure01f.pdf", sep = ""), height = 12, width = 15)
+pdf("../Plots/Figure01f.pdf", height = 12, width = 15)
 # Definign the number of plots
 par( par(mfrow=c(1,2)),  mar=c(5.1, 5.1, 5.1, 2.1)  )
 
@@ -1417,7 +1407,7 @@ dev.off()
 
 
 # Generating pdf output.
-pdf( paste( getwd(), "/Plots/Figure01g.pdf", sep = ""), height = 12, width = 15)
+pdf("../Plots/Figure01g.pdf", height = 12, width = 15)
 # Definign the number of plots
 par( par(mfrow=c(1,2)),  mar=c(5.1, 5.1, 5.1, 2.1)  )
 
