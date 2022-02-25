@@ -9,48 +9,39 @@ rm(list=ls(all=TRUE))
 # options(scipen=20)
 
 
-# Setting the correct working directory.
-work_directory_path  <- "C:/Users/akirpich/Google Drive/2021 Kirpich-Belarus Death Rates"
-
-# Setting up the working directory.
-setwd(work_directory_path)
-# Extra check
-getwd()
-
-
 
 # Reading previous datasets
 
 # Daily COVID-19 incidence data
-load( file = paste("R_Data/belarus_incidence_data_frame_covid19.RData") )
+load( file = paste("../R_Data/belarus_incidence_data_frame_covid19.RData") )
 
 # Cumulative data: incidence, recovered, and mortality
-load( file = paste("R_Data/belarus_statistics_data_frame_covid19.RData") )
+load( file = paste("../R_Data/belarus_statistics_data_frame_covid19.RData") )
 
 # Monthly COVID-19 mortality data
-load( file = paste("R_Data/monthly_death_data_frame_covid19.RData") )
+load( file = paste("../R_Data/monthly_death_data_frame_covid19.RData") )
 
 # Monthly overall mortality data since 2011
-load( file = paste("R_Data/belarus_un_mortality_data_month_only_since_2011.RData") )
+load( file = paste("../R_Data/belarus_un_mortality_data_month_only_since_2011.RData") )
 
 # Monthly overall mortality data since 2015
-load( file = paste("R_Data/belarus_un_mortality_data_month_only_since_2015.RData") )
+load( file = paste("../R_Data/belarus_un_mortality_data_month_only_since_2015.RData") )
 
 # Loading demograhics data
-load( file = paste("R_Data/demographics_aggregated_2011_2020.RData") )
+load( file = paste("../R_Data/demographics_aggregated_2011_2020.RData") )
 
 
 # Loading data
 # load( file = paste("R_Data/arima_predictions_five_plus_original_data.RData") )
 
 # Saving the data as RData file.
-load( file = paste("R_Data/arima_predictions_five_plus_original_data_subset.RData") )
+load( file = paste("../R_Data/arima_predictions_five_plus_original_data_subset.RData") )
 
 # Saving the data as RData file.
 # load( file = paste("R_Data/arima_predictions_eight_plus_original_data.RData") )
 
 # Saving the data as RData file.
-load( file = paste("R_Data/arima_predictions_eight_plus_original_data_subset.RData") )
+load( file = paste("../R_Data/arima_predictions_eight_plus_original_data_subset.RData") )
 
 
 
@@ -58,15 +49,15 @@ load( file = paste("R_Data/arima_predictions_eight_plus_original_data_subset.RDa
 # load( file = paste("R_Data/arima_predictions_five_plus_original_data_Age65Up.RData") )
 
 # Saving the data as RData file.
-load( file = paste("R_Data/arima_predictions_five_plus_original_data_Age65Up_subset.RData") )
+load( file = paste("../R_Data/arima_predictions_five_plus_original_data_Age65Up_subset.RData") )
 
 # Saving the data as RData file.
 # load( file = paste("R_Data/arima_predictions_eight_plus_original_data_Age65Up.RData") )
 
 # Saving the data as RData file.
-load( file = paste("R_Data/arima_predictions_eight_plus_original_data_Age65Up_subset.RData") )
+load( file = paste("../R_Data/arima_predictions_eight_plus_original_data_Age65Up_subset.RData") )
 
-
+pandemic_start <- as.Date("2020-02-15")
 
 
 
@@ -99,7 +90,7 @@ p_score_max <- max( c(arima_predictions_five_plus_original_data_Age65Up_subset$p
 
 
 # Generating pdf output.
-pdf( paste( getwd(), "/Plots/FigureS04a.pdf", sep = ""), height = 15, width = 15)
+pdf( paste("../Plots/FigureS04a.pdf", sep = ""), height = 15, width = 15)
 # Definign the number of plots
 par( par(mfrow=c(2,2)),  mar=c(5.1, 5.1, 5.1, 2.1)  )
 
@@ -169,10 +160,11 @@ value_combine <- c(arima_predictions_eight_plus_original_data_subset$y_hat,
                    arima_predictions_eight_plus_original_data_Age65Up_subset$y_hat)
 
 
+pandemic_data_length <- dim(arima_predictions_eight_plus_original_data_Age65Up_subset)[1] - which(arima_predictions_eight_plus_original_data_Age65Up_subset$ds == pandemic_start)
 plot(x = as.integer(arima_predictions_eight_plus_original_data_Age65Up_subset$y_hat),
-     y = as.integer(arima_predictions_eight_plus_original_data_subset$y_hat),
-     col = c( rep( "darkblue", dim(arima_predictions_eight_plus_original_data_subset)[1] - 4 ),
-              rep( "darkorange",  4 ) ),
+     y = as.integer(head(arima_predictions_eight_plus_original_data_subset$y_hat, length(arima_predictions_eight_plus_original_data_Age65Up_subset$y_hat))),
+     col = c( rep( "darkblue", dim(arima_predictions_eight_plus_original_data_subset)[1] - pandemic_data_length ),
+              rep( "darkorange",  pandemic_data_length ) ),
      # col = color_01, 
      lwd = 2,
      # pch = 16,
@@ -273,10 +265,11 @@ value_combine <- c(arima_predictions_eight_plus_original_data_subset$y_hat,
                    arima_predictions_eight_plus_original_data_subset$y)
 
 
+pandemic_data_length <- dim(arima_predictions_eight_plus_original_data_subset)[1] - which(arima_predictions_eight_plus_original_data_subset$ds == pandemic_start)
 plot(x = as.integer(arima_predictions_eight_plus_original_data_subset$y),
      y = as.integer(arima_predictions_eight_plus_original_data_subset$y_hat),
-     col = c( rep( "darkblue", dim(arima_predictions_eight_plus_original_data_subset)[1] - 4 ),
-              rep( "darkorange",  4 ) ),
+     col = c( rep( "darkblue", dim(arima_predictions_eight_plus_original_data_subset)[1] - pandemic_data_length ),
+              rep( "darkorange",  pandemic_data_length ) ),
      # col = color_01, 
      lwd = 2,
      # pch = 16,
@@ -377,10 +370,11 @@ value_combine <- c(arima_predictions_eight_plus_original_data_Age65Up_subset$y_h
                    arima_predictions_eight_plus_original_data_Age65Up_subset$y)
 
 
+pandemic_data_length <- dim(arima_predictions_eight_plus_original_data_Age65Up_subset)[1] - which(arima_predictions_eight_plus_original_data_Age65Up_subset$ds == pandemic_start)
 plot(x = as.integer(arima_predictions_eight_plus_original_data_Age65Up_subset$y),
      y = as.integer(arima_predictions_eight_plus_original_data_Age65Up_subset$y_hat),
-     col = c( rep( "darkblue", dim(arima_predictions_eight_plus_original_data_Age65Up_subset)[1] - 4 ),
-              rep( "darkorange",  4 ) ),
+     col = c( rep( "darkblue", dim(arima_predictions_eight_plus_original_data_Age65Up_subset)[1] - pandemic_data_length ),
+              rep( "darkorange",  pandemic_data_length ) ),
      # col = color_01, 
      lwd = 2,
      # pch = 16,

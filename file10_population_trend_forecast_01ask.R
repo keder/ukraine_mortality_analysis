@@ -49,36 +49,25 @@ library("prophet")
 
 
 
-
-# Setting the correct working directory.
-work_directory_path  <- "C:/Users/akirpich/Google Drive/2021 Kirpich-Belarus Mortality Analysis"
-
-# Setting up the working directory.
-setwd(work_directory_path)
-# Extra check
-getwd()
-
-
-
 # Reading previous datasets
 
 # Daily COVID-19 incidence data
-load( file = paste("R_Data/belarus_incidence_data_frame_covid19.RData") )
+load( file = paste("../R_Data/belarus_incidence_data_frame_covid19.RData") )
 
 # Cumulative data: incidence, recovered, and mortality
-load( file = paste("R_Data/belarus_statistics_data_frame_covid19.RData") )
+load( file = paste("../R_Data/belarus_statistics_data_frame_covid19.RData") )
 
 # Monthly COVID-19 mortality data
-load( file = paste("R_Data/monthly_death_data_frame_covid19.RData") )
+load( file = paste("../R_Data/monthly_death_data_frame_covid19.RData") )
 
 # Monthly overall mortality data since 2011
-load( file = paste("R_Data/belarus_un_mortality_data_month_only_since_2011.RData") )
+load( file = paste("../R_Data/belarus_un_mortality_data_month_only_since_2011.RData") )
 
 # Monthly overall mortality data since 2015
-load( file = paste("R_Data/belarus_un_mortality_data_month_only_since_2015.RData") )
+load( file = paste("../R_Data/belarus_un_mortality_data_month_only_since_2015.RData") )
 
 # Loading demograhics data
-load( file = paste("R_Data/demographics_aggregated_2011_2020.RData") )
+load( file = paste("../R_Data/demographics_aggregated_2011_2020.RData") )
 
 
 
@@ -150,10 +139,10 @@ tail(prophet_predictions_extra_year_plus_original_data)
 
 
 # Saving the data as RData file.
-save( prophet_predictions_extra_year, file = paste("R_Data/prophet_predictions_extra_year.RData") )
+save( prophet_predictions_extra_year, file = paste("../R_Data/prophet_predictions_extra_year.RData") )
 
 # Saving the data as RData file.
-save( prophet_predictions_extra_year_plus_original_data, file = paste("R_Data/prophet_predictions_extra_year_plus_original_data.RData") )
+save( prophet_predictions_extra_year_plus_original_data, file = paste("../R_Data/prophet_predictions_extra_year_plus_original_data.RData") )
 
 
 

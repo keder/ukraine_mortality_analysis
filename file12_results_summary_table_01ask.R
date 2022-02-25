@@ -12,25 +12,15 @@ rm(list=ls(all=TRUE))
 library(xtable)
 
 
-# Setting the correct working directory.
-# Debugging step to run on local machine instead instead of the code right above used for HiPer Gator.
-work_directory_path  <- "C:/Users/akirpich/Google Drive/2021 Kirpich-Belarus Death Rates"
-
-# Setting up the working directory.
-setwd(work_directory_path)
-# Extra check
-getwd()
-
-
 
 
 
 # Non-parametric Results load
 
 # Loading the data as RData file.
-load( file = paste("R_Data/p_scores_frame_five.RData") )
+load( file = paste("../R_Data/p_scores_frame_five.RData") )
 # Loading the data as RData file.
-load( file = paste("R_Data/p_scores_frame_eight.RData") )
+load( file = paste("../R_Data/p_scores_frame_eight.RData") )
 
 
 
@@ -38,14 +28,14 @@ load( file = paste("R_Data/p_scores_frame_eight.RData") )
 # Prophet Results load
 
 # Loading the data as RData file.
-load( file = paste("R_Data/prophet_predictions_five_plus_original_data_subset.RData") )
+load( file = paste("../R_Data/prophet_predictions_five_plus_original_data_subset.RData") )
 # Loading the data as RData file.
-load( file = paste("R_Data/prophet_predictions_five_plus_original_data_Age65Up_subset.RData") )
+load( file = paste("../R_Data/prophet_predictions_five_plus_original_data_Age65Up_subset.RData") )
 
 # Loading the data as RData file.
-load( file = paste("R_Data/prophet_predictions_eight_plus_original_data_subset.RData") )
+load( file = paste("../R_Data/prophet_predictions_eight_plus_original_data_subset.RData") )
 # Loading the data as RData file.
-load( file = paste("R_Data/prophet_predictions_eight_plus_original_data_Age65Up_subset.RData") )
+load( file = paste("../R_Data/prophet_predictions_eight_plus_original_data_Age65Up_subset.RData") )
 
 
 
@@ -53,14 +43,14 @@ load( file = paste("R_Data/prophet_predictions_eight_plus_original_data_Age65Up_
 # ARIMA Results load
 
 # Loading the data as RData file.
-load( file = paste("R_Data/arima_predictions_five_plus_original_data_subset.RData") )
+load( file = paste("../R_Data/arima_predictions_five_plus_original_data_subset.RData") )
 # Loading the data as RData file.
-load( file = paste("R_Data/arima_predictions_five_plus_original_data_Age65Up_subset.RData") )
+load( file = paste("../R_Data/arima_predictions_five_plus_original_data_Age65Up_subset.RData") )
 
 # Loading the data as RData file.
-load( file = paste("R_Data/arima_predictions_eight_plus_original_data_subset.RData") )
+load( file = paste("../R_Data/arima_predictions_eight_plus_original_data_subset.RData") )
 # Loading the data as RData file.
-load( file = paste("R_Data/arima_predictions_eight_plus_original_data_Age65Up_subset.RData") )
+load( file = paste("../R_Data/arima_predictions_eight_plus_original_data_Age65Up_subset.RData") )
 
 
 
@@ -131,9 +121,9 @@ counts_different_methods_five[5, c(2:7) ]   <- round( arima_predictions_five_plu
 
 # Fix 2021.05.06
 # Saving the data as RData file.
-save( p_scores_different_methods_five, file = paste("R_Data/p_scores_different_methods_five.RData") )
+save( p_scores_different_methods_five, file = paste("../R_Data/p_scores_different_methods_five.RData") )
 # Saving the data as RData file.
-save( counts_different_methods_five,   file = paste("R_Data/counts_different_methods_five.RData") )
+save( counts_different_methods_five,   file = paste("../R_Data/counts_different_methods_five.RData") )
 
 # Creating xtable object
 p_scores_different_methods_five_xtable <- xtable(x = p_scores_different_methods_five, digits = 2 )  
@@ -143,12 +133,12 @@ counts_different_methods_five_xtable   <- xtable(x = counts_different_methods_fi
 
 # Exporting as tex file
 # Creating a path 
-p_scores_different_methods_five_xtable_path_out <- paste("R_Output/p_scores_different_methods_five_xtable.tex", sep ="")
+p_scores_different_methods_five_xtable_path_out <- paste("../R_Output/p_scores_different_methods_five_xtable.tex", sep ="")
 # Printing
 print.xtable( x = p_scores_different_methods_five_xtable, type="latex", file = p_scores_different_methods_five_xtable_path_out, include.rownames = FALSE )
 
 # Creating a path 
-counts_different_methods_five_xtable_path_out <- paste("R_Output/counts_different_methods_five_xtable.tex", sep ="")
+counts_different_methods_five_xtable_path_out <- paste("../R_Output/counts_different_methods_five_xtable.tex", sep ="")
 # Printing
 print.xtable( x = counts_different_methods_five_xtable, type="latex", file = counts_different_methods_five_xtable_path_out, include.rownames = FALSE )
 
@@ -218,9 +208,9 @@ counts_different_methods_eight[5, c(2:7) ]   <- round( arima_predictions_eight_p
 
 # Fix 2021.05.06
 # Saving the data as RData file.
-save( p_scores_different_methods_eight, file = paste("R_Data/p_scores_different_methods_eight.RData") )
+save( p_scores_different_methods_eight, file = paste("../R_Data/p_scores_different_methods_eight.RData") )
 # Saving the data as RData file.
-save( counts_different_methods_eight,   file = paste("R_Data/counts_different_methods_eight.RData") )
+save( counts_different_methods_eight,   file = paste("../R_Data/counts_different_methods_eight.RData") )
 
 # Creating xtable object
 p_scores_different_methods_eight_xtable <- xtable(x = p_scores_different_methods_eight, digits = 2 )  
@@ -230,12 +220,12 @@ counts_different_methods_eight_xtable   <- xtable(x = counts_different_methods_e
 
 # Exporting as tex file
 # Creating a path 
-p_scores_different_methods_eight_xtable_path_out <- paste("R_Output/p_scores_different_methods_eight_xtable.tex", sep ="")
+p_scores_different_methods_eight_xtable_path_out <- paste("../R_Output/p_scores_different_methods_eight_xtable.tex", sep ="")
 # Printing
 print.xtable( x = p_scores_different_methods_eight_xtable, type="latex", file = p_scores_different_methods_eight_xtable_path_out, include.rownames = FALSE )
 
 # Creating a path 
-counts_different_methods_eight_xtable_path_out <- paste("R_Output/counts_different_methods_eight_xtable.tex", sep ="")
+counts_different_methods_eight_xtable_path_out <- paste("../R_Output/counts_different_methods_eight_xtable.tex", sep ="")
 # Printing
 print.xtable( x = counts_different_methods_eight_xtable, type="latex", file = counts_different_methods_eight_xtable_path_out, include.rownames = FALSE )
 
