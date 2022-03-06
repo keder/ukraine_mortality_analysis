@@ -27,24 +27,12 @@ library(readxl)
 library(rjson)
 
 
-# Setting the correct working directory.
-# Debugging step to run on local machine instead instead of the code right above used for HiPer Gator.
-work_directory_path  <- "C:/Users/akirpich/Google Drive/2021 Kirpich-Belarus Mortality Analysis"
-
-
-# Setting up the working directory.
-setwd(work_directory_path)
-# Extra check
-getwd()
-
-# Listening current variables
-ls()
 
 
 # Saving the trends data as RData file.
-load( file = paste("R_Data/google_trends_grob_data.RData") )
-load( file = paste("R_Data/google_trends_pominki_data.RData") )
-load( file = paste("R_Data/google_trends_ritualnie_uslugi_data.RData") )
+load( file = paste("../R_Data/google_trends_grob_data.RData") )
+load( file = paste("../R_Data/google_trends_pominki_data.RData") )
+load( file = paste("../R_Data/google_trends_ritualnie_uslugi_data.RData") )
 ls()
 
 
@@ -325,18 +313,18 @@ p_scores_frame_ritualnie_uslugi_2020_2021 <- rbind(p_scores_frame_ritualnie_uslu
 
 # Saving the data as RData file.
 # 2020
-save( p_scores_frame_grob_2020,             file = paste("R_Data/p_scores_frame_grob_2020.RData") )
-save( p_scores_frame_pominki_2020,          file = paste("R_Data/p_scores_frame_pominki_2020.RData") )
-save( p_scores_frame_ritualnie_uslugi_2020, file = paste("R_Data/p_scores_frame_ritualnie_uslugi_2020.RData") )
+save( p_scores_frame_grob_2020,             file = paste("../R_Data/p_scores_frame_grob_2020.RData") )
+save( p_scores_frame_pominki_2020,          file = paste("../R_Data/p_scores_frame_pominki_2020.RData") )
+save( p_scores_frame_ritualnie_uslugi_2020, file = paste("../R_Data/p_scores_frame_ritualnie_uslugi_2020.RData") )
 # 2021
-save( p_scores_frame_grob_2021,             file = paste("R_Data/p_scores_frame_grob_2021.RData") )
-save( p_scores_frame_pominki_2021,          file = paste("R_Data/p_scores_frame_pominki_2021.RData") )
-save( p_scores_frame_ritualnie_uslugi_2021, file = paste("R_Data/p_scores_frame_ritualnie_uslugi_2021.RData") )
+save( p_scores_frame_grob_2021,             file = paste("../R_Data/p_scores_frame_grob_2021.RData") )
+save( p_scores_frame_pominki_2021,          file = paste("../R_Data/p_scores_frame_pominki_2021.RData") )
+save( p_scores_frame_ritualnie_uslugi_2021, file = paste("../R_Data/p_scores_frame_ritualnie_uslugi_2021.RData") )
 
 # 2020 and 2021
-save( p_scores_frame_grob_2020_2021,             file = paste("R_Data/p_scores_frame_grob_2020_2021.RData") )
-save( p_scores_frame_pominki_2020_2021,          file = paste("R_Data/p_scores_frame_pominki_2020_2021.RData") )
-save( p_scores_frame_ritualnie_uslugi_2020_2021, file = paste("R_Data/p_scores_frame_ritualnie_uslugi_2020_2021.RData") )
+save( p_scores_frame_grob_2020_2021,             file = paste("../R_Data/p_scores_frame_grob_2020_2021.RData") )
+save( p_scores_frame_pominki_2020_2021,          file = paste("../R_Data/p_scores_frame_pominki_2020_2021.RData") )
+save( p_scores_frame_ritualnie_uslugi_2020_2021, file = paste("../R_Data/p_scores_frame_ritualnie_uslugi_2020_2021.RData") )
 
 
 
@@ -344,7 +332,7 @@ save( p_scores_frame_ritualnie_uslugi_2020_2021, file = paste("R_Data/p_scores_f
 
 
 # Generating pdf output.
-pdf( paste( getwd(), "/Plots/FigureTBD02a.pdf", sep = ""), height = 15, width = 22.5)
+pdf( paste( "../Plots/FigureTBD02a.pdf", sep = ""), height = 15, width = 22.5)
 # Definign the number of plots
 par( par(mfrow=c(2,3)),  mar=c(5.1, 5.1, 5.1, 2.1)  )
 

@@ -34,29 +34,18 @@ library(lmtest)
 
 
 
-# Setting the correct working directory.
-# Debugging step to run on local machine instead instead of the code right above used for HiPer Gator.
-work_directory_path  <- "C:/Users/akirpich/Google Drive/2021 Kirpich-Belarus Mortality Analysis"
-
-# Setting up the working directory.
-setwd(work_directory_path)
-# Extra check
-getwd()
-
-
-
 
 # Loading the trends data as RData file.
-load( file = paste("R_Data/google_trends_grob_data.RData") )
-load( file = paste("R_Data/google_trends_pominki_data.RData") )
-load( file = paste("R_Data/google_trends_ritualnie_uslugi_data.RData") )
+load( file = paste("../R_Data/google_trends_grob_data.RData") )
+load( file = paste("../R_Data/google_trends_pominki_data.RData") )
+load( file = paste("../R_Data/google_trends_ritualnie_uslugi_data.RData") )
 dim(google_trends_grob_data)
 dim(google_trends_pominki_data)
 dim(google_trends_ritualnie_uslugi_data)
 ls()
 
 # Loading the mortality data as RData file.
-load( file = paste("R_Data/belarus_un_mortality_data_month_only_since_2015.RData") )
+load( file = paste("../R_Data/belarus_un_mortality_data_month_only_since_2015.RData") )
 dim(belarus_un_mortality_data_month_only_since_2015)
 ls()
 
@@ -262,14 +251,14 @@ frame_results_combined$grangertest_smooth[index_to_save] <- grangertest(y = merg
 
 
 # Saving the data as RData file.
-save( frame_results_combined, file = paste("R_Data/frame_results_combined.RData") )
+save( frame_results_combined, file = paste("../R_Data/frame_results_combined.RData") )
 
 
 # Creating xtable object
 frame_results_combined_xtable <- xtable(x = frame_results_combined, digits = 2 )  
 # Exporting as tex file
 # Creating a path 
-frame_results_combined_xtable_path_out <- paste("R_Output/frame_results_combined_xtable.tex", sep ="")
+frame_results_combined_xtable_path_out <- paste("../R_Output/frame_results_combined_xtable.tex", sep ="")
 # Printing
 print.xtable( x = frame_results_combined_xtable, type="latex", file = frame_results_combined_xtable_path_out, include.rownames = FALSE )
 
@@ -278,7 +267,7 @@ print.xtable( x = frame_results_combined_xtable, type="latex", file = frame_resu
 
 
 # Generating pdf output.
-pdf( paste( getwd(), "/Plots/FigureTBD04a.pdf", sep = ""), height = 4.75, width = 14.25)
+pdf( paste( "../Plots/FigureTBD04a.pdf", sep = ""), height = 4.75, width = 14.25)
 # Definign the number of plots
 par( par(mfrow=c(1,3)),  mar=c(5.1, 5.1, 3, 2.1)  )
 
@@ -589,7 +578,7 @@ dev.off()
 
 
 # Generating pdf output.
-pdf( paste( getwd(), "/Plots/FigureTBD04b.pdf", sep = ""), height = 4.75, width = 14.25)
+pdf( paste( "../Plots/FigureTBD04b.pdf", sep = ""), height = 4.75, width = 14.25)
 # Definign the number of plots
 par( par(mfrow=c(1,3)),  mar=c(5.1, 5.1, 3, 2.1)  )
 

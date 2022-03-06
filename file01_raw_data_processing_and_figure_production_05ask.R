@@ -41,7 +41,7 @@ json2_data_relative_path <- "../Data/Other/onliner.scrap2.json"
 
 # data relative path
 belarus_un_mortality_relative_path  <- "../Data/Death/Belarus_UNdata_Export_20210415_203326048/UNdata_Export_20210415_203326048_tweaked.csv"
-
+proportion_max = 0.025
 
 
 
@@ -597,9 +597,9 @@ dev.off()
 
 
 # Generating pdf output.
-pdf("../Plots/Figure01d.pdf", height = 12, width = 15)
+pdf("../Plots/Figure01d.pdf", height = 15, width = 15)
 # Definign the number of plots
-par( par(mfrow=c(1,2)),  mar=c(5.1, 5.1, 5.1, 2.1)  )
+par( par(mfrow=c(1,2)),  mar=c(5.5, 5.1, 5.1, 2.1)  )
 
 
 combined_value_min <- min( belarus_un_mortality_data_month_only_since_2015$Value )
@@ -813,7 +813,7 @@ text(x, y, txt, cex = 4)
 proportion_covid19 <- intersected_data$death_covid19/(intersected_data$Value+intersected_data$death_covid19)
 
 summary_to_plot <-  rbind( proportion_covid19,
-                           (0.02 - proportion_covid19)  )
+                           (proportion_max - proportion_covid19)  )
 colnames(summary_to_plot) <- intersected_data$unique_month
 rownames(summary_to_plot) <- NULL
 
@@ -824,14 +824,15 @@ barplot( summary_to_plot, col=c("darkorange", "darkblue"),
          args.legend = list(bty="n", border=TRUE), 
          ylab = "", 
          xlab = "", 
+         ylim = c(0, proportion_max),
          main = "Proportion of COVID-19 Death in Total",
          names.arg = colnames(summary_to_plot), 
-         cex.names = 1.7, 
-         cex.lab = 2, 
-         cex.axis = 1.75,
+         cex.names = 1.1, 
+         cex.lab = 1, 
+         cex.axis = 1.25,
          cex.main = 2, 
-         cex = 2,
-         las = 1)
+         cex = 1,
+         las = 2)
 
 # Label C
 par(xpd = NA )
@@ -1080,7 +1081,7 @@ text(x, y, txt, cex = 4)
 proportion_covid19 <- intersected_data$death_covid19/(intersected_data$Value+intersected_data$death_covid19)
 
 summary_to_plot <-  rbind( proportion_covid19,
-                           (0.02 - proportion_covid19)  )
+                           (proportion_max - proportion_covid19)  )
 colnames(summary_to_plot) <- intersected_data$unique_month
 rownames(summary_to_plot) <- NULL
 
@@ -1091,14 +1092,15 @@ barplot( summary_to_plot, col=c("darkturquoise", "darkblue"),
          args.legend = list(bty="n", border=TRUE), 
          ylab = "", 
          xlab = "", 
+         ylim = c(0, proportion_max),
          main = "Proportion of COVID-19 Death in Total",
          names.arg = colnames(summary_to_plot), 
-         cex.names = 1.7, 
+         cex.names = 1.1, 
          cex.lab = 2, 
          cex.axis = 1.75,
          cex.main = 2, 
          cex = 2,
-         las = 1)
+         las = 2)
 
 # Label C
 par(xpd = NA )
@@ -1355,7 +1357,7 @@ text(x, y, txt, cex = 4)
 proportion_covid19 <- intersected_data$death_covid19/(intersected_data$Value+intersected_data$death_covid19)
 
 summary_to_plot <-  rbind( proportion_covid19,
-                           (0.02 - proportion_covid19)  )
+                           (proportion_max - proportion_covid19)  )
 colnames(summary_to_plot) <- intersected_data$unique_month
 rownames(summary_to_plot) <- NULL
 
@@ -1366,14 +1368,15 @@ barplot( summary_to_plot, col=c("darkorange", "darkblue"),
          args.legend = list(bty="n", border=TRUE), 
          ylab = "", 
          xlab = "", 
+         ylim = c(0, proportion_max),
          main = "Proportion of COVID-19 Death in Total",
          names.arg = colnames(summary_to_plot), 
-         cex.names = 1.7, 
+         cex.names = 1.1, 
          cex.lab = 2, 
          cex.axis = 1.75,
          cex.main = 2, 
          cex = 2,
-         las = 1)
+         las = 2)
 
 # Label C
 par(xpd = NA )
@@ -1630,7 +1633,7 @@ text(x, y, txt, cex = 4)
 proportion_covid19 <- intersected_data$death_covid19/(intersected_data$Value+intersected_data$death_covid19)
 
 summary_to_plot <-  rbind( proportion_covid19,
-                           (0.02 - proportion_covid19)  )
+                           (proportion_max - proportion_covid19)  )
 colnames(summary_to_plot) <- intersected_data$unique_month
 rownames(summary_to_plot) <- NULL
 
@@ -1641,14 +1644,15 @@ barplot( summary_to_plot, col=c("darkturquoise", "darkblue"),
          args.legend = list(bty="n", border=TRUE), 
          ylab = "", 
          xlab = "", 
+         ylim = c(0, proportion_max),
          main = "Proportion of COVID-19 Death in Total",
          names.arg = colnames(summary_to_plot), 
-         cex.names = 1.7, 
+         cex.names = 1.1, 
          cex.lab = 2, 
          cex.axis = 1.75,
          cex.main = 2, 
          cex = 2,
-         las = 1)
+         las = 2)
 
 # Label C
 par(xpd = NA )

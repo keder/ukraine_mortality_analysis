@@ -33,29 +33,17 @@ library(lmtest)
 
 
 
-# Setting the correct working directory.
-# Debugging step to run on local machine instead instead of the code right above used for HiPer Gator.
-work_directory_path  <- "C:/Users/akirpich/Google Drive/2021 Kirpich-Belarus Mortality Analysis"
-
-# Setting up the working directory.
-setwd(work_directory_path)
-# Extra check
-getwd()
-
-
-
-
 # Loading the trends data as RData file.
-load( file = paste("R_Data/google_trends_grob_data.RData") )
-load( file = paste("R_Data/google_trends_pominki_data.RData") )
-load( file = paste("R_Data/google_trends_ritualnie_uslugi_data.RData") )
+load( file = paste("../R_Data/google_trends_grob_data.RData") )
+load( file = paste("../R_Data/google_trends_pominki_data.RData") )
+load( file = paste("../R_Data/google_trends_ritualnie_uslugi_data.RData") )
 dim(google_trends_grob_data)
 dim(google_trends_pominki_data)
 dim(google_trends_ritualnie_uslugi_data)
 ls()
 
 # Loading the mortality data as RData file.
-load( file = paste("R_Data/belarus_un_mortality_data_month_only_since_2015.RData") )
+load( file = paste("../R_Data/belarus_un_mortality_data_month_only_since_2015.RData") )
 dim(belarus_un_mortality_data_month_only_since_2015)
 ls()
 
@@ -183,7 +171,7 @@ ccf_ritualnie_uslugi_scaled_smoothed <- ccf(x = merged_ritualnie_uslugi$incidenc
 
 
 # Generating pdf output.
-pdf( paste( getwd(), "/Plots/FigureTBD05a.pdf", sep = ""), height = 8, width = 12)
+pdf( paste( "../Plots/FigureTBD05a.pdf", sep = ""), height = 8, width = 12)
 # Definign the number of plots
 par( par(mfrow=c(2,3)),  mar=c(5.1, 5.1, 3, 2.1)  )
 

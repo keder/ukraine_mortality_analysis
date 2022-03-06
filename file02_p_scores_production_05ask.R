@@ -426,7 +426,7 @@ lines(
 
 legend(
       x = "topleft",
-      inset = c(0.35, 0.08),
+      inset = c(0.15, 0.08),
       legend = c("Averaged Data", "2020-2021 Data", "Epidemic Start"),
       col = "black",
       fill = c("darkblue", "darkturquoise", "red"),
@@ -575,7 +575,7 @@ lines(
 
 legend(
       x = "topleft",
-      inset = c(0.35, 0.08),
+      inset = c(0.15, 0.08),
       legend = c("Averaged Data", "2020-2021 Data", "Epidemic Start"),
       col = "black",
       fill = c("darkblue", "darkturquoise", "red"),

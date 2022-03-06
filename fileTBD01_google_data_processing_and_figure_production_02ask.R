@@ -27,21 +27,10 @@ library(readxl)
 library(rjson)
 
 
-# Setting the correct working directory.
-# Debugging step to run on local machine instead instead of the code right above used for HiPer Gator.
-work_directory_path  <- "C:/Users/akirpich/Google Drive/2021 Kirpich-Belarus Mortality Analysis"
-
-# Setting up the working directory.
-setwd(work_directory_path)
-# Extra check
-getwd()
-
-
-
 # google trends data relative path
-google_trends_grob_data_relative_path              <- "Data/GoogleTrends/grob_multiTimeline2.csv"
-google_trends_pominki_data_relative_path           <- "Data/GoogleTrends/pominki_multiTimeline2.csv"
-google_trends_ritualnie_uslugi_data_relative_path  <- "Data/GoogleTrends/ritualnie_uslugi_multiTimeline2.csv"
+google_trends_grob_data_relative_path              <- "../Data/GoogleTrends/grob_multiTimeline2.csv"
+google_trends_pominki_data_relative_path           <- "../Data/GoogleTrends/pominki_multiTimeline2.csv"
+google_trends_ritualnie_uslugi_data_relative_path  <- "../Data/GoogleTrends/ritualnie_uslugi_multiTimeline2.csv"
 
 
 
@@ -75,9 +64,9 @@ dim(google_trends_ritualnie_uslugi_data)
 
 
 # Saving the trends data as RData file.
-save( google_trends_grob_data, file = paste("R_Data/google_trends_grob_data.RData") )
-save( google_trends_pominki_data, file = paste("R_Data/google_trends_pominki_data.RData") )
-save( google_trends_ritualnie_uslugi_data, file = paste("R_Data/google_trends_ritualnie_uslugi_data.RData") )
+save( google_trends_grob_data, file = paste("../R_Data/google_trends_grob_data.RData") )
+save( google_trends_pominki_data, file = paste("../R_Data/google_trends_pominki_data.RData") )
+save( google_trends_ritualnie_uslugi_data, file = paste("../R_Data/google_trends_ritualnie_uslugi_data.RData") )
 ls()
 
 
@@ -86,7 +75,7 @@ ls()
 
 
 # Generating pdf output.
-pdf( paste( getwd(), "/Plots/FigureTBD01b.pdf", sep = ""), height = 10, width = 9)
+pdf( paste( "../Plots/FigureTBD01b.pdf", sep = ""), height = 10, width = 9)
 # Definign the number of plots
 par( par(mfrow=c(3,1)),  mar=c(5.1, 5.1, 3, 2.1)  )
 

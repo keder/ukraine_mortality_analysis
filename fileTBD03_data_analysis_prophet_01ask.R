@@ -49,20 +49,10 @@ library("prophet")
 
 
 
-# Setting the correct working directory.
-# Debugging step to run on local machine instead instead of the code right above used for HiPer Gator.
-work_directory_path  <- "C:/Users/akirpich/Google Drive/2021 Kirpich-Belarus Mortality Analysis"
-
-# Setting up the working directory.
-setwd(work_directory_path)
-# Extra check
-getwd()
-
-
 # Loading the trends data from RData files.
-load( file = paste("R_Data/google_trends_grob_data.RData") )
-load( file = paste("R_Data/google_trends_pominki_data.RData") )
-load( file = paste("R_Data/google_trends_ritualnie_uslugi_data.RData") )
+load( file = paste("../R_Data/google_trends_grob_data.RData") )
+load( file = paste("../R_Data/google_trends_pominki_data.RData") )
+load( file = paste("../R_Data/google_trends_ritualnie_uslugi_data.RData") )
 ls()
 
 
@@ -138,14 +128,14 @@ prophet_predictions_grob_plus_original_data$year_month_text <- substr(x = as.cha
 
 
 # Saving the data as RData file.
-save( prophet_predictions_grob_plus_original_data, file = paste("R_Data/prophet_predictions_grob_plus_original_data.RData") )
+save( prophet_predictions_grob_plus_original_data, file = paste("../R_Data/prophet_predictions_grob_plus_original_data.RData") )
 
 # Creating a sumbset with predicitons only
 prophet_predictions_grob_plus_original_data_subset <- 
   prophet_predictions_grob_plus_original_data[, c("ds", "year_month_text", "y", "yhat", "yhat_lower", "yhat_upper", "p_scores", "p_scores_lower", "p_scores_upper", "raw_y_minus_yhat_upper") ]
 
 # Saving the data as RData file.
-save( prophet_predictions_grob_plus_original_data_subset, file = paste("R_Data/prophet_predictions_grob_plus_original_data_subset.RData") )
+save( prophet_predictions_grob_plus_original_data_subset, file = paste("../R_Data/prophet_predictions_grob_plus_original_data_subset.RData") )
 
 # Min and Max
 p_score_min_grob <- min( c(prophet_predictions_grob_plus_original_data_subset$p_scores) )
@@ -233,14 +223,14 @@ prophet_predictions_pominki_plus_original_data$year_month_text <- substr(x = as.
 
 
 # Saving the data as RData file.
-save( prophet_predictions_pominki_plus_original_data, file = paste("R_Data/prophet_predictions_pominki_plus_original_data.RData") )
+save( prophet_predictions_pominki_plus_original_data, file = paste("../R_Data/prophet_predictions_pominki_plus_original_data.RData") )
 
 # Creating a sumbset with predicitons only
 prophet_predictions_pominki_plus_original_data_subset <- 
   prophet_predictions_pominki_plus_original_data[, c("ds", "year_month_text", "y", "yhat", "yhat_lower", "yhat_upper", "p_scores", "p_scores_lower", "p_scores_upper", "raw_y_minus_yhat_upper") ]
 
 # Saving the data as RData file.
-save( prophet_predictions_pominki_plus_original_data_subset, file = paste("R_Data/prophet_predictions_pominki_plus_original_data_subset.RData") )
+save( prophet_predictions_pominki_plus_original_data_subset, file = paste("../R_Data/prophet_predictions_pominki_plus_original_data_subset.RData") )
 
 # Min and Max
 p_score_min_pominki <- min( c(prophet_predictions_pominki_plus_original_data_subset$p_scores) )
@@ -323,14 +313,14 @@ prophet_predictions_ritualnie_uslugi_plus_original_data$year_month_text <- subst
 
 
 # Saving the data as RData file.
-save( prophet_predictions_ritualnie_uslugi_plus_original_data, file = paste("R_Data/prophet_predictions_ritualnie_uslugi_plus_original_data.RData") )
+save( prophet_predictions_ritualnie_uslugi_plus_original_data, file = paste("../R_Data/prophet_predictions_ritualnie_uslugi_plus_original_data.RData") )
 
 # Creating a sumbset with predicitons only
 prophet_predictions_ritualnie_uslugi_plus_original_data_subset <- 
   prophet_predictions_ritualnie_uslugi_plus_original_data[, c("ds", "year_month_text", "y", "yhat", "yhat_lower", "yhat_upper", "p_scores", "p_scores_lower", "p_scores_upper", "raw_y_minus_yhat_upper") ]
 
 # Saving the data as RData file.
-save( prophet_predictions_ritualnie_uslugi_plus_original_data_subset, file = paste("R_Data/prophet_predictions_ritualnie_uslugi_plus_original_data_subset.RData") )
+save( prophet_predictions_ritualnie_uslugi_plus_original_data_subset, file = paste("../R_Data/prophet_predictions_ritualnie_uslugi_plus_original_data_subset.RData") )
 
 # Min and Max
 p_score_min_ritualnie_uslugi <- min( c(prophet_predictions_ritualnie_uslugi_plus_original_data_subset$p_scores) )
@@ -346,7 +336,7 @@ p_score_max_ritualnie_uslugi <- max( c(prophet_predictions_ritualnie_uslugi_plus
 
 
 # Generating pdf output.
-pdf( paste( getwd(), "/Plots/FigureTBD03a.pdf", sep = ""), height = 15, width = 22.5)
+pdf( paste( "../Plots/FigureTBD03a.pdf", sep = ""), height = 15, width = 22.5)
 # Definign the number of plots
 par( par(mfrow=c(2,3)),  mar=c(5.1, 5.1, 5.1, 2.1)  )
 
