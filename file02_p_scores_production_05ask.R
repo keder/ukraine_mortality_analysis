@@ -40,7 +40,7 @@ load(file = paste("../R_Data/belarus_statistics_data_frame_covid19.RData"))
 # Reading mortailty UN Data
 
 # Reading the RAW data in R
-load(file = paste("../R_Data/belarus_un_mortality_data.RData"))
+load(file = paste("../R_Data/ukraine_un_mortality_data.RData"))
 # Reading the PROCESSED data in R
 load(file = paste("../R_Data/monthly_death_data_frame_covid19.RData"))
 
@@ -54,7 +54,7 @@ ls()
 
 # Extracting the last five years 2015 and later
 # years after 2015
-belarus_un_mortality_data_truncated_with_others <- belarus_un_mortality_data[which(belarus_un_mortality_data$Year >= 2015), ]
+belarus_un_mortality_data_truncated_with_others <- ukraine_un_mortality_data[which(ukraine_un_mortality_data$Year >= 2015), ]
 # Dropping total and unknown
 belarus_un_mortality_data_truncated_month <- belarus_un_mortality_data_truncated_with_others[which(belarus_un_mortality_data_truncated_with_others$Month %in% month.name), ]
 dim(belarus_un_mortality_data_truncated_month)
@@ -131,7 +131,7 @@ save(p_scores_frame_five, file = paste("../R_Data/p_scores_frame_five.RData"))
 
 # Extracting the last eight years 2011 and later
 # years after 2011
-belarus_un_mortality_data_truncated_with_others <- belarus_un_mortality_data[which(belarus_un_mortality_data$Year >= 2011), ]
+belarus_un_mortality_data_truncated_with_others <- ukraine_un_mortality_data[which(ukraine_un_mortality_data$Year >= 2011), ]
 # Dropping total and unknown
 belarus_un_mortality_data_truncated_month <- belarus_un_mortality_data_truncated_with_others[which(belarus_un_mortality_data_truncated_with_others$Month %in% month.name), ]
 dim(belarus_un_mortality_data_truncated_month)

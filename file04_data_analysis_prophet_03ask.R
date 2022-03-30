@@ -65,7 +65,7 @@ load(file = paste("../R_Data/monthly_death_data_frame_covid19.RData"))
 load(file = paste("../R_Data/belarus_un_mortality_data_month_only_since_2011.RData"))
 
 # Monthly overall mortality data since 2015
-load(file = paste("../R_Data/belarus_un_mortality_data_month_only_since_2015.RData"))
+load(file = paste("../R_Data/ukraine_un_mortality_data_month_only_since_2015.RData"))
 
 # Loading demograhics data
 load(file = paste("../R_Data/demographics_aggregated_2011_2020.RData"))
@@ -75,16 +75,16 @@ load(file = paste("../R_Data/demographics_aggregated_2011_2020.RData"))
 
 # Fixing the data for the package for five years
 # Number of records BEFORE the epidemic start
-number_of_records_five <- which(belarus_un_mortality_data_month_only_since_2015$date_fixed == pandemic_start)
+number_of_records_five <- which(ukraine_un_mortality_data_month_only_since_2015$date_fixed == pandemic_start)
 
 data_to_feed_full_five <- data.frame(
-      ds = belarus_un_mortality_data_month_only_since_2015$date_fixed,
-      y = belarus_un_mortality_data_month_only_since_2015$Value
+      ds = ukraine_un_mortality_data_month_only_since_2015$date_fixed,
+      y = ukraine_un_mortality_data_month_only_since_2015$Value
 )
 
 data_to_feed_truncated_five <- data.frame(
-      ds = belarus_un_mortality_data_month_only_since_2015$date_fixed[c(1:number_of_records_five)],
-      y = belarus_un_mortality_data_month_only_since_2015$Value[c(1:number_of_records_five)]
+      ds = ukraine_un_mortality_data_month_only_since_2015$date_fixed[c(1:number_of_records_five)],
+      y = ukraine_un_mortality_data_month_only_since_2015$Value[c(1:number_of_records_five)]
 )
 
 

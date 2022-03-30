@@ -45,8 +45,8 @@ dim(google_trends_ritualnie_uslugi_data)
 ls()
 
 # Loading the mortality data as RData file.
-load( file = paste("../R_Data/belarus_un_mortality_data_month_only_since_2015.RData") )
-dim(belarus_un_mortality_data_month_only_since_2015)
+load( file = paste("../R_Data/ukraine_un_mortality_data_month_only_since_2015.RData") )
+dim(ukraine_un_mortality_data_month_only_since_2015)
 ls()
 
 
@@ -65,7 +65,7 @@ names(frame_results_combined)
 
 
 # grob time series
-merged_grob <- base::merge( x = google_trends_grob_data, y = belarus_un_mortality_data_month_only_since_2015, by.x = "Date", by.y =  "date_fixed"   )
+merged_grob <- base::merge( x = google_trends_grob_data, y = ukraine_un_mortality_data_month_only_since_2015, by.x = "Date", by.y =  "date_fixed"   )
 # Geberating standardized values
 merged_grob$grob_scaled  <- 100 * merged_grob$grob / median(merged_grob$grob)
 merged_grob$value_scaled <- 100 * merged_grob$Value / median(merged_grob$Value)
@@ -128,7 +128,7 @@ frame_results_combined$grangertest_smooth[index_to_save] <- grangertest(y = merg
 
 
 # pominki time series
-merged_pominki <- base::merge( x = google_trends_pominki_data, y = belarus_un_mortality_data_month_only_since_2015, by.x = "Date", by.y =  "date_fixed"   )
+merged_pominki <- base::merge( x = google_trends_pominki_data, y = ukraine_un_mortality_data_month_only_since_2015, by.x = "Date", by.y =  "date_fixed"   )
 # Geberating standardized values
 merged_pominki$pominki_scaled  <- 100 * merged_pominki$pominki / median(merged_pominki$pominki)
 merged_pominki$value_scaled <- 100 * merged_pominki$Value / median(merged_pominki$Value)
@@ -190,7 +190,7 @@ frame_results_combined$grangertest_smooth[index_to_save] <- grangertest(y = merg
 
 
 # ritualnie_uslugi time series
-merged_ritualnie_uslugi <- base::merge( x = google_trends_ritualnie_uslugi_data, y = belarus_un_mortality_data_month_only_since_2015, by.x = "Date", by.y =  "date_fixed"   )
+merged_ritualnie_uslugi <- base::merge( x = google_trends_ritualnie_uslugi_data, y = ukraine_un_mortality_data_month_only_since_2015, by.x = "Date", by.y =  "date_fixed"   )
 # Geberating standardized values
 merged_ritualnie_uslugi$ritualnie_uslugi_scaled  <- 100 * merged_ritualnie_uslugi$ritualnie_uslugi / median(merged_ritualnie_uslugi$ritualnie_uslugi)
 merged_ritualnie_uslugi$value_scaled <- 100 * merged_ritualnie_uslugi$Value / median(merged_ritualnie_uslugi$Value)

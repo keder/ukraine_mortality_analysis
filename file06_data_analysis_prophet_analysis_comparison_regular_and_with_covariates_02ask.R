@@ -25,7 +25,7 @@ load(file = paste("../R_Data/monthly_death_data_frame_covid19.RData"))
 load(file = paste("../R_Data/belarus_un_mortality_data_month_only_since_2011.RData"))
 
 # Monthly overall mortality data since 2015
-load(file = paste("../R_Data/belarus_un_mortality_data_month_only_since_2015.RData"))
+load(file = paste("../R_Data/ukraine_un_mortality_data_month_only_since_2015.RData"))
 
 # Loading demograhics data
 load(file = paste("../R_Data/demographics_aggregated_2011_2020.RData"))

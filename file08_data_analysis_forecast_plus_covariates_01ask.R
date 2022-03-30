@@ -64,7 +64,7 @@ load(file = paste("../R_Data/monthly_death_data_frame_covid19.RData"))
 load(file = paste("../R_Data/belarus_un_mortality_data_month_only_since_2011.RData"))
 
 # Monthly overall mortality data since 2015
-load(file = paste("../R_Data/belarus_un_mortality_data_month_only_since_2015.RData"))
+load(file = paste("../R_Data/ukraine_un_mortality_data_month_only_since_2015.RData"))
 
 # Loading demograhics data
 load(file = paste("../R_Data/demographics_aggregated_2011_2020.RData"))
@@ -99,12 +99,12 @@ demographics_aggregated_2011_2020_transposed$Age65Up <- as.numeric(as.character(
 
 # Fixing the data for the package for five years.
 # Number of records BEFORE the epidemic start.
-number_of_records_five <- which(belarus_un_mortality_data_month_only_since_2015$date_fixed == pandemic_start)
+number_of_records_five <- which(ukraine_un_mortality_data_month_only_since_2015$date_fixed == pandemic_start)
 
 merged_five <- data.frame(
-      ds = belarus_un_mortality_data_month_only_since_2015$date_fixed,
-      y = belarus_un_mortality_data_month_only_since_2015$Value,
-      Year = belarus_un_mortality_data_month_only_since_2015$Year
+      ds = ukraine_un_mortality_data_month_only_since_2015$date_fixed,
+      y = ukraine_un_mortality_data_month_only_since_2015$Value,
+      Year = ukraine_un_mortality_data_month_only_since_2015$Year
 )
 
 # with_year_temp <- base::merge( x = merged_five, y = demographics_aggregated_2011_2020_transposed[,c("Year", "Age65Up", "Age70Up")], by = "Year" )
@@ -131,7 +131,7 @@ names(prophet_predictions_eight_plus_original_data_subset)
 AutoArimaModel_object_five <- Arima(y = as.vector(data_to_feed_truncated_five$y), xreg = data_to_feed_truncated_five$Age65Up, order = c(2, 0, 2))
 AutoArimaModel_object_five
 
-pandemic_data_length_five <- dim(belarus_un_mortality_data_month_only_since_2015)[1] - which(belarus_un_mortality_data_month_only_since_2015$date_fixed == pandemic_start)
+pandemic_data_length_five <- dim(ukraine_un_mortality_data_month_only_since_2015)[1] - which(ukraine_un_mortality_data_month_only_since_2015$date_fixed == pandemic_start)
 AutoArimaModel_object_five_forecast <- forecast(AutoArimaModel_object_five, xreg = data_to_feed_truncated_five$Age65Up[(number_of_records_five - (pandemic_data_length_five - 1)):number_of_records_five], h = pandemic_data_length_five)
 
 # Saving values

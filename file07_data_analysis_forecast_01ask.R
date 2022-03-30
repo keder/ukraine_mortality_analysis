@@ -65,7 +65,7 @@ load(file = paste("../R_Data/monthly_death_data_frame_covid19.RData"))
 load(file = paste("../R_Data/belarus_un_mortality_data_month_only_since_2011.RData"))
 
 # Monthly overall mortality data since 2015
-load(file = paste("../R_Data/belarus_un_mortality_data_month_only_since_2015.RData"))
+load(file = paste("../R_Data/ukraine_un_mortality_data_month_only_since_2015.RData"))
 
 # Loading demograhics data
 load(file = paste("../R_Data/demographics_aggregated_2011_2020.RData"))
@@ -79,16 +79,16 @@ pandemic_start <- as.Date("2020-02-15")
 
 # Fixing the data for the package for five years.
 # Number of records BEFORE the epidemic start.
-number_of_records_five <- which(belarus_un_mortality_data_month_only_since_2015$date_fixed == pandemic_start)
+number_of_records_five <- which(ukraine_un_mortality_data_month_only_since_2015$date_fixed == pandemic_start)
 
 data_to_feed_full_five <- data.frame(
-      ds = belarus_un_mortality_data_month_only_since_2015$date_fixed,
-      y = belarus_un_mortality_data_month_only_since_2015$Value
+      ds = ukraine_un_mortality_data_month_only_since_2015$date_fixed,
+      y = ukraine_un_mortality_data_month_only_since_2015$Value
 )
 
 data_to_feed_truncated_five <- data.frame(
-      ds = belarus_un_mortality_data_month_only_since_2015$date_fixed[c(1:number_of_records_five)],
-      y = belarus_un_mortality_data_month_only_since_2015$Value[c(1:number_of_records_five)]
+      ds = ukraine_un_mortality_data_month_only_since_2015$date_fixed[c(1:number_of_records_five)],
+      y = ukraine_un_mortality_data_month_only_since_2015$Value[c(1:number_of_records_five)]
 )
 
 
@@ -106,7 +106,7 @@ names(prophet_predictions_eight_plus_original_data_subset)
 AutoArimaModel_object_five <- Arima(as.vector(data_to_feed_truncated_five$y), order = c(1, 1, 1), include.drift = TRUE)
 AutoArimaModel_object_five
 
-prediction_count_for_five <- dim(belarus_un_mortality_data_month_only_since_2015)[1] - which(belarus_un_mortality_data_month_only_since_2015$date_fixed == pandemic_start)
+prediction_count_for_five <- dim(ukraine_un_mortality_data_month_only_since_2015)[1] - which(ukraine_un_mortality_data_month_only_since_2015$date_fixed == pandemic_start)
 AutoArimaModel_object_five_forecast <- forecast(AutoArimaModel_object_five, h = prediction_count_for_five)
 
 # Saving values
