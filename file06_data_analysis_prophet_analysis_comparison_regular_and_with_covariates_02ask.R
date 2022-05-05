@@ -12,18 +12,6 @@ rm(list = ls(all = TRUE))
 
 # Reading previous datasets
 
-# Daily COVID-19 incidence data
-load(file = paste("../R_Data/belarus_incidence_data_frame_covid19.RData"))
-
-# Cummulative data: incidence, recovered, and mortality
-load(file = paste("../R_Data/belarus_statistics_data_frame_covid19.RData"))
-
-# Monthly COVID-19 mortality data
-load(file = paste("../R_Data/monthly_death_data_frame_covid19.RData"))
-
-# Monthly overall mortality data since 2011
-load(file = paste("../R_Data/belarus_un_mortality_data_month_only_since_2011.RData"))
-
 # Monthly overall mortality data since 2015
 load(file = paste("../R_Data/ukraine_un_mortality_data_month_only_since_2015.RData"))
 
@@ -37,25 +25,12 @@ load(file = paste("../R_Data/prophet_predictions_five_plus_original_data.RData")
 # Saving the data as RData file.
 load(file = paste("../R_Data/prophet_predictions_five_plus_original_data_subset.RData"))
 
-# Saving the data as RData file.
-load(file = paste("../R_Data/prophet_predictions_eight_plus_original_data.RData"))
-
-# Saving the data as RData file.
-load(file = paste("../R_Data/prophet_predictions_eight_plus_original_data_subset.RData"))
-
-
 
 # Loading data
 load(file = paste("../R_Data/prophet_predictions_five_plus_original_data_Age65Up.RData"))
 
 # Saving the data as RData file.
 load(file = paste("../R_Data/prophet_predictions_five_plus_original_data_Age65Up_subset.RData"))
-
-# Saving the data as RData file.
-load(file = paste("../R_Data/prophet_predictions_eight_plus_original_data_Age65Up.RData"))
-
-# Saving the data as RData file.
-load(file = paste("../R_Data/prophet_predictions_eight_plus_original_data_Age65Up_subset.RData"))
 
 pandemic_start <- as.Date("2020-02-15")
 
@@ -65,9 +40,9 @@ pandemic_start <- as.Date("2020-02-15")
 
 # Fix 2021.04.29
 # Adding regressors
-demographics_aggregated_2011_2020_transposed <- data.frame(t(demographics_aggregated_2011_2020)[-1, ])
-names(demographics_aggregated_2011_2020_transposed) <- t(demographics_aggregated_2011_2020)[1, ]
-demographics_aggregated_2011_2020_transposed$Year <- c(2011:2020)
+demographics_aggregated_2011_2020_transposed <- data.frame(t(demographics_aggregated_2011_2020[, -ncol(demographics_aggregated_2011_2020)]))
+names(demographics_aggregated_2011_2020_transposed) <- t(demographics_aggregated_2011_2020)[ncol(demographics_aggregated_2011_2020), ]
+demographics_aggregated_2011_2020_transposed$Year <- c(2015:2021)
 
 demographics_aggregated_2011_2020_transposed$Age70Up <- as.numeric(as.character(demographics_aggregated_2011_2020_transposed$`70Up`))
 demographics_aggregated_2011_2020_transposed$Age65_69 <- as.numeric(as.character(demographics_aggregated_2011_2020_transposed$`65-69`))
@@ -82,8 +57,8 @@ demographics_aggregated_2011_2020_transposed$Age65Up <- as.numeric(as.character(
 
 
 # Min and Max
-p_score_min <- min(c(prophet_predictions_five_plus_original_data_Age65Up_subset$p_scores, prophet_predictions_eight_plus_original_data_Age65Up_subset$p_scores))
-p_score_max <- max(c(prophet_predictions_five_plus_original_data_Age65Up_subset$p_scores, prophet_predictions_eight_plus_original_data_Age65Up_subset$p_scores))
+p_score_min <- min(c(prophet_predictions_five_plus_original_data_Age65Up_subset$p_scores))
+p_score_max <- max(c(prophet_predictions_five_plus_original_data_Age65Up_subset$p_scores))
 
 
 
@@ -106,15 +81,15 @@ max_values <- max(colSums(age_frame_summary))
 
 
 barplot(age_frame_summary,
-        col = c("darkorange", "darkblue"),
+        col = c("#FFD500", "#005BBB"),
         legend = TRUE,
         border = TRUE,
         # xlim = c(1, 5),
-        ylim = c(0, 10275),
+        ylim = c(0, 50275),
         args.legend = list(bty = "n", border = TRUE),
         ylab = "",
         xlab = "",
-        main = "Age Structure During 2011 - 2020",
+        main = "Age Structure During 2011 - 2021",
         # names.arg = as.character(p_scores_frame_five_jan_june$Month),
         names.arg = as.character(demographics_aggregated_2011_2020_transposed$Year),
         cex.names = 1.25,
@@ -128,10 +103,10 @@ barplot(age_frame_summary,
 
 legend(
         x = "topleft",
-        inset = c(0.075, 0.125),
+        inset = c(0.075, 0.200),
         legend = c("Younger Than 65", "Older Than 65"),
         col = "black",
-        fill = c("darkblue", "darkorange"),
+        fill = c("#005BBB", "#FFD500"),
         pt.cex = c(4, 2),
         bg = "white",
         # pch = c(19, 20),
@@ -162,24 +137,24 @@ text(x, y, txt, cex = 4)
 # Second graph
 
 value_combine <- c(
-        prophet_predictions_eight_plus_original_data_subset$yhat_upper,
-        prophet_predictions_eight_plus_original_data_Age65Up_subset$yhat_upper
+        prophet_predictions_five_plus_original_data_subset$yhat_upper,
+        prophet_predictions_five_plus_original_data_Age65Up_subset$yhat_upper
 )
 
 
-if (dim(prophet_predictions_eight_plus_original_data_Age65Up_subset)[1] > dim(prophet_predictions_eight_plus_original_data_subset)[1]) {
-        data_length <- dim(prophet_predictions_eight_plus_original_data_subset)[1]
-        pandemic_data_length <- data_length - which(prophet_predictions_eight_plus_original_data_subset$ds == pandemic_start)
+if (dim(prophet_predictions_five_plus_original_data_Age65Up_subset)[1] > dim(prophet_predictions_five_plus_original_data_subset)[1]) {
+        data_length <- dim(prophet_predictions_five_plus_original_data_subset)[1]
+        pandemic_data_length <- data_length - which(prophet_predictions_five_plus_original_data_subset$ds == pandemic_start)
 } else {
-        data_length <- dim(prophet_predictions_eight_plus_original_data_Age65Up_subset)[1]
-        pandemic_data_length <- data_length - which(prophet_predictions_eight_plus_original_data_Age65Up_subset$ds == pandemic_start)
+        data_length <- dim(prophet_predictions_five_plus_original_data_Age65Up_subset)[1]
+        pandemic_data_length <- data_length - which(prophet_predictions_five_plus_original_data_Age65Up_subset$ds == pandemic_start)
 }
 plot(
-        x = head(as.integer(prophet_predictions_eight_plus_original_data_Age65Up_subset$yhat_upper), data_length),
-        y = head(as.integer(prophet_predictions_eight_plus_original_data_subset$yhat_upper), data_length),
+        x = head(as.integer(prophet_predictions_five_plus_original_data_Age65Up_subset$yhat_upper), data_length),
+        y = head(as.integer(prophet_predictions_five_plus_original_data_subset$yhat_upper), data_length),
         col = c(
-                rep("darkblue", data_length - pandemic_data_length),
-                rep("darkorange", pandemic_data_length)
+                rep("#005BBB", data_length - pandemic_data_length),
+                rep("#FFD500", pandemic_data_length)
         ),
         # col = color_01,
         lwd = 2,
@@ -225,7 +200,7 @@ legend(
         inset = c(0.04, 0.04),
         legend = c("Pre Epidemic", "During Epidemic", "45 Degree Line"),
         col = "black",
-        fill = c("darkblue", "darkorange", "red"),
+        fill = c("#005BBB", "#FFD500", "red"),
         pt.cex = c(4, 2),
         # pch = c(19, 20),
         cex = 1.85
@@ -286,17 +261,17 @@ text(x, y, txt, cex = 4)
 # Third graph
 
 value_combine <- c(
-        prophet_predictions_eight_plus_original_data_subset$yhat_upper,
-        prophet_predictions_eight_plus_original_data_subset$y
+        prophet_predictions_five_plus_original_data_subset$yhat_upper,
+        prophet_predictions_five_plus_original_data_subset$y
 )
 
-pandemic_data_length <- dim(prophet_predictions_eight_plus_original_data_subset)[1] - which(prophet_predictions_eight_plus_original_data_subset$ds == pandemic_start)
+pandemic_data_length <- dim(prophet_predictions_five_plus_original_data_subset)[1] - which(prophet_predictions_five_plus_original_data_subset$ds == pandemic_start)
 plot(
-        x = as.integer(prophet_predictions_eight_plus_original_data_subset$y),
-        y = as.integer(prophet_predictions_eight_plus_original_data_subset$yhat_upper),
+        x = as.integer(prophet_predictions_five_plus_original_data_subset$y),
+        y = as.integer(prophet_predictions_five_plus_original_data_subset$yhat_upper),
         col = c(
-                rep("darkblue", dim(prophet_predictions_eight_plus_original_data_subset)[1] - pandemic_data_length),
-                rep("darkorange", pandemic_data_length)
+                rep("#005BBB", dim(prophet_predictions_five_plus_original_data_subset)[1] - pandemic_data_length),
+                rep("#FFD500", pandemic_data_length)
         ),
         # col = color_01,
         lwd = 2,
@@ -342,7 +317,7 @@ legend(
         inset = c(0.04, 0.04),
         legend = c("Pre Epidemic", "During Epidemic", "45 Degree Line"),
         col = "black",
-        fill = c("darkblue", "darkorange", "red"),
+        fill = c("#005BBB", "#FFD500", "red"),
         pt.cex = c(4, 2),
         # pch = c(19, 20),
         cex = 1.85
@@ -403,17 +378,17 @@ text(x, y, txt, cex = 4)
 # Fourth graph
 
 value_combine <- c(
-        prophet_predictions_eight_plus_original_data_Age65Up_subset$yhat_upper,
-        prophet_predictions_eight_plus_original_data_Age65Up_subset$y
+        prophet_predictions_five_plus_original_data_Age65Up_subset$yhat_upper,
+        prophet_predictions_five_plus_original_data_Age65Up_subset$y
 )
 
-pandemic_data_length <- dim(prophet_predictions_eight_plus_original_data_Age65Up_subset)[1] - which(prophet_predictions_eight_plus_original_data_Age65Up_subset$ds == pandemic_start)
+pandemic_data_length <- dim(prophet_predictions_five_plus_original_data_Age65Up_subset)[1] - which(prophet_predictions_five_plus_original_data_Age65Up_subset$ds == pandemic_start)
 plot(
-        x = as.integer(prophet_predictions_eight_plus_original_data_Age65Up_subset$y),
-        y = as.integer(prophet_predictions_eight_plus_original_data_Age65Up_subset$yhat_upper),
+        x = as.integer(prophet_predictions_five_plus_original_data_Age65Up_subset$y),
+        y = as.integer(prophet_predictions_five_plus_original_data_Age65Up_subset$yhat_upper),
         col = c(
-                rep("darkblue", dim(prophet_predictions_eight_plus_original_data_Age65Up_subset)[1] - pandemic_data_length),
-                rep("darkorange", pandemic_data_length)
+                rep("#005BBB", dim(prophet_predictions_five_plus_original_data_Age65Up_subset)[1] - pandemic_data_length),
+                rep("#FFD500", pandemic_data_length)
         ),
         # col = color_01,
         lwd = 2,
@@ -459,7 +434,7 @@ legend(
         inset = c(0.04, 0.04),
         legend = c("Pre Epidemic", "During Epidemic", "45 Degree Line"),
         col = "black",
-        fill = c("darkblue", "darkorange", "red"),
+        fill = c("#005BBB", "#FFD500", "red"),
         pt.cex = c(4, 2),
         # pch = c(19, 20),
         cex = 1.85

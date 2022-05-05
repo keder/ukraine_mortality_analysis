@@ -12,17 +12,6 @@ rm(list=ls(all=TRUE))
 
 # Reading previous datasets
 
-# Daily COVID-19 incidence data
-load( file = paste("../R_Data/belarus_incidence_data_frame_covid19.RData") )
-
-# Cumulative data: incidence, recovered, and mortality
-load( file = paste("../R_Data/belarus_statistics_data_frame_covid19.RData") )
-
-# Monthly COVID-19 mortality data
-load( file = paste("../R_Data/monthly_death_data_frame_covid19.RData") )
-
-# Monthly overall mortality data since 2011
-load( file = paste("../R_Data/belarus_un_mortality_data_month_only_since_2011.RData") )
 
 # Monthly overall mortality data since 2015
 load( file = paste("../R_Data/ukraine_un_mortality_data_month_only_since_2015.RData") )
@@ -37,25 +26,10 @@ load( file = paste("../R_Data/demographics_aggregated_2011_2020.RData") )
 # Saving the data as RData file.
 load( file = paste("../R_Data/arima_predictions_five_plus_original_data_subset.RData") )
 
-# Saving the data as RData file.
-# load( file = paste("R_Data/arima_predictions_eight_plus_original_data.RData") )
-
-# Saving the data as RData file.
-load( file = paste("../R_Data/arima_predictions_eight_plus_original_data_subset.RData") )
-
-
-
-# Loading data
-# load( file = paste("R_Data/arima_predictions_five_plus_original_data_Age65Up.RData") )
 
 # Saving the data as RData file.
 load( file = paste("../R_Data/arima_predictions_five_plus_original_data_Age65Up_subset.RData") )
 
-# Saving the data as RData file.
-# load( file = paste("R_Data/arima_predictions_eight_plus_original_data_Age65Up.RData") )
-
-# Saving the data as RData file.
-load( file = paste("../R_Data/arima_predictions_eight_plus_original_data_Age65Up_subset.RData") )
 
 pandemic_start <- as.Date("2020-02-15")
 
@@ -65,9 +39,9 @@ pandemic_start <- as.Date("2020-02-15")
 
 # Fix 2021.04.29
 # Adding regressors
-demographics_aggregated_2011_2020_transposed <- data.frame(t(demographics_aggregated_2011_2020)[-1,])
-names(demographics_aggregated_2011_2020_transposed) <- t(demographics_aggregated_2011_2020)[1,]
-demographics_aggregated_2011_2020_transposed$Year <- c(2011:2020)
+demographics_aggregated_2011_2020_transposed <- data.frame(t(demographics_aggregated_2011_2020[, -ncol(demographics_aggregated_2011_2020)]))
+names(demographics_aggregated_2011_2020_transposed) <- t(demographics_aggregated_2011_2020)[ncol(demographics_aggregated_2011_2020), ]
+demographics_aggregated_2011_2020_transposed$Year <- c(2015:2021)
 
 demographics_aggregated_2011_2020_transposed$Age70Up  <- as.numeric(as.character(demographics_aggregated_2011_2020_transposed$`70Up`))
 demographics_aggregated_2011_2020_transposed$Age65_69 <- as.numeric(as.character(demographics_aggregated_2011_2020_transposed$`65-69`))
@@ -82,8 +56,8 @@ demographics_aggregated_2011_2020_transposed$Age65Up <- as.numeric( as.character
 
 
 # Min and Max
-p_score_min <- min( c(arima_predictions_five_plus_original_data_Age65Up_subset$p_scores, arima_predictions_eight_plus_original_data_Age65Up_subset$p_scores) )
-p_score_max <- max( c(arima_predictions_five_plus_original_data_Age65Up_subset$p_scores, arima_predictions_eight_plus_original_data_Age65Up_subset$p_scores) )
+p_score_min <- min( c(arima_predictions_five_plus_original_data_Age65Up_subset$p_scores, arima_predictions_five_plus_original_data_Age65Up_subset$p_scores) )
+p_score_max <- max( c(arima_predictions_five_plus_original_data_Age65Up_subset$p_scores, arima_predictions_five_plus_original_data_Age65Up_subset$p_scores) )
 
 
 
@@ -104,15 +78,15 @@ max_values <- max( colSums( age_frame_summary ) )
 
 
 barplot( age_frame_summary, 
-         col= c("darkorange", "darkblue"), 
+         col= c("#FFD500", "#005BBB"), 
          legend = TRUE, 
          border =  TRUE, 
          #xlim = c(1, 5), 
-         ylim = c( 0, 10275 ), 
+         ylim = c( 0, 50275 ), 
          args.legend = list(bty="n", border=TRUE), 
          ylab = "", 
          xlab = "", 
-         main = "Age Structure During 2011 - 2020",
+         main = "Age Structure During 2011 - 2021",
          # names.arg = as.character(p_scores_frame_five_jan_june$Month), 
          names.arg = as.character(demographics_aggregated_2011_2020_transposed$Year), 
          cex.names = 1.25, 
@@ -124,10 +98,10 @@ barplot( age_frame_summary,
 
 
 legend( x = "topleft", 
-        inset= c(0.075, 0.125), 
+        inset= c(0.075, 0.175), 
         legend = c("Younger Than 65", "Older Than 65"), 
         col = "black", 
-        fill = c("darkblue", "darkorange"),   
+        fill = c("#005BBB", "#FFD500"),   
         pt.cex = c(4, 2),
         bg ="white",
         # pch = c(19, 20),  
@@ -156,15 +130,15 @@ text(x, y, txt, cex = 4)
 
 # Second graph
 
-value_combine <- c(arima_predictions_eight_plus_original_data_subset$y_hat,
-                   arima_predictions_eight_plus_original_data_Age65Up_subset$y_hat)
+value_combine <- c(arima_predictions_five_plus_original_data_subset$y_hat,
+                   arima_predictions_five_plus_original_data_Age65Up_subset$y_hat)
 
 
-pandemic_data_length <- dim(arima_predictions_eight_plus_original_data_Age65Up_subset)[1] - which(arima_predictions_eight_plus_original_data_Age65Up_subset$ds == pandemic_start)
-plot(x = as.integer(arima_predictions_eight_plus_original_data_Age65Up_subset$y_hat),
-     y = as.integer(head(arima_predictions_eight_plus_original_data_subset$y_hat, length(arima_predictions_eight_plus_original_data_Age65Up_subset$y_hat))),
-     col = c( rep( "darkblue", dim(arima_predictions_eight_plus_original_data_subset)[1] - pandemic_data_length ),
-              rep( "darkorange",  pandemic_data_length ) ),
+pandemic_data_length <- dim(arima_predictions_five_plus_original_data_Age65Up_subset)[1] - which(arima_predictions_five_plus_original_data_Age65Up_subset$ds == pandemic_start)
+plot(x = as.integer(arima_predictions_five_plus_original_data_Age65Up_subset$y_hat),
+     y = as.integer(head(arima_predictions_five_plus_original_data_subset$y_hat, length(arima_predictions_five_plus_original_data_Age65Up_subset$y_hat))),
+     col = c( rep( "#005BBB", dim(arima_predictions_five_plus_original_data_subset)[1] - pandemic_data_length ),
+              rep( "#FFD500",  pandemic_data_length ) ),
      # col = color_01, 
      lwd = 2,
      # pch = 16,
@@ -202,7 +176,7 @@ legend( x = "topleft",
         inset= c(0.04, 0.04), 
         legend = c("Pre Epidemic", "During Epidemic","45 Degree Line"), 
         col = "black", 
-        fill = c("darkblue", "darkorange", "red"),   
+        fill = c("#005BBB", "#FFD500", "red"),   
         pt.cex = c(4, 2),
         # pch = c(19, 20),  
         cex = 1.85 ) 
@@ -261,15 +235,15 @@ text(x, y, txt, cex = 4)
 
 # Third graph
 
-value_combine <- c(arima_predictions_eight_plus_original_data_subset$y_hat,
-                   arima_predictions_eight_plus_original_data_subset$y)
+value_combine <- c(arima_predictions_five_plus_original_data_subset$y_hat,
+                   arima_predictions_five_plus_original_data_subset$y)
 
 
-pandemic_data_length <- dim(arima_predictions_eight_plus_original_data_subset)[1] - which(arima_predictions_eight_plus_original_data_subset$ds == pandemic_start)
-plot(x = as.integer(arima_predictions_eight_plus_original_data_subset$y),
-     y = as.integer(arima_predictions_eight_plus_original_data_subset$y_hat),
-     col = c( rep( "darkblue", dim(arima_predictions_eight_plus_original_data_subset)[1] - pandemic_data_length ),
-              rep( "darkorange",  pandemic_data_length ) ),
+pandemic_data_length <- dim(arima_predictions_five_plus_original_data_subset)[1] - which(arima_predictions_five_plus_original_data_subset$ds == pandemic_start)
+plot(x = as.integer(arima_predictions_five_plus_original_data_subset$y),
+     y = as.integer(arima_predictions_five_plus_original_data_subset$y_hat),
+     col = c( rep( "#005BBB", dim(arima_predictions_five_plus_original_data_subset)[1] - pandemic_data_length ),
+              rep( "#FFD500",  pandemic_data_length ) ),
      # col = color_01, 
      lwd = 2,
      # pch = 16,
@@ -307,7 +281,7 @@ legend( x = "topleft",
         inset= c(0.04, 0.04), 
         legend = c("Pre Epidemic", "During Epidemic","45 Degree Line"), 
         col = "black", 
-        fill = c("darkblue", "darkorange", "red"),   
+        fill = c("#005BBB", "#FFD500", "red"),   
         pt.cex = c(4, 2),
         # pch = c(19, 20),  
         cex = 1.85 ) 
@@ -366,15 +340,15 @@ text(x, y, txt, cex = 4)
 
 # Fourth graph
 
-value_combine <- c(arima_predictions_eight_plus_original_data_Age65Up_subset$y_hat,
-                   arima_predictions_eight_plus_original_data_Age65Up_subset$y)
+value_combine <- c(arima_predictions_five_plus_original_data_Age65Up_subset$y_hat,
+                   arima_predictions_five_plus_original_data_Age65Up_subset$y)
 
 
-pandemic_data_length <- dim(arima_predictions_eight_plus_original_data_Age65Up_subset)[1] - which(arima_predictions_eight_plus_original_data_Age65Up_subset$ds == pandemic_start)
-plot(x = as.integer(arima_predictions_eight_plus_original_data_Age65Up_subset$y),
-     y = as.integer(arima_predictions_eight_plus_original_data_Age65Up_subset$y_hat),
-     col = c( rep( "darkblue", dim(arima_predictions_eight_plus_original_data_Age65Up_subset)[1] - pandemic_data_length ),
-              rep( "darkorange",  pandemic_data_length ) ),
+pandemic_data_length <- dim(arima_predictions_five_plus_original_data_Age65Up_subset)[1] - which(arima_predictions_five_plus_original_data_Age65Up_subset$ds == pandemic_start)
+plot(x = as.integer(arima_predictions_five_plus_original_data_Age65Up_subset$y),
+     y = as.integer(arima_predictions_five_plus_original_data_Age65Up_subset$y_hat),
+     col = c( rep( "#005BBB", dim(arima_predictions_five_plus_original_data_Age65Up_subset)[1] - pandemic_data_length ),
+              rep( "#FFD500",  pandemic_data_length ) ),
      # col = color_01, 
      lwd = 2,
      # pch = 16,
@@ -412,7 +386,7 @@ legend( x = "topleft",
         inset= c(0.04, 0.04), 
         legend = c("Pre Epidemic", "During Epidemic","45 Degree Line"), 
         col = "black", 
-        fill = c("darkblue", "darkorange", "red"),   
+        fill = c("#005BBB", "#FFD500", "red"),   
         pt.cex = c(4, 2),
         # pch = c(19, 20),  
         cex = 1.85 ) 

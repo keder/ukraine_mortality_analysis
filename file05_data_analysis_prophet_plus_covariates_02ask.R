@@ -53,18 +53,6 @@ library("prophet")
 
 # Reading previous datasets
 
-# Daily COVID-19 incidence data
-load(file = paste("../R_Data/belarus_incidence_data_frame_covid19.RData"))
-
-# Cummulative data: incidence, recovered, and mortality
-load(file = paste("../R_Data/belarus_statistics_data_frame_covid19.RData"))
-
-# Monthly COVID-19 mortality data
-load(file = paste("../R_Data/monthly_death_data_frame_covid19.RData"))
-
-# Monthly overall mortality data since 2011
-load(file = paste("../R_Data/belarus_un_mortality_data_month_only_since_2011.RData"))
-
 # Monthly overall mortality data since 2015
 load(file = paste("../R_Data/ukraine_un_mortality_data_month_only_since_2015.RData"))
 
@@ -77,9 +65,9 @@ pandemic_start <- as.Date("2020-02-15")
 
 # Fix 2021.04.29
 # Adding regressors
-demographics_aggregated_2011_2020_transposed <- data.frame(t(demographics_aggregated_2011_2020)[-1, ])
-names(demographics_aggregated_2011_2020_transposed) <- t(demographics_aggregated_2011_2020)[1, ]
-demographics_aggregated_2011_2020_transposed$Year <- c(2011:2020)
+demographics_aggregated_2011_2020_transposed <- data.frame(t(demographics_aggregated_2011_2020[, -ncol(demographics_aggregated_2011_2020)]))
+names(demographics_aggregated_2011_2020_transposed) <- t(demographics_aggregated_2011_2020)[ncol(demographics_aggregated_2011_2020), ]
+demographics_aggregated_2011_2020_transposed$Year <- c(2015:2021)
 
 demographics_aggregated_2011_2020_transposed$Age70Up <- as.numeric(as.character(demographics_aggregated_2011_2020_transposed$`70Up`))
 demographics_aggregated_2011_2020_transposed$Age65_69 <- as.numeric(as.character(demographics_aggregated_2011_2020_transposed$`65-69`))
@@ -185,127 +173,29 @@ save(prophet_predictions_five_plus_original_data_Age65Up_subset, file = paste(".
 
 
 
-
-
-# Fixing the data for the package for eight years
-# Number of records BEFORE the epidemic start
-number_of_records_eight <- which(belarus_un_mortality_data_month_only_since_2011$date_fixed == pandemic_start)
-
-
-merged_eight <- data.frame(
-      ds = belarus_un_mortality_data_month_only_since_2011$date_fixed,
-      y = belarus_un_mortality_data_month_only_since_2011$Value,
-      Year = belarus_un_mortality_data_month_only_since_2011$Year
-)
-
-# with_year_temp <- base::merge( x = merged_eight, y = demographics_aggregated_2011_2020_transposed[,c("Year", "Age65Up", "Age70Up")], by = "Year" )
-with_year_temp <- base::merge(x = merged_eight, y = demographics_aggregated_2011_2020_transposed[, c("Year", "Age65Up")], by = "Year")
-
-data_to_feed_full_eight <- with_year_temp[, -which(names(with_year_temp) == "Year")]
-
-data_to_feed_truncated_eight <- data_to_feed_full_eight[c(1:number_of_records_eight), ]
-
-
-
-# Listing names of the created objects.
-names(data_to_feed_full_eight)
-names(data_to_feed_truncated_eight)
-
-
-
-# Creating a prophet object.
-prophet_object_eight <- prophet()
-
-
-prophet_object_eight <- add_regressor(prophet_object_eight, "Age65Up")
-prophet_object_eight <- fit.prophet(prophet_object_eight, data_to_feed_truncated_eight)
-
-
-# Full frame for predictions. Dates only extraction
-data_to_feed_full_eight_dates_only <- subset(data_to_feed_full_eight, select = -c(y))
-# data_to_feed_full_eight_dates_only <- data_to_feed_full_eight
-
-# Precting for the specified dates.
-prophet_predictions_eight <- predict(prophet_object_eight, data_to_feed_full_eight_dates_only)
-# Fixing dates
-prophet_predictions_eight$ds <- as.Date(prophet_predictions_eight$ds)
-
-
-# Summaries for mortalities
-dim(prophet_predictions_eight)
-head(prophet_predictions_eight)
-tail(prophet_predictions_eight)
-
-# Adding original data
-prophet_predictions_eight_plus_original_data_Age65Up <- base::merge(x = data_to_feed_full_eight, y = prophet_predictions_eight, by = "ds")
-dim(prophet_predictions_eight_plus_original_data_Age65Up)
-
-
-# Summaries for mortalities
-dim(prophet_predictions_eight_plus_original_data_Age65Up)
-head(prophet_predictions_eight_plus_original_data_Age65Up)
-tail(prophet_predictions_eight_plus_original_data_Age65Up)
-
-
-# lower scores
-prophet_predictions_eight_plus_original_data_Age65Up$p_scores_lower <-
-      100 * (prophet_predictions_eight_plus_original_data_Age65Up$y - prophet_predictions_eight_plus_original_data_Age65Up$yhat_lower) / prophet_predictions_eight_plus_original_data_Age65Up$yhat_lower
-# upper scores
-prophet_predictions_eight_plus_original_data_Age65Up$p_scores_upper <-
-      100 * (prophet_predictions_eight_plus_original_data_Age65Up$y - prophet_predictions_eight_plus_original_data_Age65Up$yhat_upper) / prophet_predictions_eight_plus_original_data_Age65Up$yhat_upper
-# scores
-prophet_predictions_eight_plus_original_data_Age65Up$p_scores <-
-      100 * (prophet_predictions_eight_plus_original_data_Age65Up$y - prophet_predictions_eight_plus_original_data_Age65Up$yhat) / prophet_predictions_eight_plus_original_data_Age65Up$yhat
-
-
-# Computing the raw excess mortalities
-# raw excess
-prophet_predictions_eight_plus_original_data_Age65Up$raw_y_minus_yhat_upper <-
-      prophet_predictions_eight_plus_original_data_Age65Up$y - prophet_predictions_eight_plus_original_data_Age65Up$yhat_upper
-
-
-# Creating year and month in text
-prophet_predictions_eight_plus_original_data_Age65Up$year_month_text <- substr(x = as.character(prophet_predictions_eight_plus_original_data_Age65Up$ds), start = 1, stop = 7)
-
-
-# Saving the data as RData file.
-save(prophet_predictions_eight_plus_original_data_Age65Up, file = paste("../R_Data/prophet_predictions_eight_plus_original_data_Age65Up.RData"))
-
-# Creating a sumbset with predicitons only
-prophet_predictions_eight_plus_original_data_Age65Up_subset <-
-      prophet_predictions_eight_plus_original_data_Age65Up[, c("ds", "year_month_text", "y", "yhat", "yhat_lower", "yhat_upper", "p_scores", "p_scores_lower", "p_scores_upper", "raw_y_minus_yhat_upper")]
-
-# Saving the data as RData file.
-save(prophet_predictions_eight_plus_original_data_Age65Up_subset, file = paste("../R_Data/prophet_predictions_eight_plus_original_data_Age65Up_subset.RData"))
-
-
-
-
-
 # Min and Max
-p_score_min <- min(c(prophet_predictions_five_plus_original_data_Age65Up_subset$p_scores, prophet_predictions_eight_plus_original_data_Age65Up_subset$p_scores))
-p_score_max <- max(c(prophet_predictions_five_plus_original_data_Age65Up_subset$p_scores, prophet_predictions_eight_plus_original_data_Age65Up_subset$p_scores))
+p_score_min <- min(c(prophet_predictions_five_plus_original_data_Age65Up_subset$p_scores))
+p_score_max <- max(c(prophet_predictions_five_plus_original_data_Age65Up_subset$p_scores))
 
 
 
 
 
 # Generating pdf output.
-pdf(paste("../Plots/FigureS01a.pdf", sep = ""), height = 15, width = 15)
+pdf(paste("../Plots/FigureS01a.pdf", sep = ""), height = 15, width = 18)
 # Definign the number of plots
-par(par(mfrow = c(2, 2)), mar = c(5.1, 5.1, 5.1, 2.1))
+par(par(mfrow = c(2, 1)), mar = c(5.5, 5.1, 5.1, 2.1))
 
 
 # First plot
-plot_point_count = 25
-lower_index_five <- length(prophet_predictions_five_plus_original_data_Age65Up_subset$p_scores_upper) - plot_point_count
+lower_index_five <- 1
 upper_index_five <- length(prophet_predictions_five_plus_original_data_Age65Up_subset$p_scores_upper)
 range_five <- c(lower_index_five:upper_index_five)
 pandemic_data_length = upper_index_five - which(prophet_predictions_five_plus_original_data_Age65Up_subset$ds == pandemic_start)
 range_five_last4 <- c(upper_index_five - c(pandemic_data_length:0))
 
 barplot(prophet_predictions_five_plus_original_data_Age65Up_subset$p_scores_upper[range_five],
-      col = c(rep("darkblue", length(prophet_predictions_five_plus_original_data_Age65Up_subset$p_scores[range_five]) - pandemic_data_length), rep("orange", pandemic_data_length)),
+      col = c(rep("#005BBB", length(prophet_predictions_five_plus_original_data_Age65Up_subset$p_scores[range_five]) - pandemic_data_length), rep("#FFD500", pandemic_data_length)),
       legend = TRUE,
       border = TRUE,
       # xlim = c(1, 5),
@@ -330,7 +220,7 @@ legend(
       inset = c(0.06, 0.08),
       legend = c("Pre Epidemic", "During Epidemic"),
       col = "black",
-      fill = c("darkblue", "darkorange"),
+      fill = c("#005BBB", "#FFD500"),
       pt.cex = c(4, 2),
       # pch = c(19, 20),
       cex = 2
@@ -358,64 +248,6 @@ text(x, y, txt, cex = 4)
 
 
 
-# Second plot
-
-lower_index_eight <- length(prophet_predictions_eight_plus_original_data_Age65Up_subset$p_scores_upper) - plot_point_count
-upper_index_eight <- length(prophet_predictions_eight_plus_original_data_Age65Up_subset$p_scores_upper)
-range_eight <- c(lower_index_eight:upper_index_eight)
-pandemic_data_length = upper_index_eight - which(prophet_predictions_eight_plus_original_data_Age65Up_subset$ds == pandemic_start)
-range_eight_last4 <- c(upper_index_eight - c(pandemic_data_length:0))
-
-barplot(prophet_predictions_eight_plus_original_data_Age65Up_subset$p_scores_upper[range_eight],
-      col = c(rep("darkblue", length(prophet_predictions_eight_plus_original_data_Age65Up_subset$p_scores[range_eight]) - pandemic_data_length), rep("orange", pandemic_data_length)),
-      legend = TRUE,
-      border = TRUE,
-      # xlim = c(1, 5),
-      ylim = c(p_score_min - 5, p_score_max + 5),
-      args.legend = list(bty = "n", border = TRUE),
-      ylab = "",
-      xlab = "",
-      main = "P-Scores For 2011/01-2020/02 Model Fits\n & 2020/03-2021/02 Prediction",
-      # names.arg = as.character(p_scores_frame_eight_jan_june$Month),
-      names.arg = prophet_predictions_eight_plus_original_data_Age65Up_subset$year_month_text[range_eight],
-      cex.names = 1.25,
-      cex.lab = 2,
-      cex.axis = 1.75,
-      cex.main = 2,
-      cex = 2,
-      las = 2
-)
-
-
-legend(
-      x = "topleft",
-      inset = c(0.06, 0.08),
-      legend = c("Pre Epidemic", "During Epidemic"),
-      col = "black",
-      fill = c("darkblue", "darkorange"),
-      pt.cex = c(4, 2),
-      # pch = c(19, 20),
-      cex = 2
-)
-
-
-# Label B
-par(xpd = NA)
-
-di <- dev.size("in")
-x <- grconvertX(c(0, di[1]), from = "in", to = "user")
-y <- grconvertY(c(0, di[2]), from = "in", to = "user")
-
-fig <- par("fig")
-x <- x[1] + (x[2] - x[1]) * fig[1:2]
-y <- y[1] + (y[2] - y[1]) * fig[3:4]
-
-txt <- "B"
-x <- x[1] + strwidth(txt, cex = 4) * 6 / 5
-y <- y[2] - strheight(txt, cex = 4) * 6 / 5
-text(x, y, txt, cex = 4)
-
-
 
 
 
@@ -424,16 +256,14 @@ text(x, y, txt, cex = 4)
 
 value_combine <- c(
       prophet_predictions_five_plus_original_data_Age65Up_subset$yhat_upper,
-      prophet_predictions_five_plus_original_data_Age65Up_subset$y,
-      prophet_predictions_eight_plus_original_data_Age65Up_subset$yhat_upper,
-      prophet_predictions_eight_plus_original_data_Age65Up_subset$y
+      prophet_predictions_five_plus_original_data_Age65Up_subset$y
 )
 
 
 plot(
       x = as.integer(prophet_predictions_five_plus_original_data_Age65Up_subset$ds)[range_five],
       y = prophet_predictions_five_plus_original_data_Age65Up_subset$yhat_upper[range_five],
-      col = "darkblue",
+      col = "#005BBB",
       # col = color_01,
       lwd = 5,
       # pch = 16,
@@ -441,7 +271,7 @@ plot(
       # pch = 17,
       type = "l",
       # main = paste( colnames(proporions_all_locations_data_baseline)[compartment],  sep = ""),
-      main = "Reported (2015/01-2020/02)\nFitted (2015/01-2020/02) & Predicted (2020/03-2021/02)",
+      main = "Reported (2015/01-2020/02)\nFitted (2015/01-2021/12) & Predicted (2020/03-2021/12)",
       # xlim = c( intersected_data$death_covid19,  combined_date_max  ),
       ylim = c(
             min(value_combine),
@@ -462,8 +292,8 @@ plot(
 lines(
       x = as.integer(prophet_predictions_five_plus_original_data_Age65Up_subset$ds)[range_five],
       y = prophet_predictions_five_plus_original_data_Age65Up_subset$yhat_upper[range_five],
-      col = "darkblue",
-      # col = "darkturquoise",
+      col = "#005BBB",
+      # col = "#00bb61",
       # col = color_01,
       lwd = 15,
       pch = 19,
@@ -474,8 +304,8 @@ lines(
 lines(
       x = as.integer(prophet_predictions_five_plus_original_data_Age65Up_subset$ds)[range_five_last4],
       y = prophet_predictions_five_plus_original_data_Age65Up_subset$yhat_upper[range_five_last4],
-      # col = "darkblue",
-      col = "darkorange",
+      # col = "#005BBB",
+      col = "#FFD500",
       # col = color_01,
       lwd = 5,
       # pch = 16,
@@ -486,8 +316,8 @@ lines(
 lines(
       x = as.integer(prophet_predictions_five_plus_original_data_Age65Up_subset$ds)[range_five_last4],
       y = prophet_predictions_five_plus_original_data_Age65Up_subset$yhat_upper[range_five_last4],
-      # col = "darkblue",
-      col = "darkorange",
+      # col = "#005BBB",
+      col = "#FFD500",
       # col = color_01,
       lwd = 15,
       pch = 19,
@@ -498,8 +328,8 @@ lines(
 lines(
       x = as.integer(prophet_predictions_five_plus_original_data_Age65Up_subset$ds)[range_five],
       y = prophet_predictions_five_plus_original_data_Age65Up_subset$y[range_five],
-      # col = "darkblue",
-      col = "darkturquoise",
+      # col = "#005BBB",
+      col = "#00bb61",
       # col = color_01,
       lwd = 5,
       pch = 19,
@@ -510,8 +340,8 @@ lines(
 lines(
       x = as.integer(prophet_predictions_five_plus_original_data_Age65Up_subset$ds)[range_five],
       y = prophet_predictions_five_plus_original_data_Age65Up_subset$y[range_five],
-      # col = "darkblue",
-      col = "darkturquoise",
+      # col = "#005BBB",
+      col = "#00bb61",
       # col = color_01,
       lwd = 15,
       pch = 19,
@@ -530,10 +360,10 @@ lines(
 
 legend(
       x = "topleft",
-      inset = c(0.08, 0.08),
+      inset = c(0.25, 0.05),
       legend = c("Fitted Trend", "Predicted Trend", "Actual Data", "Epidemic Start"),
       col = "black",
-      fill = c("darkblue", "darkorange", "darkturquoise", "red"),
+      fill = c("#005BBB", "#FFD500", "#00bb61", "red"),
       pt.cex = c(4, 2),
       # pch = c(19, 20),
       cex = 1.85
@@ -560,7 +390,7 @@ x_tlab <- x_indexes_to_display
 # x_lablist  <- as.character( p_scores_frame_five_jan_june$Month )
 x_lablist <- as.character(prophet_predictions_five_plus_original_data_Age65Up_subset$year_month_text[range_five])
 axis(1, at = x_tlab, labels = FALSE)
-text(x = x_tlab, y = par()$usr[3] - 0.03 * (par()$usr[4] - par()$usr[3]), labels = x_lablist, srt = 45, adj = 1, xpd = TRUE, cex = 1.5)
+text(x = x_tlab, y = par()$usr[3] - 0.03 * (par()$usr[4] - par()$usr[3]), labels = x_lablist, srt = 45, adj = 1, xpd = TRUE, cex = 0.9)
 
 
 # Y-axis
@@ -573,7 +403,7 @@ y_lablist <- as.character(round(y_tlab, digits = 0))
 axis(2, at = y_tlab, labels = y_lablist, cex.axis = 1.5)
 
 
-# Label C
+# Label B
 par(xpd = NA)
 
 di <- dev.size("in")
@@ -584,181 +414,7 @@ fig <- par("fig")
 x <- x[1] + (x[2] - x[1]) * fig[1:2]
 y <- y[1] + (y[2] - y[1]) * fig[3:4]
 
-txt <- "C"
-x <- x[1] + strwidth(txt, cex = 4) * 6 / 5
-y <- y[2] - strheight(txt, cex = 4) * 6 / 5
-text(x, y, txt, cex = 4)
-
-
-
-
-
-
-# Fourth graph
-
-value_combine <- c(
-      prophet_predictions_five_plus_original_data_Age65Up_subset$yhat_upper,
-      prophet_predictions_five_plus_original_data_Age65Up_subset$y,
-      prophet_predictions_eight_plus_original_data_Age65Up_subset$yhat_upper,
-      prophet_predictions_eight_plus_original_data_Age65Up_subset$y
-)
-
-
-plot(
-      x = as.integer(prophet_predictions_eight_plus_original_data_Age65Up_subset$ds)[range_eight],
-      y = prophet_predictions_eight_plus_original_data_Age65Up_subset$yhat_upper[range_eight],
-      col = "darkblue",
-      # col = color_01,
-      lwd = 5,
-      # pch = 16,
-      # pch = shape_01,
-      # pch = 17,
-      type = "l",
-      # main = paste( colnames(proporions_all_locations_data_baseline)[compartment],  sep = ""),
-      main = "Reported (2011/01-2020/02)\nFitted (2011/01-2020/02) & Predicted (2020/03-2021/02)",
-      # xlim = c( intersected_data$death_covid19,  combined_date_max  ),
-      ylim = c(
-            min(value_combine),
-            max(value_combine) * 1.01
-      ),
-      # ylim = c(0, y_max_value_current * 1.2  ),
-      # xlab = "Time",
-      xlab = "",
-      ylab = "Counts",
-      xaxt = "n",
-      yaxt = "n",
-      cex = 3,
-      cex.axis = 1.55,
-      cex.lab = 2,
-      cex.main = 1.45,
-      cex.sub = 2
-)
-lines(
-      x = as.integer(prophet_predictions_eight_plus_original_data_Age65Up_subset$ds)[range_eight],
-      y = prophet_predictions_eight_plus_original_data_Age65Up_subset$yhat_upper[range_eight],
-      col = "darkblue",
-      # col = "darkturquoise",
-      # col = color_01,
-      lwd = 15,
-      pch = 19,
-      # pch = shape_01,
-      # pch = 17,
-      type = "p"
-)
-lines(
-      x = as.integer(prophet_predictions_eight_plus_original_data_Age65Up_subset$ds)[range_eight_last4],
-      y = prophet_predictions_eight_plus_original_data_Age65Up_subset$yhat_upper[range_eight_last4],
-      # col = "darkblue",
-      col = "darkorange",
-      # col = color_01,
-      lwd = 5,
-      # pch = 16,
-      # pch = shape_01,
-      # pch = 17,
-      type = "l"
-)
-lines(
-      x = as.integer(prophet_predictions_eight_plus_original_data_Age65Up_subset$ds)[range_eight_last4],
-      y = prophet_predictions_eight_plus_original_data_Age65Up_subset$yhat_upper[range_eight_last4],
-      # col = "darkblue",
-      col = "darkorange",
-      # col = color_01,
-      lwd = 15,
-      pch = 19,
-      # pch = shape_01,
-      # pch = 17,
-      type = "p"
-)
-lines(
-      x = as.integer(prophet_predictions_eight_plus_original_data_Age65Up_subset$ds)[range_eight],
-      y = prophet_predictions_eight_plus_original_data_Age65Up_subset$y[range_eight],
-      # col = "darkblue",
-      col = "darkturquoise",
-      # col = color_01,
-      lwd = 5,
-      pch = 19,
-      # pch = shape_01,
-      # pch = 17,
-      type = "l"
-)
-lines(
-      x = as.integer(prophet_predictions_eight_plus_original_data_Age65Up_subset$ds)[range_eight],
-      y = prophet_predictions_eight_plus_original_data_Age65Up_subset$y[range_eight],
-      # col = "darkblue",
-      col = "darkturquoise",
-      # col = color_01,
-      lwd = 15,
-      pch = 19,
-      # pch = shape_01,
-      # pch = 17,
-      type = "p"
-)
-
-lines(
-      x = rep(max(as.integer(prophet_predictions_eight_plus_original_data_Age65Up_subset$ds)[range_eight]) - pandemic_data_length * 30, 10),
-      y = c(rep(min(value_combine), 5), rep(max(value_combine), 5)),
-      col = "red",
-      lwd = 1,
-      lty = 2
-)
-
-legend(
-      x = "topleft",
-      inset = c(0.08, 0.08),
-      legend = c("Fitted Trend", "Predicted Trend", "Actual Data", "Epidemic Start"),
-      col = "black",
-      fill = c("darkblue", "darkorange", "darkturquoise", "red"),
-      pt.cex = c(4, 2),
-      # pch = c(19, 20),
-      cex = 1.85
-)
-# labels FAQ -> http://www.r-bloggers.com/rotated-axis-labels-in-r-plots/
-# Creating labels by month and converting.
-
-
-# X-axis
-# labels FAQ -> http://www.r-bloggers.com/rotated-axis-labels-in-r-plots/
-# Creating labels by month and converting.
-initial_date <- min(as.integer(prophet_predictions_eight_plus_original_data_Age65Up_subset$ds)[range_eight])
-final_date <- max(as.integer(prophet_predictions_eight_plus_original_data_Age65Up_subset$ds)[range_eight])
-number_of_dates <- length(as.integer(prophet_predictions_eight_plus_original_data_Age65Up_subset$ds)[range_eight])
-
-
-# Indexes to display
-# x_indexes_to_display <-  seq( from  =  1, to  = length(p_scores_frame_five_jan_june$Month),  by = 1 )
-x_indexes_to_display <- prophet_predictions_eight_plus_original_data_Age65Up_subset$ds[range_eight]
-# x_indexes_to_display[1] <- 1
-# Actual lab elements
-x_tlab <- x_indexes_to_display
-# ctual lab labels
-# x_lablist  <- as.character( p_scores_frame_five_jan_june$Month )
-x_lablist <- as.character(prophet_predictions_eight_plus_original_data_Age65Up_subset$year_month_text[range_eight])
-axis(1, at = x_tlab, labels = FALSE)
-text(x = x_tlab, y = par()$usr[3] - 0.03 * (par()$usr[4] - par()$usr[3]), labels = x_lablist, srt = 45, adj = 1, xpd = TRUE, cex = 1.5)
-
-
-# Y-axis
-# Adding axis label
-# labels FAQ -> https://stackoverflow.com/questions/26180178/r-boxplot-how-to-move-the-x-axis-label-down
-y_min_value <- min(value_combine)
-y_max_value <- max(value_combine)
-y_tlab <- seq(from = y_min_value, to = y_max_value, by = (y_max_value - y_min_value) / 5)
-y_lablist <- as.character(round(y_tlab, digits = 0))
-axis(2, at = y_tlab, labels = y_lablist, cex.axis = 1.5)
-
-
-# Label D
-par(xpd = NA)
-
-di <- dev.size("in")
-x <- grconvertX(c(0, di[1]), from = "in", to = "user")
-y <- grconvertY(c(0, di[2]), from = "in", to = "user")
-
-fig <- par("fig")
-x <- x[1] + (x[2] - x[1]) * fig[1:2]
-y <- y[1] + (y[2] - y[1]) * fig[3:4]
-
-txt <- "D"
+txt <- "B"
 x <- x[1] + strwidth(txt, cex = 4) * 6 / 5
 y <- y[2] - strheight(txt, cex = 4) * 6 / 5
 text(x, y, txt, cex = 4)

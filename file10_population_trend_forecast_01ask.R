@@ -51,17 +51,6 @@ library("prophet")
 
 # Reading previous datasets
 
-# Daily COVID-19 incidence data
-load( file = paste("../R_Data/belarus_incidence_data_frame_covid19.RData") )
-
-# Cumulative data: incidence, recovered, and mortality
-load( file = paste("../R_Data/belarus_statistics_data_frame_covid19.RData") )
-
-# Monthly COVID-19 mortality data
-load( file = paste("../R_Data/monthly_death_data_frame_covid19.RData") )
-
-# Monthly overall mortality data since 2011
-load( file = paste("../R_Data/belarus_un_mortality_data_month_only_since_2011.RData") )
 
 # Monthly overall mortality data since 2015
 load( file = paste("../R_Data/ukraine_un_mortality_data_month_only_since_2015.RData") )
@@ -73,9 +62,9 @@ load( file = paste("../R_Data/demographics_aggregated_2011_2020.RData") )
 
 # Fix 2021.05.05
 # Adding regressors
-demographics_aggregated_2011_2020_transposed <- data.frame(t(demographics_aggregated_2011_2020)[-1,])
-names(demographics_aggregated_2011_2020_transposed) <- t(demographics_aggregated_2011_2020)[1,]
-demographics_aggregated_2011_2020_transposed$Year <- c(2011:2020)
+demographics_aggregated_2011_2020_transposed <- data.frame(t(demographics_aggregated_2011_2020[, -ncol(demographics_aggregated_2011_2020)]))
+names(demographics_aggregated_2011_2020_transposed) <- t(demographics_aggregated_2011_2020)[ncol(demographics_aggregated_2011_2020), ]
+demographics_aggregated_2011_2020_transposed$Year <- c(2015:2021)
 
 demographics_aggregated_2011_2020_transposed$Age70Up  <- as.numeric(as.character(demographics_aggregated_2011_2020_transposed$`70Up`))
 demographics_aggregated_2011_2020_transposed$Age65_69 <- as.numeric(as.character(demographics_aggregated_2011_2020_transposed$`65-69`))
