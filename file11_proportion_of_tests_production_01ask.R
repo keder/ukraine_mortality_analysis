@@ -1,12 +1,8 @@
-# Alexander Kirpich
-# Georgia State University
-# akirpich@gsu.edu
 
-# 2021.05.06. ask
+
+
 rm(list=ls(all=TRUE))
-# Extra check that we deleted everything.
-# 20 Digits Precision Representation
-# options(scipen=20)
+
 
 # Library for the latex exports in the nice format.
 library(xtable)
@@ -55,64 +51,64 @@ month_list_2021 <- c("2021-01", "2021-02", "2021-03", "2021-04", "2021-05", "202
 # Five years
 
 p_scores_different_methods_five_2020 <- data.frame( method = c("Non-parametric", "Prophet", "Prophet&65+", "ARIMA", "ARIMA&65+" ),
-                                              Year2020_01 = rep(0, 5),
-                                               Year2020_02 = rep(0, 5),
-                                               Year2020_03 = rep(0, 5),
-                                               Year2020_04 = rep(0, 5),
-                                               Year2020_05 = rep(0, 5),
-                                               Year2020_06 = rep(0, 5),
-                                               Year2020_07 = rep(0, 5),
-                                               Year2020_08 = rep(0, 5),
-                                               Year2020_09 = rep(0, 5),
-                                               Year2020_10 = rep(0, 5),
-                                               Year2020_11 = rep(0, 5),
-                                               Year2020_12 = rep(0, 5),
+                                              Jan = rep(0, 5),
+                                               Feb = rep(0, 5),
+                                               Mar = rep(0, 5),
+                                               Apr = rep(0, 5),
+                                               May = rep(0, 5),
+                                               Jun = rep(0, 5),
+                                               Jul = rep(0, 5),
+                                               Aug = rep(0, 5),
+                                               Sep = rep(0, 5),
+                                               Oct = rep(0, 5),
+                                               Nov = rep(0, 5),
+                                               Dec = rep(0, 5),
                                                Total = rep(0, 5) )
 p_scores_different_methods_five_2020   
 p_scores_different_methods_five_2021 <- data.frame( method = c("Non-parametric", "Prophet", "Prophet&65+", "ARIMA", "ARIMA&65+" ),
-                                               Year2021_01 = rep(0, 5),
-                                               Year2021_02 = rep(0, 5),
-                                               Year2021_03 = rep(0, 5),
-                                               Year2021_04 = rep(0, 5),
-                                               Year2021_05 = rep(0, 5),
-                                               Year2021_06 = rep(0, 5),
-                                               Year2021_07 = rep(0, 5),
-                                               Year2021_08 = rep(0, 5),
-                                               Year2021_09 = rep(0, 5),
-                                               Year2021_10 = rep(0, 5),
-                                               Year2021_11 = rep(0, 5),
-                                               Year2021_12 = rep(0, 5),
+                                                Jan = rep(0, 5),
+                                               Feb = rep(0, 5),
+                                               Mar = rep(0, 5),
+                                               Apr = rep(0, 5),
+                                               May = rep(0, 5),
+                                               Jun = rep(0, 5),
+                                               Jul = rep(0, 5),
+                                               Aug = rep(0, 5),
+                                               Sep = rep(0, 5),
+                                               Oct = rep(0, 5),
+                                               Nov = rep(0, 5),
+                                               Dec = rep(0, 5),
                                                Total = rep(0, 5) )             
                                           
 
 counts_different_methods_five_2020 <- data.frame( method = c("Non-parametric", "Prophet", "Prophet&65+", "ARIMA", "ARIMA&65+" ),
-                                             Year2020_01 = rep(0, 5),
-                                               Year2020_02 = rep(0, 5),
-                                               Year2020_03 = rep(0, 5),
-                                               Year2020_04 = rep(0, 5),
-                                               Year2020_05 = rep(0, 5),
-                                               Year2020_06 = rep(0, 5),
-                                               Year2020_07 = rep(0, 5),
-                                               Year2020_08 = rep(0, 5),
-                                               Year2020_09 = rep(0, 5),
-                                               Year2020_10 = rep(0, 5),
-                                               Year2020_11 = rep(0, 5),
-                                               Year2020_12 = rep(0, 5),
+                                              Jan = rep(0, 5),
+                                               Feb = rep(0, 5),
+                                               Mar = rep(0, 5),
+                                               Apr = rep(0, 5),
+                                               May = rep(0, 5),
+                                               Jun = rep(0, 5),
+                                               Jul = rep(0, 5),
+                                               Aug = rep(0, 5),
+                                               Sep = rep(0, 5),
+                                               Oct = rep(0, 5),
+                                               Nov = rep(0, 5),
+                                               Dec = rep(0, 5),
                                                Total = rep(0, 5) )
 counts_different_methods_five_2020                
 counts_different_methods_five_2021 <- data.frame( method = c("Non-parametric", "Prophet", "Prophet&65+", "ARIMA", "ARIMA&65+" ),
-                                               Year2021_01 = rep(0, 5),
-                                               Year2021_02 = rep(0, 5),
-                                               Year2021_03 = rep(0, 5),
-                                               Year2021_04 = rep(0, 5),
-                                               Year2021_05 = rep(0, 5),
-                                               Year2021_06 = rep(0, 5),
-                                               Year2021_07 = rep(0, 5),
-                                               Year2021_08 = rep(0, 5),
-                                               Year2021_09 = rep(0, 5),
-                                               Year2021_10 = rep(0, 5),
-                                               Year2021_11 = rep(0, 5),
-                                               Year2021_12 = rep(0, 5),
+                                                Jan = rep(0, 5),
+                                               Feb = rep(0, 5),
+                                               Mar = rep(0, 5),
+                                               Apr = rep(0, 5),
+                                               May = rep(0, 5),
+                                               Jun = rep(0, 5),
+                                               Jul = rep(0, 5),
+                                               Aug = rep(0, 5),
+                                               Sep = rep(0, 5),
+                                               Oct = rep(0, 5),
+                                               Nov = rep(0, 5),
+                                               Dec = rep(0, 5),
                                                Total = rep(0, 5) )
 
 
@@ -208,6 +204,7 @@ counts_different_methods_five_xtable   <- xtable(x = counts_different_methods_fi
 p_scores_different_methods_five_xtable_path_out <- paste("../R_Output/p_scores_different_methods_five_xtable_2020.tex", sep ="")
 # Printing
 print.xtable( x = p_scores_different_methods_five_xtable, type="latex", file = p_scores_different_methods_five_xtable_path_out, include.rownames = FALSE )
+write.csv(p_scores_different_methods_five_xtable, "../R_Output/p_scores_different_methods_five_xtable_2020.csv")
 
 # Creating a path 
 counts_different_methods_five_xtable_path_out <- paste("../R_Output/counts_different_methods_five_xtable_2020.tex", sep ="")
@@ -232,6 +229,7 @@ counts_different_methods_five_xtable   <- xtable(x = counts_different_methods_fi
 p_scores_different_methods_five_xtable_path_out <- paste("../R_Output/p_scores_different_methods_five_xtable_2021.tex", sep ="")
 # Printing
 print.xtable( x = p_scores_different_methods_five_xtable, type="latex", file = p_scores_different_methods_five_xtable_path_out, include.rownames = FALSE )
+write.csv(p_scores_different_methods_five_xtable, "../R_Output/p_scores_different_methods_five_xtable_2021.csv")
 
 # Creating a path 
 counts_different_methods_five_xtable_path_out <- paste("../R_Output/counts_different_methods_five_xtable_2021.tex", sep ="")

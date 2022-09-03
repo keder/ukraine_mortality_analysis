@@ -1,12 +1,8 @@
-# Alexander Kirpich
-# Georgia State University
-# akirpich@gsu.edu
 
-# 2021.10.01. ask
+
+
 rm(list=ls(all=TRUE))
-# Extra check that we deleted everything.
-# 20 Digits Precision Representation
-# options(scipen=20)
+
 
 # Library to perform colum medians and other usefull matrix algebra computations. 
 library(matrixStats)
@@ -34,7 +30,7 @@ google_trends_grob_data_relative_path              <- "../Data/Ukraine_data/grob
 google_trends_pominki_data_relative_path           <- "../Data/Ukraine_data/pominki_gt.csv"
 google_trends_ritualnie_uslugi_data_relative_path  <- "../Data/Ukraine_data/ritualnie_uslugi_gt.csv"
 google_trends_truna_data_relative_path              <- "../Data/Ukraine_data/truna_gt.csv"
-google_trends_ritualnii_poslugi_data_relative_path  <- "../Data/Ukraine_data/ritualnii_poslugi_gt.csv"
+google_trends_ritualni_poslugi_data_relative_path  <- "../Data/Ukraine_data/ritualni_poslugi_gt.csv"
 
 
 
@@ -43,30 +39,30 @@ google_trends_grob_data             <- read.table( file = google_trends_grob_dat
 google_trends_pominki_data          <- read.table( file = google_trends_pominki_data_relative_path,  sep =",", header = TRUE )
 google_trends_ritualnie_uslugi_data <- read.table( file = google_trends_ritualnie_uslugi_data_relative_path,  sep =",", header = TRUE )
 google_trends_truna_data         <- read.table( file = google_trends_truna_data_relative_path, sep =",", header = TRUE )
-google_trends_ritualnii_poslugi_data <- read.table( file = google_trends_ritualnii_poslugi_data_relative_path, sep =",", header = TRUE )
+google_trends_ritualni_poslugi_data <- read.table( file = google_trends_ritualni_poslugi_data_relative_path, sep =",", header = TRUE )
 names(google_trends_grob_data)[2]             <- "grob"
 names(google_trends_pominki_data)[2]          <- "pominki"
 names(google_trends_ritualnie_uslugi_data)[2] <- "ritualnie_uslugi"
 names(google_trends_truna_data)[2]          <- "truna"
-names(google_trends_ritualnii_poslugi_data)[2] <- "ritualnii_poslugi"
+names(google_trends_ritualni_poslugi_data)[2] <- "ritualni_poslugi"
 # Fixing dates
 google_trends_grob_data$Date             <- as.Date( paste0(google_trends_grob_data$Month, "-15") ) 
 google_trends_pominki_data$Date          <- as.Date( paste0(google_trends_pominki_data$Month, "-15") ) 
 google_trends_ritualnie_uslugi_data$Date <- as.Date( paste0(google_trends_ritualnie_uslugi_data$Month, "-15") ) 
 google_trends_truna_data$Date          <- as.Date( paste0(google_trends_truna_data$Month, "-15") ) 
-google_trends_ritualnii_poslugi_data$Date <- as.Date( paste0(google_trends_ritualnii_poslugi_data$Month, "-15") )  
+google_trends_ritualni_poslugi_data$Date <- as.Date( paste0(google_trends_ritualni_poslugi_data$Month, "-15") )  
 # Creating month
 google_trends_grob_data$Month_text             <- format(google_trends_grob_data$Date,"%B")
 google_trends_pominki_data$Month_text          <- format(google_trends_pominki_data$Date,"%B")
 google_trends_ritualnie_uslugi_data$Month_text <- format(google_trends_ritualnie_uslugi_data$Date,"%B")
 google_trends_truna_data$Month_text          <- format(google_trends_truna_data$Date,"%B")
-google_trends_ritualnii_poslugi_data$Month_text <- format(google_trends_ritualnii_poslugi_data$Date,"%B")
+google_trends_ritualni_poslugi_data$Month_text <- format(google_trends_ritualni_poslugi_data$Date,"%B")
 # Cut 2022 data
 google_trends_grob_data = google_trends_grob_data[which(google_trends_grob_data$Date < cut_date),]
 google_trends_pominki_data = google_trends_pominki_data[which(google_trends_pominki_data$Date < cut_date),]
 google_trends_ritualnie_uslugi_data = google_trends_ritualnie_uslugi_data[which(google_trends_ritualnie_uslugi_data$Date < cut_date),]
 google_trends_truna_data = google_trends_truna_data[which(google_trends_truna_data$Date < cut_date),]
-google_trends_ritualnii_poslugi_data = google_trends_ritualnii_poslugi_data[which(google_trends_ritualnii_poslugi_data$Date < cut_date),]
+google_trends_ritualni_poslugi_data = google_trends_ritualni_poslugi_data[which(google_trends_ritualni_poslugi_data$Date < cut_date),]
 
 
 # Summaries
@@ -86,7 +82,7 @@ save( google_trends_grob_data, file = paste("../R_Data/google_trends_grob_data.R
 save( google_trends_pominki_data, file = paste("../R_Data/google_trends_pominki_data.RData") )
 save( google_trends_ritualnie_uslugi_data, file = paste("../R_Data/google_trends_ritualnie_uslugi_data.RData") )
 save( google_trends_truna_data, file = paste("../R_Data/google_trends_truna_data.RData") )
-save( google_trends_ritualnii_poslugi_data, file = paste("../R_Data/google_trends_ritualnii_poslugi_data.RData") )
+save( google_trends_ritualni_poslugi_data, file = paste("../R_Data/google_trends_ritualni_poslugi_data.RData") )
 ls()
 
 
@@ -95,9 +91,9 @@ ls()
 
 
 # Generating pdf output.
-pdf( paste( "../Plots/FigureTBD01b.pdf", sep = ""), height = 18, width = 9)
+pdf( paste( "../Plots/FigureTBD01a.pdf", sep = ""), height = 10, width = 9)
 # Definign the number of plots
-par( par(mfrow=c(5,1)),  mar=c(5.1, 5.1, 3, 2.1)  )
+par( par(mfrow=c(3,1)),  mar=c(5.1, 5.1, 3, 2.1)  )
 
 
 # First graph
@@ -404,8 +400,8 @@ text(x = x_tlab, y=par()$usr[3]-0.05*(par()$usr[4]-par()$usr[3]), labels = x_lab
 # Y-axis
 # Adding axis label
 # labels FAQ -> https://stackoverflow.com/questions/26180178/r-boxplot-how-to-move-the-x-axis-label-down
-y_min_value <- 0
-y_max_value <- 100
+y_min_value <- combined_value_min
+y_max_value <- combined_value_max
 y_tlab  <- seq( from = y_min_value, to = y_max_value, by = (y_max_value-y_min_value)/5 )
 y_lablist <- as.character( round(y_tlab,  digits = 0) )
 axis(2, at = y_tlab, labels = y_lablist, cex.axis = 1)
@@ -429,7 +425,13 @@ y <- y[2] - strheight(txt, cex=4) * 4 / 5
 text(x, y, txt, cex = 4)
 
 
+dev.off()
 
+
+# Generating pdf output.
+pdf( paste( "../Plots/FigureTBD01b.pdf", sep = ""), height = 9, width = 9)
+# Definign the number of plots
+par( par(mfrow=c(2,1)),  mar=c(5.1, 5.1, 3, 2.1)  )
 
 # 4 graph
 
@@ -543,8 +545,8 @@ text(x, y, txt, cex = 4)
 
 # 5 graph
 
-combined_value_min <- min( google_trends_ritualnii_poslugi_data[,2] )
-combined_value_max <- max( google_trends_ritualnii_poslugi_data[,2] )
+combined_value_min <- min( google_trends_ritualni_poslugi_data[,2] )
+combined_value_max <- max( google_trends_ritualni_poslugi_data[,2] )
 
 combined_date_min  <- min( google_trends_grob_data$Date )
 combined_date_max  <- max( google_trends_grob_data$Date )
@@ -552,7 +554,7 @@ combined_date_max  <- max( google_trends_grob_data$Date )
 
 # First plot (Belarus)
 plot(x = google_trends_grob_data$Date,
-     y = google_trends_ritualnii_poslugi_data[,2],
+     y = google_trends_ritualni_poslugi_data[,2],
      col = "#005BBB",
      # col = color_01, 
      lwd = 5,
@@ -561,7 +563,7 @@ plot(x = google_trends_grob_data$Date,
      # pch = 17,
      type = "l",
      # main = paste( colnames(proporions_all_locations_data_baseline)[compartment],  sep = ""),
-     main = "Google Trend: \"ritualnii poslugi\"",
+     main = "Google Trend: \"ritualni poslugi\"",
      xlim = c( combined_date_min,  combined_date_max  ),
      ylim = c( combined_value_min*0.9, combined_value_max * 1.10 ),
      # ylim = c(0, y_max_value_current * 1.2  ),
@@ -577,7 +579,7 @@ plot(x = google_trends_grob_data$Date,
      cex.sub = 2
 )
 lines(x = google_trends_grob_data$Date,
-      y = google_trends_ritualnii_poslugi_data[,2],
+      y = google_trends_ritualni_poslugi_data[,2],
       #col = "#005BBB",
       col = "#005BBB",
       # col = color_01, 

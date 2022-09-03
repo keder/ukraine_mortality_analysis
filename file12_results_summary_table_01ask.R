@@ -1,12 +1,8 @@
-# Alexander Kirpich
-# Georgia State University
-# akirpich@gsu.edu
 
-# 2021.05.06. ask
+
+
 rm(list=ls(all=TRUE))
-# Extra check that we deleted everything.
-# 20 Digits Precision Representation
-# options(scipen=20)
+
 
 # Library for the latex exports in the nice format.
 library(xtable)

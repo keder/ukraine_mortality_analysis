@@ -1,12 +1,8 @@
-# Alexander Kirpich
-# Georgia State University
-# akirpich@gsu.edu
 
-# 2021.08.30. ask
+
+
 rm(list=ls(all=TRUE))
-# Extra check that we deleted everything.
-# 20 Digits Precision Representation
-# options(scipen=20)
+
 
 # Library to perform colum medians and other usefull matrix algebra computations. 
 # library(matrixStats)
@@ -54,7 +50,7 @@ load( file = paste("../R_Data/google_trends_grob_data.RData") )
 load( file = paste("../R_Data/google_trends_pominki_data.RData") )
 load( file = paste("../R_Data/google_trends_ritualnie_uslugi_data.RData") )
 load( file = paste("../R_Data/google_trends_truna_data.RData") )
-load( file = paste("../R_Data/google_trends_ritualnii_poslugi_data.RData") )
+load( file = paste("../R_Data/google_trends_ritualni_poslugi_data.RData") )
 ls()
 
 
@@ -422,87 +418,87 @@ p_score_max_truna <- max( c(prophet_predictions_truna_plus_original_data_subset$
 
 
 
-# ritualnii_poslugi
+# ritualni_poslugi
 
 # Fixing the data for the package 
 # Number of records BEFORE the epidemic start
-number_of_records_ritualnii_poslugi <- dim(google_trends_ritualnii_poslugi_data)[1] - 18
+number_of_records_ritualni_poslugi <- dim(google_trends_ritualni_poslugi_data)[1] - 18
 
-data_to_feed_full_ritualnii_poslugi      <- data.frame( ds =  google_trends_ritualnii_poslugi_data$Date,
-                                              y  =  google_trends_ritualnii_poslugi_data$ritualnii_poslugi )
+data_to_feed_full_ritualni_poslugi      <- data.frame( ds =  google_trends_ritualni_poslugi_data$Date,
+                                              y  =  google_trends_ritualni_poslugi_data$ritualni_poslugi )
 
-data_to_feed_truncated_ritualnii_poslugi <- data.frame( ds =  google_trends_ritualnii_poslugi_data$Date[c(1:number_of_records_ritualnii_poslugi)],
-                                              y  =  google_trends_ritualnii_poslugi_data$ritualnii_poslugi[c(1:number_of_records_ritualnii_poslugi)] )
+data_to_feed_truncated_ritualni_poslugi <- data.frame( ds =  google_trends_ritualni_poslugi_data$Date[c(1:number_of_records_ritualni_poslugi)],
+                                              y  =  google_trends_ritualni_poslugi_data$ritualni_poslugi[c(1:number_of_records_ritualni_poslugi)] )
 
 
 # Listing names of the created objects.
-names(data_to_feed_full_ritualnii_poslugi)
-names(data_to_feed_truncated_ritualnii_poslugi)
+names(data_to_feed_full_ritualni_poslugi)
+names(data_to_feed_truncated_ritualni_poslugi)
 
 
 # Creating a prophet object.
-prophet_object_ritualnii_poslugi <- prophet(data_to_feed_truncated_ritualnii_poslugi)
+prophet_object_ritualni_poslugi <- prophet(data_to_feed_truncated_ritualni_poslugi)
 
 # Full frame for predictions. Dates only extraction
-data_to_feed_full_ritualnii_poslugi_only <- subset( data_to_feed_full_ritualnii_poslugi, select = -c(y) ) 
+data_to_feed_full_ritualni_poslugi_only <- subset( data_to_feed_full_ritualni_poslugi, select = -c(y) ) 
 
 # Precting for the specified dates.
-prophet_predictions_ritualnii_poslugi <- predict(prophet_object_ritualnii_poslugi, data_to_feed_full_ritualnii_poslugi_only )
+prophet_predictions_ritualni_poslugi <- predict(prophet_object_ritualni_poslugi, data_to_feed_full_ritualni_poslugi_only )
 # Fixing dates
-prophet_predictions_ritualnii_poslugi$ds <- as.Date(prophet_predictions_ritualnii_poslugi$ds)
+prophet_predictions_ritualni_poslugi$ds <- as.Date(prophet_predictions_ritualni_poslugi$ds)
 
 
 
 # Summaries for mortalities
-dim(prophet_predictions_ritualnii_poslugi)
-head(prophet_predictions_ritualnii_poslugi)
-tail(prophet_predictions_ritualnii_poslugi)
+dim(prophet_predictions_ritualni_poslugi)
+head(prophet_predictions_ritualni_poslugi)
+tail(prophet_predictions_ritualni_poslugi)
 
 # Adding original data
-prophet_predictions_ritualnii_poslugi_plus_original_data <- base::merge( x = data_to_feed_full_ritualnii_poslugi, y = prophet_predictions_ritualnii_poslugi, by = "ds" )
-dim(prophet_predictions_ritualnii_poslugi_plus_original_data)
+prophet_predictions_ritualni_poslugi_plus_original_data <- base::merge( x = data_to_feed_full_ritualni_poslugi, y = prophet_predictions_ritualni_poslugi, by = "ds" )
+dim(prophet_predictions_ritualni_poslugi_plus_original_data)
 
 
 # Summaries for mortalities
-dim(prophet_predictions_ritualnii_poslugi_plus_original_data)
-head(prophet_predictions_ritualnii_poslugi_plus_original_data)
-tail(prophet_predictions_ritualnii_poslugi_plus_original_data)
+dim(prophet_predictions_ritualni_poslugi_plus_original_data)
+head(prophet_predictions_ritualni_poslugi_plus_original_data)
+tail(prophet_predictions_ritualni_poslugi_plus_original_data)
 
 
 # lower scores
-prophet_predictions_ritualnii_poslugi_plus_original_data$p_scores_lower <- 
-  100 * ( prophet_predictions_ritualnii_poslugi_plus_original_data$y - prophet_predictions_ritualnii_poslugi_plus_original_data$yhat_lower ) / prophet_predictions_ritualnii_poslugi_plus_original_data$yhat_lower
+prophet_predictions_ritualni_poslugi_plus_original_data$p_scores_lower <- 
+  100 * ( prophet_predictions_ritualni_poslugi_plus_original_data$y - prophet_predictions_ritualni_poslugi_plus_original_data$yhat_lower ) / prophet_predictions_ritualni_poslugi_plus_original_data$yhat_lower
 # upper scores
-prophet_predictions_ritualnii_poslugi_plus_original_data$p_scores_upper <- 
-  100 * ( prophet_predictions_ritualnii_poslugi_plus_original_data$y - prophet_predictions_ritualnii_poslugi_plus_original_data$yhat_upper ) / prophet_predictions_ritualnii_poslugi_plus_original_data$yhat_upper
+prophet_predictions_ritualni_poslugi_plus_original_data$p_scores_upper <- 
+  100 * ( prophet_predictions_ritualni_poslugi_plus_original_data$y - prophet_predictions_ritualni_poslugi_plus_original_data$yhat_upper ) / prophet_predictions_ritualni_poslugi_plus_original_data$yhat_upper
 # scores
-prophet_predictions_ritualnii_poslugi_plus_original_data$p_scores <- 
-  100 * ( prophet_predictions_ritualnii_poslugi_plus_original_data$y - prophet_predictions_ritualnii_poslugi_plus_original_data$yhat ) / prophet_predictions_ritualnii_poslugi_plus_original_data$yhat
+prophet_predictions_ritualni_poslugi_plus_original_data$p_scores <- 
+  100 * ( prophet_predictions_ritualni_poslugi_plus_original_data$y - prophet_predictions_ritualni_poslugi_plus_original_data$yhat ) / prophet_predictions_ritualni_poslugi_plus_original_data$yhat
 
 
 # Computing the raw excess trends
 # raw excess
-prophet_predictions_ritualnii_poslugi_plus_original_data$raw_y_minus_yhat_upper <- 
-  prophet_predictions_ritualnii_poslugi_plus_original_data$y - prophet_predictions_ritualnii_poslugi_plus_original_data$yhat_upper
+prophet_predictions_ritualni_poslugi_plus_original_data$raw_y_minus_yhat_upper <- 
+  prophet_predictions_ritualni_poslugi_plus_original_data$y - prophet_predictions_ritualni_poslugi_plus_original_data$yhat_upper
 
 
 # Creating year and month in text  
-prophet_predictions_ritualnii_poslugi_plus_original_data$year_month_text <- substr(x = as.character(prophet_predictions_ritualnii_poslugi_plus_original_data$ds), start = 1, stop = 7)
+prophet_predictions_ritualni_poslugi_plus_original_data$year_month_text <- substr(x = as.character(prophet_predictions_ritualni_poslugi_plus_original_data$ds), start = 1, stop = 7)
 
 
 # Saving the data as RData file.
-save( prophet_predictions_ritualnii_poslugi_plus_original_data, file = paste("../R_Data/prophet_predictions_ritualnii_poslugi_plus_original_data.RData") )
+save( prophet_predictions_ritualni_poslugi_plus_original_data, file = paste("../R_Data/prophet_predictions_ritualni_poslugi_plus_original_data.RData") )
 
 # Creating a sumbset with predicitons only
-prophet_predictions_ritualnii_poslugi_plus_original_data_subset <- 
-  prophet_predictions_ritualnii_poslugi_plus_original_data[, c("ds", "year_month_text", "y", "yhat", "yhat_lower", "yhat_upper", "p_scores", "p_scores_lower", "p_scores_upper", "raw_y_minus_yhat_upper") ]
+prophet_predictions_ritualni_poslugi_plus_original_data_subset <- 
+  prophet_predictions_ritualni_poslugi_plus_original_data[, c("ds", "year_month_text", "y", "yhat", "yhat_lower", "yhat_upper", "p_scores", "p_scores_lower", "p_scores_upper", "raw_y_minus_yhat_upper") ]
 
 # Saving the data as RData file.
-save( prophet_predictions_ritualnii_poslugi_plus_original_data_subset, file = paste("../R_Data/prophet_predictions_ritualnii_poslugi_plus_original_data_subset.RData") )
+save( prophet_predictions_ritualni_poslugi_plus_original_data_subset, file = paste("../R_Data/prophet_predictions_ritualni_poslugi_plus_original_data_subset.RData") )
 
 # Min and Max
-p_score_min_ritualnii_poslugi <- min( c(prophet_predictions_ritualnii_poslugi_plus_original_data_subset$p_scores) )
-p_score_max_ritualnii_poslugi <- max( c(prophet_predictions_ritualnii_poslugi_plus_original_data_subset$p_scores) )
+p_score_min_ritualni_poslugi <- min( c(prophet_predictions_ritualni_poslugi_plus_original_data_subset$p_scores) )
+p_score_max_ritualni_poslugi <- max( c(prophet_predictions_ritualni_poslugi_plus_original_data_subset$p_scores) )
 
 
 
@@ -1386,27 +1382,27 @@ text(x, y, txt, cex = 4)
 
 
 
-# ritualnii_poslugi
+# ritualni_poslugi
 
 # Third plot
 
-lower_index_ritualnii_poslugi <- length(prophet_predictions_ritualnii_poslugi_plus_original_data_subset$p_scores_upper) - 19
-upper_index_ritualnii_poslugi <- length(prophet_predictions_ritualnii_poslugi_plus_original_data_subset$p_scores_upper)
-range_ritualnii_poslugi <- c(lower_index_ritualnii_poslugi:upper_index_ritualnii_poslugi)
-range_ritualnii_poslugi_last18 <- c(upper_index_ritualnii_poslugi - c(19:0))
+lower_index_ritualni_poslugi <- length(prophet_predictions_ritualni_poslugi_plus_original_data_subset$p_scores_upper) - 19
+upper_index_ritualni_poslugi <- length(prophet_predictions_ritualni_poslugi_plus_original_data_subset$p_scores_upper)
+range_ritualni_poslugi <- c(lower_index_ritualni_poslugi:upper_index_ritualni_poslugi)
+range_ritualni_poslugi_last18 <- c(upper_index_ritualni_poslugi - c(19:0))
 
-barplot( prophet_predictions_ritualnii_poslugi_plus_original_data_subset$p_scores_upper[range_ritualnii_poslugi], 
-         col= c( rep("#005BBB", 2), rep("#FFD500", (length(range_ritualnii_poslugi_last18)-2)) ), 
+barplot( prophet_predictions_ritualni_poslugi_plus_original_data_subset$p_scores_upper[range_ritualni_poslugi], 
+         col= c( rep("#005BBB", 2), rep("#FFD500", (length(range_ritualni_poslugi_last18)-2)) ), 
          legend = TRUE, 
          border =  TRUE, 
          #xlim = c(1, 5), 
-         ylim = c(p_score_min_ritualnii_poslugi-15, p_score_max_ritualnii_poslugi+15), 
+         ylim = c(p_score_min_ritualni_poslugi-15, p_score_max_ritualni_poslugi+15), 
          args.legend = list(bty="n", border=TRUE), 
          ylab = "", 
          xlab = "", 
-         main = "P-Scores (in Percent) for 2020-2021\nGoogle Trend: \"ritualnii poslugi\"",
-         # names.arg = as.character(p_scores_frame_ritualnii_poslugi_jan_june$Month), 
-         names.arg = prophet_predictions_ritualnii_poslugi_plus_original_data_subset$year_month_text[range_ritualnii_poslugi], 
+         main = "P-Scores (in Percent) for 2020-2021\nGoogle Trend: \"ritualni poslugi\"",
+         # names.arg = as.character(p_scores_frame_ritualni_poslugi_jan_june$Month), 
+         names.arg = prophet_predictions_ritualni_poslugi_plus_original_data_subset$year_month_text[range_ritualni_poslugi], 
          cex.names = 1.25, 
          cex.lab = 2, 
          cex.axis = 1.75,
@@ -1445,16 +1441,16 @@ text(x, y, txt, cex = 4)
 
 
 
-# ritualnii_poslugi
+# ritualni_poslugi
 
 # Fifths graph
 
-value_combine <- c(prophet_predictions_ritualnii_poslugi_plus_original_data_subset$yhat_upper, 
-                   prophet_predictions_ritualnii_poslugi_plus_original_data_subset$y)
+value_combine <- c(prophet_predictions_ritualni_poslugi_plus_original_data_subset$yhat_upper, 
+                   prophet_predictions_ritualni_poslugi_plus_original_data_subset$y)
 
 
-plot(x = as.integer(prophet_predictions_ritualnii_poslugi_plus_original_data_subset$ds),
-     y = prophet_predictions_ritualnii_poslugi_plus_original_data_subset$yhat_upper,
+plot(x = as.integer(prophet_predictions_ritualni_poslugi_plus_original_data_subset$ds),
+     y = prophet_predictions_ritualni_poslugi_plus_original_data_subset$yhat_upper,
      col = "#005BBB",
      # col = color_01, 
      lwd = 5,
@@ -1463,7 +1459,7 @@ plot(x = as.integer(prophet_predictions_ritualnii_poslugi_plus_original_data_sub
      # pch = 17,
      type = "l",
      # main = paste( colnames(proporions_all_locations_data_baseline)[compartment],  sep = ""),
-     main = "Fitted (2015-2019) and Predicted (2020-21) \nvs 2015-2021 Data\nGoogle Trend: \"ritualnii poslugi\"",
+     main = "Fitted (2015-2019) and Predicted (2020-21) \nvs 2015-2021 Data\nGoogle Trend: \"ritualni poslugi\"",
      # xlim = c( intersected_data$death_covid19,  combined_date_max  ),
      ylim = c( min(value_combine),
                max(value_combine) * 1.01 ),
@@ -1479,8 +1475,8 @@ plot(x = as.integer(prophet_predictions_ritualnii_poslugi_plus_original_data_sub
      cex.main = 1.6,
      cex.sub = 2
 )
-lines(x = as.integer(prophet_predictions_ritualnii_poslugi_plus_original_data_subset$ds),
-      y = prophet_predictions_ritualnii_poslugi_plus_original_data_subset$yhat_upper,
+lines(x = as.integer(prophet_predictions_ritualni_poslugi_plus_original_data_subset$ds),
+      y = prophet_predictions_ritualni_poslugi_plus_original_data_subset$yhat_upper,
       col = "#005BBB",
       #col = "#00bb61",
       # col = color_01, 
@@ -1489,8 +1485,8 @@ lines(x = as.integer(prophet_predictions_ritualnii_poslugi_plus_original_data_su
       # pch = shape_01,
       # pch = 17,
       type = "p")
-lines(x = as.integer(prophet_predictions_ritualnii_poslugi_plus_original_data_subset$ds)[range_ritualnii_poslugi_last18],
-      y = prophet_predictions_ritualnii_poslugi_plus_original_data_subset$yhat_upper[range_ritualnii_poslugi_last18],
+lines(x = as.integer(prophet_predictions_ritualni_poslugi_plus_original_data_subset$ds)[range_ritualni_poslugi_last18],
+      y = prophet_predictions_ritualni_poslugi_plus_original_data_subset$yhat_upper[range_ritualni_poslugi_last18],
       # col = "#005BBB",
       col = "#FFD500",
       # col = color_01, 
@@ -1499,8 +1495,8 @@ lines(x = as.integer(prophet_predictions_ritualnii_poslugi_plus_original_data_su
       # pch = shape_01,
       # pch = 17,
       type = "l")
-lines(x = as.integer(prophet_predictions_ritualnii_poslugi_plus_original_data_subset$ds)[range_ritualnii_poslugi_last18],
-      y = prophet_predictions_ritualnii_poslugi_plus_original_data_subset$yhat_upper[range_ritualnii_poslugi_last18],
+lines(x = as.integer(prophet_predictions_ritualni_poslugi_plus_original_data_subset$ds)[range_ritualni_poslugi_last18],
+      y = prophet_predictions_ritualni_poslugi_plus_original_data_subset$yhat_upper[range_ritualni_poslugi_last18],
       #col = "#005BBB",
       col = "#FFD500",
       # col = color_01, 
@@ -1509,8 +1505,8 @@ lines(x = as.integer(prophet_predictions_ritualnii_poslugi_plus_original_data_su
       # pch = shape_01,
       # pch = 17,
       type = "p")
-lines(x = as.integer(prophet_predictions_ritualnii_poslugi_plus_original_data_subset$ds),
-      y = prophet_predictions_ritualnii_poslugi_plus_original_data_subset$y,
+lines(x = as.integer(prophet_predictions_ritualni_poslugi_plus_original_data_subset$ds),
+      y = prophet_predictions_ritualni_poslugi_plus_original_data_subset$y,
       #col = "#005BBB",
       col = "#00bb61",
       # col = color_01, 
@@ -1519,8 +1515,8 @@ lines(x = as.integer(prophet_predictions_ritualnii_poslugi_plus_original_data_su
       # pch = shape_01,
       # pch = 17,
       type = "l")
-lines(x = as.integer(prophet_predictions_ritualnii_poslugi_plus_original_data_subset$ds),
-      y = prophet_predictions_ritualnii_poslugi_plus_original_data_subset$y,
+lines(x = as.integer(prophet_predictions_ritualni_poslugi_plus_original_data_subset$ds),
+      y = prophet_predictions_ritualni_poslugi_plus_original_data_subset$y,
       #col = "#005BBB",
       col = "#00bb61",
       # col = color_01, 
@@ -1529,7 +1525,7 @@ lines(x = as.integer(prophet_predictions_ritualnii_poslugi_plus_original_data_su
       # pch = shape_01,
       # pch = 17,
       type = "p")
-lines(x = rep( prophet_predictions_ritualnii_poslugi_plus_original_data_subset$ds[range_ritualnii_poslugi[1]]+15, 10), 
+lines(x = rep( prophet_predictions_ritualni_poslugi_plus_original_data_subset$ds[range_ritualni_poslugi[1]]+15, 10), 
       y = c( rep( min(value_combine), 5),  rep( max(value_combine), 5) ), 
       col="red", 
       lwd = 1, 
@@ -1549,20 +1545,20 @@ legend( x = "topleft",
 # X-axis
 # labels FAQ -> http://www.r-bloggers.com/rotated-axis-labels-in-r-plots/
 # Creating labels by month and converting.
-initial_date <- min(as.integer(prophet_predictions_ritualnii_poslugi_plus_original_data_subset$ds))
-final_date   <- max(as.integer(prophet_predictions_ritualnii_poslugi_plus_original_data_subset$ds))
-number_of_dates <- length( as.integer(prophet_predictions_ritualnii_poslugi_plus_original_data_subset$ds) )
+initial_date <- min(as.integer(prophet_predictions_ritualni_poslugi_plus_original_data_subset$ds))
+final_date   <- max(as.integer(prophet_predictions_ritualni_poslugi_plus_original_data_subset$ds))
+number_of_dates <- length( as.integer(prophet_predictions_ritualni_poslugi_plus_original_data_subset$ds) )
 
 
 # Indexes to display
-x_indexes_to_display <-  seq( from  =  1, to  = length(prophet_predictions_ritualnii_poslugi_plus_original_data_subset$ds),  by = 5 )
-# x_indexes_to_display <-  prophet_predictions_ritualnii_poslugi_plus_original_data_subset$ds
+x_indexes_to_display <-  seq( from  =  1, to  = length(prophet_predictions_ritualni_poslugi_plus_original_data_subset$ds),  by = 5 )
+# x_indexes_to_display <-  prophet_predictions_ritualni_poslugi_plus_original_data_subset$ds
 # x_indexes_to_display[1] <- 1
 # Actual lab elements
-x_tlab <- prophet_predictions_ritualnii_poslugi_plus_original_data_subset$ds[x_indexes_to_display]
+x_tlab <- prophet_predictions_ritualni_poslugi_plus_original_data_subset$ds[x_indexes_to_display]
 # ctual lab labels
-# x_lablist  <- as.character( p_scores_frame_ritualnii_poslugi_jan_june$Month )
-x_lablist  <- as.character( prophet_predictions_ritualnii_poslugi_plus_original_data_subset$year_month_text[x_indexes_to_display] )
+# x_lablist  <- as.character( p_scores_frame_ritualni_poslugi_jan_june$Month )
+x_lablist  <- as.character( prophet_predictions_ritualni_poslugi_plus_original_data_subset$year_month_text[x_indexes_to_display] )
 axis(1, at = x_tlab, labels = FALSE)
 text(x = x_tlab, y=par()$usr[3]-0.03*(par()$usr[4]-par()$usr[3]), labels = x_lablist, srt=45, adj=1, xpd=TRUE, cex = 1.5)
 

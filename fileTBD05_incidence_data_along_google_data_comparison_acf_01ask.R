@@ -1,12 +1,8 @@
-# Alexander Kirpich
-# Georgia State University
-# akirpich@gsu.edu
 
-# 2021.09.23. ask
+
+
 rm(list=ls(all=TRUE))
-# Extra check that we deleted everything.
-# 20 Digits Precision Representation
-# options(scipen=20)
+
 
 # Library to perform colum medians and other usefull matrix algebra computations. 
 library(matrixStats)
@@ -38,7 +34,7 @@ load( file = paste("../R_Data/google_trends_grob_data.RData") )
 load( file = paste("../R_Data/google_trends_pominki_data.RData") )
 load( file = paste("../R_Data/google_trends_ritualnie_uslugi_data.RData") )
 load( file = paste("../R_Data/google_trends_truna_data.RData") )
-load( file = paste("../R_Data/google_trends_ritualnii_poslugi_data.RData") )
+load( file = paste("../R_Data/google_trends_ritualni_poslugi_data.RData") )
 dim(google_trends_grob_data)
 dim(google_trends_pominki_data)
 dim(google_trends_ritualnie_uslugi_data)
@@ -211,40 +207,40 @@ ccf_truna_scaled_smoothed <- ccf(x = merged_truna$incidence_scaled, y = merged_t
 
 
 
-# ritualnii_poslugi time series
-merged_ritualnii_poslugi <- base::merge( x = google_trends_ritualnii_poslugi_data, y = ukraine_un_mortality_data_month_only_since_2015, by.x = "Date", by.y =  "date_fixed"   )
+# ritualni_poslugi time series
+merged_ritualni_poslugi <- base::merge( x = google_trends_ritualni_poslugi_data, y = ukraine_un_mortality_data_month_only_since_2015, by.x = "Date", by.y =  "date_fixed"   )
 # Geberating standardized values
-merged_ritualnii_poslugi$ritualnii_poslugi_scaled  <- 100 * merged_ritualnii_poslugi$ritualnii_poslugi / median(merged_ritualnii_poslugi$ritualnii_poslugi)
-merged_ritualnii_poslugi$value_scaled <- 100 * merged_ritualnii_poslugi$Value / median(merged_ritualnii_poslugi$Value)
-sum(!merged_ritualnii_poslugi$ritualnii_poslugi_scaled  == merged_ritualnii_poslugi$ritualnii_poslugi)
+merged_ritualni_poslugi$ritualni_poslugi_scaled  <- 100 * merged_ritualni_poslugi$ritualni_poslugi / median(merged_ritualni_poslugi$ritualni_poslugi)
+merged_ritualni_poslugi$value_scaled <- 100 * merged_ritualni_poslugi$Value / median(merged_ritualni_poslugi$Value)
+sum(!merged_ritualni_poslugi$ritualni_poslugi_scaled  == merged_ritualni_poslugi$ritualni_poslugi)
 
 
 # Add integer dates
-merged_ritualnii_poslugi$Date_integer <- as.integer(merged_ritualnii_poslugi$Date)
+merged_ritualni_poslugi$Date_integer <- as.integer(merged_ritualni_poslugi$Date)
 
 
 # loess fit_incidence_scaled
-loess_fit_ritualnii_poslugi_incidence_scaled <- loess( value_scaled ~ Date_integer, data = merged_ritualnii_poslugi, span = 0.25 )
-summary(loess_fit_ritualnii_poslugi_incidence_scaled)
-names(loess_fit_ritualnii_poslugi_incidence_scaled)
+loess_fit_ritualni_poslugi_incidence_scaled <- loess( value_scaled ~ Date_integer, data = merged_ritualni_poslugi, span = 0.25 )
+summary(loess_fit_ritualni_poslugi_incidence_scaled)
+names(loess_fit_ritualni_poslugi_incidence_scaled)
 
 # Predicted values
-merged_ritualnii_poslugi$incidence_scaled <- predict(loess_fit_ritualnii_poslugi_incidence_scaled)
+merged_ritualni_poslugi$incidence_scaled <- predict(loess_fit_ritualni_poslugi_incidence_scaled)
 
 
 
 # loess fit_predictor_scaled
-loess_fit_ritualnii_poslugi_predictor_scaled <- loess( ritualnii_poslugi_scaled ~ Date_integer, data = merged_ritualnii_poslugi, span = 0.25 )
-summary(loess_fit_ritualnii_poslugi_predictor_scaled)
-names(loess_fit_ritualnii_poslugi_predictor_scaled)
+loess_fit_ritualni_poslugi_predictor_scaled <- loess( ritualni_poslugi_scaled ~ Date_integer, data = merged_ritualni_poslugi, span = 0.25 )
+summary(loess_fit_ritualni_poslugi_predictor_scaled)
+names(loess_fit_ritualni_poslugi_predictor_scaled)
 
 # Predicted values
-merged_ritualnii_poslugi$predictor_scaled <- predict(loess_fit_ritualnii_poslugi_predictor_scaled)
+merged_ritualni_poslugi$predictor_scaled <- predict(loess_fit_ritualni_poslugi_predictor_scaled)
 
 
 # Creating ccf objects
-ccf_ritualnii_poslugi_scaled          <- ccf(x = merged_ritualnii_poslugi$value_scaled,     y = merged_ritualnii_poslugi$ritualnii_poslugi_scaled  )
-ccf_ritualnii_poslugi_scaled_smoothed <- ccf(x = merged_ritualnii_poslugi$incidence_scaled, y = merged_ritualnii_poslugi$predictor_scaled  )
+ccf_ritualni_poslugi_scaled          <- ccf(x = merged_ritualni_poslugi$value_scaled,     y = merged_ritualni_poslugi$ritualni_poslugi_scaled  )
+ccf_ritualni_poslugi_scaled_smoothed <- ccf(x = merged_ritualni_poslugi$incidence_scaled, y = merged_ritualni_poslugi$predictor_scaled  )
 
 
 
@@ -315,11 +311,11 @@ plot(ccf_truna_scaled,
 
 
 # Third plot
-# ritualnii_poslugi
-plot(ccf_ritualnii_poslugi_scaled,
+# ritualni_poslugi
+plot(ccf_ritualni_poslugi_scaled,
      col = "#005BBB",
      lwd = 5,
-     main = "Scaled CCF for \"ritualnii poslugi\"",
+     main = "Scaled CCF for \"ritualni poslugi\"",
      cex = 1,
      cex.axis = 1.55,
      cex.lab = 1.55,
@@ -385,11 +381,11 @@ plot(ccf_truna_scaled_smoothed,
 
 
 # Sixth plot
-# ritualnii_poslugi
-plot(ccf_ritualnii_poslugi_scaled_smoothed,
+# ritualni_poslugi
+plot(ccf_ritualni_poslugi_scaled_smoothed,
      col = "#005BBB",
      lwd = 5,
-     main = "Scaled and Smoothed CCF for \"ritualnii poslugi\"",
+     main = "Scaled and Smoothed CCF for \"ritualni poslugi\"",
      cex = 1,
      cex.axis = 1.55,
      cex.lab = 1.55,

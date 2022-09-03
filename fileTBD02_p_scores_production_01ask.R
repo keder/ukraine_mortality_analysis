@@ -1,12 +1,8 @@
-# Alexander Kirpich
-# Georgia State University
-# akirpich@gsu.edu
 
-# 2021.08.27. ask
+
+
 rm(list=ls(all=TRUE))
-# Extra check that we deleted everything.
-# 20 Digits Precision Representation
-# options(scipen=20)
+
 
 # Library to perform colum medians and other usefull matrix algebra computations. 
 library(matrixStats)
@@ -34,7 +30,7 @@ load( file = paste("../R_Data/google_trends_grob_data.RData") )
 load( file = paste("../R_Data/google_trends_pominki_data.RData") )
 load( file = paste("../R_Data/google_trends_ritualnie_uslugi_data.RData") )
 load( file = paste("../R_Data/google_trends_truna_data.RData") )
-load( file = paste("../R_Data/google_trends_ritualnii_poslugi_data.RData") )
+load( file = paste("../R_Data/google_trends_ritualni_poslugi_data.RData") )
 ls()
 
 
@@ -56,21 +52,21 @@ google_trends_grob_data_2015_2019             <- google_trends_grob_data[ which(
 google_trends_pominki_data_2015_2019          <- google_trends_pominki_data[ which( google_trends_pominki_data$Date < date_2020_01_01 ), ]
 google_trends_ritualnie_uslugi_data_2015_2019 <- google_trends_ritualnie_uslugi_data[ which( google_trends_ritualnie_uslugi_data$Date < date_2020_01_01 ), ]
 google_trends_truna_data_2015_2019          <- google_trends_truna_data[ which( google_trends_truna_data$Date < date_2020_01_01 ), ]
-google_trends_ritualnii_poslugi_data_2015_2019 <- google_trends_ritualnii_poslugi_data[ which( google_trends_ritualnii_poslugi_data$Date < date_2020_01_01 ), ]
+google_trends_ritualni_poslugi_data_2015_2019 <- google_trends_ritualni_poslugi_data[ which( google_trends_ritualni_poslugi_data$Date < date_2020_01_01 ), ]
 
 # Only 2020
 google_trends_grob_data_2020             <- google_trends_grob_data[ which( ((google_trends_grob_data$Date >= date_2020_01_01)*(google_trends_grob_data$Date <= date_2020_12_31)) == 1 ), ]
 google_trends_pominki_data_2020          <- google_trends_pominki_data[ which( ((google_trends_pominki_data$Date >= date_2020_01_01)*(google_trends_pominki_data$Date <= date_2020_12_31)) == 1 ), ]
 google_trends_ritualnie_uslugi_data_2020 <- google_trends_ritualnie_uslugi_data[ which( ((google_trends_ritualnie_uslugi_data$Date >= date_2020_01_01)*(google_trends_ritualnie_uslugi_data$Date <= date_2020_12_31)) == 1 ), ]
 google_trends_truna_data_2020          <- google_trends_truna_data[ which( ((google_trends_truna_data$Date >= date_2020_01_01)*(google_trends_truna_data$Date <= date_2020_12_31)) == 1 ), ]
-google_trends_ritualnii_poslugi_data_2020 <- google_trends_ritualnii_poslugi_data[ which( ((google_trends_ritualnii_poslugi_data$Date >= date_2020_01_01)*(google_trends_ritualnii_poslugi_data$Date <= date_2020_12_31)) == 1 ), ]
+google_trends_ritualni_poslugi_data_2020 <- google_trends_ritualni_poslugi_data[ which( ((google_trends_ritualni_poslugi_data$Date >= date_2020_01_01)*(google_trends_ritualni_poslugi_data$Date <= date_2020_12_31)) == 1 ), ]
 
 # Only 2021
 google_trends_grob_data_2021             <- google_trends_grob_data[ which( ((google_trends_grob_data$Date >= date_2021_01_01)*(google_trends_grob_data$Date <= date_2022_01_01)) == 1 ), ]
 google_trends_pominki_data_2021          <- google_trends_pominki_data[ which( ((google_trends_pominki_data$Date >= date_2021_01_01)*(google_trends_pominki_data$Date <= date_2022_01_01)) == 1 ), ]
 google_trends_ritualnie_uslugi_data_2021 <- google_trends_ritualnie_uslugi_data[ which( ((google_trends_ritualnie_uslugi_data$Date >= date_2021_01_01)*(google_trends_ritualnie_uslugi_data$Date <= date_2022_01_01)) == 1 ), ]
 google_trends_truna_data_2021          <- google_trends_truna_data[ which( ((google_trends_truna_data$Date >= date_2021_01_01)*(google_trends_truna_data$Date <= date_2022_01_01)) == 1 ), ]
-google_trends_ritualnii_poslugi_data_2021 <- google_trends_ritualnii_poslugi_data[ which( ((google_trends_ritualnii_poslugi_data$Date >= date_2021_01_01)*(google_trends_ritualnii_poslugi_data$Date <= date_2022_01_01)) == 1 ), ]
+google_trends_ritualni_poslugi_data_2021 <- google_trends_ritualni_poslugi_data[ which( ((google_trends_ritualni_poslugi_data$Date >= date_2021_01_01)*(google_trends_ritualni_poslugi_data$Date <= date_2022_01_01)) == 1 ), ]
 
 
 
@@ -95,7 +91,7 @@ p_scores_frame_truna_2020          <- data.frame( Month = month.name,
                                                     Value = rep(0, length(month.name)),
                                                     p_score_value = rep(0, length(month.name)),
                                                     month_text = rep("X", length(month.name))  )
-p_scores_frame_ritualnii_poslugi_2020 <- data.frame( Month = month.name,
+p_scores_frame_ritualni_poslugi_2020 <- data.frame( Month = month.name,
                                                     average_2015_2019_years = rep(0, length(month.name)),
                                                     Value = rep(0, length(month.name)),
                                                     p_score_value = rep(0, length(month.name)),
@@ -105,7 +101,7 @@ p_scores_frame_grob_2020$month_text             <- as.character(p_scores_frame_g
 p_scores_frame_pominki_2020$month_text          <- as.character(p_scores_frame_pominki_2020$month_text)
 p_scores_frame_ritualnie_uslugi_2020$month_text <- as.character(p_scores_frame_ritualnie_uslugi_2020$month_text)
 p_scores_frame_truna_2020$month_text          <- as.character(p_scores_frame_truna_2020$month_text)
-p_scores_frame_ritualnii_poslugi_2020$month_text <- as.character(p_scores_frame_ritualnii_poslugi_2020$month_text)
+p_scores_frame_ritualni_poslugi_2020$month_text <- as.character(p_scores_frame_ritualni_poslugi_2020$month_text)
 
 
 
@@ -131,7 +127,7 @@ p_scores_frame_truna_2021          <- data.frame( Month = month.name,
                                                     Value = rep(0, length(month.name)),
                                                     p_score_value = rep(0, length(month.name)),
                                                     month_text = rep("X", length(month.name))  )
-p_scores_frame_ritualnii_poslugi_2021 <- data.frame( Month = month.name,
+p_scores_frame_ritualni_poslugi_2021 <- data.frame( Month = month.name,
                                                     average_2015_2019_years = rep(0, length(month.name)),
                                                     Value = rep(0, length(month.name)),
                                                     p_score_value = rep(0, length(month.name)),
@@ -141,7 +137,7 @@ p_scores_frame_grob_2021$month_text             <- as.character(p_scores_frame_g
 p_scores_frame_pominki_2021$month_text          <- as.character(p_scores_frame_pominki_2021$month_text)
 p_scores_frame_ritualnie_uslugi_2021$month_text <- as.character(p_scores_frame_ritualnie_uslugi_2021$month_text)
 p_scores_frame_truna_2021$month_text          <- as.character(p_scores_frame_truna_2021$month_text)
-p_scores_frame_ritualnii_poslugi_2021$month_text <- as.character(p_scores_frame_ritualnii_poslugi_2021$month_text)
+p_scores_frame_ritualni_poslugi_2021$month_text <- as.character(p_scores_frame_ritualni_poslugi_2021$month_text)
 
 
 
@@ -157,21 +153,21 @@ for( m in month.name )
   month_current_frame_pominki_2015_2019           <- google_trends_pominki_data_2015_2019[ which(google_trends_pominki_data_2015_2019$Month_text == m),  ]
   month_current_frame_ritualnie_uslugi_2015_2019  <- google_trends_ritualnie_uslugi_data_2015_2019[ which(google_trends_ritualnie_uslugi_data_2015_2019$Month_text == m),  ]
   month_current_frame_truna_2015_2019           <- google_trends_truna_data_2015_2019[ which(google_trends_truna_data_2015_2019$Month_text == m),  ]
-  month_current_frame_ritualnii_poslugi_2015_2019  <- google_trends_ritualnii_poslugi_data_2015_2019[ which(google_trends_ritualnii_poslugi_data_2015_2019$Month_text == m),  ]
+  month_current_frame_ritualni_poslugi_2015_2019  <- google_trends_ritualni_poslugi_data_2015_2019[ which(google_trends_ritualni_poslugi_data_2015_2019$Month_text == m),  ]
 
   # Getting current month for 2020
   month_current_frame_grob_2020              <- google_trends_grob_data_2020[ which(google_trends_grob_data_2020$Month_text == m),  ]
   month_current_frame_pominki_2020           <- google_trends_pominki_data_2020[ which(google_trends_pominki_data_2020$Month_text == m),  ]
   month_current_frame_ritualnie_uslugi_2020  <- google_trends_ritualnie_uslugi_data_2020[ which(google_trends_ritualnie_uslugi_data_2020$Month_text == m),  ]
   month_current_frame_truna_2020           <- google_trends_truna_data_2020[ which(google_trends_truna_data_2020$Month_text == m),  ]
-  month_current_frame_ritualnii_poslugi_2020  <- google_trends_ritualnii_poslugi_data_2020[ which(google_trends_ritualnii_poslugi_data_2020$Month_text == m),  ]
+  month_current_frame_ritualni_poslugi_2020  <- google_trends_ritualni_poslugi_data_2020[ which(google_trends_ritualni_poslugi_data_2020$Month_text == m),  ]
 
   # Getting current month for 2021
   month_current_frame_grob_2021              <- google_trends_grob_data_2021[ which(google_trends_grob_data_2021$Month_text == m),  ]
   month_current_frame_pominki_2021           <- google_trends_pominki_data_2021[ which(google_trends_pominki_data_2021$Month_text == m),  ]
   month_current_frame_ritualnie_uslugi_2021  <- google_trends_ritualnie_uslugi_data_2021[ which(google_trends_ritualnie_uslugi_data_2021$Month_text == m),  ]
   month_current_frame_truna_2021           <- google_trends_truna_data_2021[ which(google_trends_truna_data_2021$Month_text == m),  ]
-  month_current_frame_ritualnii_poslugi_2021  <- google_trends_ritualnii_poslugi_data_2021[ which(google_trends_ritualnii_poslugi_data_2021$Month_text == m),  ]
+  month_current_frame_ritualni_poslugi_2021  <- google_trends_ritualni_poslugi_data_2021[ which(google_trends_ritualni_poslugi_data_2021$Month_text == m),  ]
 
 
   # grob
@@ -257,22 +253,22 @@ for( m in month.name )
   
   
   
-  # ritualnii_poslugi
+  # ritualni_poslugi
   
   # 2020
   # Saving the current value
-  p_scores_frame_ritualnii_poslugi_2020[ which(p_scores_frame_ritualnii_poslugi_2020$Month == m), "Value"  ] <- google_trends_ritualnii_poslugi_data_2020[ which(google_trends_ritualnii_poslugi_data_2020$Month_text == m) , "ritualnii_poslugi"]  
-  value_current_ritualnii_poslugi <- google_trends_ritualnii_poslugi_data_2020[ which(google_trends_ritualnii_poslugi_data_2020$Month_text == m) , "ritualnii_poslugi"]
+  p_scores_frame_ritualni_poslugi_2020[ which(p_scores_frame_ritualni_poslugi_2020$Month == m), "Value"  ] <- google_trends_ritualni_poslugi_data_2020[ which(google_trends_ritualni_poslugi_data_2020$Month_text == m) , "ritualni_poslugi"]  
+  value_current_ritualni_poslugi <- google_trends_ritualni_poslugi_data_2020[ which(google_trends_ritualni_poslugi_data_2020$Month_text == m) , "ritualni_poslugi"]
   
   # Saving the average value
-  p_scores_frame_ritualnii_poslugi_2020[ which(p_scores_frame_ritualnii_poslugi_2020$Month == m), "average_2015_2019_years"  ] <-  mean( month_current_frame_ritualnii_poslugi_2015_2019$ritualnii_poslugi )
-  mean_current_ritualnii_poslugi  <-  mean( month_current_frame_ritualnii_poslugi_2015_2019$ritualnii_poslugi )
+  p_scores_frame_ritualni_poslugi_2020[ which(p_scores_frame_ritualni_poslugi_2020$Month == m), "average_2015_2019_years"  ] <-  mean( month_current_frame_ritualni_poslugi_2015_2019$ritualni_poslugi )
+  mean_current_ritualni_poslugi  <-  mean( month_current_frame_ritualni_poslugi_2015_2019$ritualni_poslugi )
   
   # Computing p-scores for non-parametric
-  p_scores_frame_ritualnii_poslugi_2020[ which(p_scores_frame_ritualnii_poslugi_2020$Month == m), "p_score_value"  ] <-  100*(value_current_ritualnii_poslugi - mean_current_ritualnii_poslugi)/mean_current_ritualnii_poslugi
+  p_scores_frame_ritualni_poslugi_2020[ which(p_scores_frame_ritualni_poslugi_2020$Month == m), "p_score_value"  ] <-  100*(value_current_ritualni_poslugi - mean_current_ritualni_poslugi)/mean_current_ritualni_poslugi
   
   # Saving month
-  p_scores_frame_ritualnii_poslugi_2020[ which(p_scores_frame_ritualnii_poslugi_2020$Month == m), "month_text"  ] <-  m
+  p_scores_frame_ritualni_poslugi_2020[ which(p_scores_frame_ritualni_poslugi_2020$Month == m), "month_text"  ] <-  m
   
   
   
@@ -280,18 +276,18 @@ for( m in month.name )
   {
     # 2021
     # Saving the current value
-    p_scores_frame_ritualnii_poslugi_2021[ which(p_scores_frame_ritualnii_poslugi_2021$Month == m), "Value"  ] <- google_trends_ritualnii_poslugi_data_2021[ which(google_trends_ritualnii_poslugi_data_2021$Month_text == m) , "ritualnii_poslugi"]  
-    value_current_ritualnii_poslugi <- google_trends_ritualnii_poslugi_data_2021[ which(google_trends_ritualnii_poslugi_data_2021$Month_text == m) , "ritualnii_poslugi"]
+    p_scores_frame_ritualni_poslugi_2021[ which(p_scores_frame_ritualni_poslugi_2021$Month == m), "Value"  ] <- google_trends_ritualni_poslugi_data_2021[ which(google_trends_ritualni_poslugi_data_2021$Month_text == m) , "ritualni_poslugi"]  
+    value_current_ritualni_poslugi <- google_trends_ritualni_poslugi_data_2021[ which(google_trends_ritualni_poslugi_data_2021$Month_text == m) , "ritualni_poslugi"]
     
     # Saving the average value
-    p_scores_frame_ritualnii_poslugi_2021[ which(p_scores_frame_ritualnii_poslugi_2021$Month == m), "average_2015_2019_years"  ] <-  mean( month_current_frame_ritualnii_poslugi_2015_2019$ritualnii_poslugi )
-    mean_current_ritualnii_poslugi  <-  mean( month_current_frame_ritualnii_poslugi_2015_2019$ritualnii_poslugi )
+    p_scores_frame_ritualni_poslugi_2021[ which(p_scores_frame_ritualni_poslugi_2021$Month == m), "average_2015_2019_years"  ] <-  mean( month_current_frame_ritualni_poslugi_2015_2019$ritualni_poslugi )
+    mean_current_ritualni_poslugi  <-  mean( month_current_frame_ritualni_poslugi_2015_2019$ritualni_poslugi )
     
     # Computing p-scores for non-parametric
-    p_scores_frame_ritualnii_poslugi_2021[ which(p_scores_frame_ritualnii_poslugi_2021$Month == m), "p_score_value"  ] <-  100*(value_current_ritualnii_poslugi - mean_current_ritualnii_poslugi)/mean_current_ritualnii_poslugi
+    p_scores_frame_ritualni_poslugi_2021[ which(p_scores_frame_ritualni_poslugi_2021$Month == m), "p_score_value"  ] <-  100*(value_current_ritualni_poslugi - mean_current_ritualni_poslugi)/mean_current_ritualni_poslugi
     
     # Saving month
-    p_scores_frame_ritualnii_poslugi_2021[ which(p_scores_frame_ritualnii_poslugi_2021$Month == m), "month_text"  ] <-  m
+    p_scores_frame_ritualni_poslugi_2021[ which(p_scores_frame_ritualni_poslugi_2021$Month == m), "month_text"  ] <-  m
     
   }
   
@@ -387,21 +383,21 @@ p_scores_frame_grob_2020$month_text2             <- paste0("2020-", p_scores_fra
 p_scores_frame_pominki_2020$month_text2          <- paste0("2020-", p_scores_frame_pominki_2020$month_text)
 p_scores_frame_ritualnie_uslugi_2020$month_text2 <- paste0("2020-", p_scores_frame_ritualnie_uslugi_2020$month_text)
 p_scores_frame_truna_2020$month_text2          <- paste0("2020-", p_scores_frame_truna_2020$month_text)
-p_scores_frame_ritualnii_poslugi_2020$month_text2 <- paste0("2020-", p_scores_frame_ritualnii_poslugi_2020$month_text)
+p_scores_frame_ritualni_poslugi_2020$month_text2 <- paste0("2020-", p_scores_frame_ritualni_poslugi_2020$month_text)
 
 # Fixing month3 text 2020
 p_scores_frame_grob_2020$month_text3             <- paste0("2020-", c("01","02","03","04","05","06","07","08","09","10","11","12"))
 p_scores_frame_pominki_2020$month_text3          <- paste0("2020-", c("01","02","03","04","05","06","07","08","09","10","11","12"))
 p_scores_frame_ritualnie_uslugi_2020$month_text3 <- paste0("2020-", c("01","02","03","04","05","06","07","08","09","10","11","12"))
 p_scores_frame_truna_2020$month_text3          <- paste0("2020-", c("01","02","03","04","05","06","07","08","09","10","11","12"))
-p_scores_frame_ritualnii_poslugi_2020$month_text3 <- paste0("2020-", c("01","02","03","04","05","06","07","08","09","10","11","12"))
+p_scores_frame_ritualni_poslugi_2020$month_text3 <- paste0("2020-", c("01","02","03","04","05","06","07","08","09","10","11","12"))
 
 # Fixing color 2020
 p_scores_frame_grob_2020$color             <- c( rep("#005BBB", 2), rep("#FFD500", 10) )
 p_scores_frame_pominki_2020$color          <- c( rep("#005BBB", 2), rep("#FFD500", 10) )
 p_scores_frame_ritualnie_uslugi_2020$color <- c( rep("#005BBB", 2), rep("#FFD500", 10) )
 p_scores_frame_truna_2020$color          <- c( rep("#005BBB", 2), rep("#FFD500", 10) )
-p_scores_frame_ritualnii_poslugi_2020$color <- c( rep("#005BBB", 2), rep("#FFD500", 10) )
+p_scores_frame_ritualni_poslugi_2020$color <- c( rep("#005BBB", 2), rep("#FFD500", 10) )
 
 
 
@@ -411,14 +407,14 @@ p_scores_frame_grob_2021$month_text2             <- paste0("2021-", p_scores_fra
 p_scores_frame_pominki_2021$month_text2          <- paste0("2021-", p_scores_frame_pominki_2021$month_text)
 p_scores_frame_ritualnie_uslugi_2021$month_text2 <- paste0("2021-", p_scores_frame_ritualnie_uslugi_2021$month_text)
 p_scores_frame_truna_2021$month_text2          <- paste0("2021-", p_scores_frame_truna_2021$month_text)
-p_scores_frame_ritualnii_poslugi_2021$month_text2 <- paste0("2021-", p_scores_frame_ritualnii_poslugi_2021$month_text)
+p_scores_frame_ritualni_poslugi_2021$month_text2 <- paste0("2021-", p_scores_frame_ritualni_poslugi_2021$month_text)
 
 # Fixing month3 text 2021
 p_scores_frame_grob_2021$month_text3             <- paste0("2021-", c("01","02","03","04","05","06","07","08","09","10","11","12"))
 p_scores_frame_pominki_2021$month_text3          <- paste0("2021-", c("01","02","03","04","05","06","07","08","09","10","11","12"))
 p_scores_frame_ritualnie_uslugi_2021$month_text3 <- paste0("2021-", c("01","02","03","04","05","06","07","08","09","10","11","12"))
 p_scores_frame_truna_2021$month_text3          <- paste0("2021-", c("01","02","03","04","05","06","07","08","09","10","11","12"))
-p_scores_frame_ritualnii_poslugi_2021$month_text3 <- paste0("2021-", c("01","02","03","04","05","06","07","08","09","10","11","12"))
+p_scores_frame_ritualni_poslugi_2021$month_text3 <- paste0("2021-", c("01","02","03","04","05","06","07","08","09","10","11","12"))
 
 
 # Fixing color 2021
@@ -426,7 +422,7 @@ p_scores_frame_grob_2021$color             <- c( rep("#FFD500", 12) )
 p_scores_frame_pominki_2021$color          <- c( rep("#FFD500", 12) )
 p_scores_frame_ritualnie_uslugi_2021$color <- c( rep("#FFD500", 12) )
 p_scores_frame_truna_2021$color          <- c( rep("#FFD500", 12) )
-p_scores_frame_ritualnii_poslugi_2021$color <- c( rep("#FFD500", 12) )
+p_scores_frame_ritualni_poslugi_2021$color <- c( rep("#FFD500", 12) )
 
 
 
@@ -435,7 +431,7 @@ p_scores_frame_grob_2020_2021             <- rbind(p_scores_frame_grob_2020, p_s
 p_scores_frame_pominki_2020_2021          <- rbind(p_scores_frame_pominki_2020, p_scores_frame_pominki_2021)
 p_scores_frame_ritualnie_uslugi_2020_2021 <- rbind(p_scores_frame_ritualnie_uslugi_2020, p_scores_frame_ritualnie_uslugi_2021)
 p_scores_frame_truna_2020_2021          <- rbind(p_scores_frame_truna_2020, p_scores_frame_truna_2021)
-p_scores_frame_ritualnii_poslugi_2020_2021 <- rbind(p_scores_frame_ritualnii_poslugi_2020, p_scores_frame_ritualnii_poslugi_2021)
+p_scores_frame_ritualni_poslugi_2020_2021 <- rbind(p_scores_frame_ritualni_poslugi_2020, p_scores_frame_ritualni_poslugi_2021)
 
 
 
@@ -445,27 +441,27 @@ save( p_scores_frame_grob_2020,             file = paste("../R_Data/p_scores_fra
 save( p_scores_frame_pominki_2020,          file = paste("../R_Data/p_scores_frame_pominki_2020.RData") )
 save( p_scores_frame_ritualnie_uslugi_2020, file = paste("../R_Data/p_scores_frame_ritualnie_uslugi_2020.RData") )
 save( p_scores_frame_truna_2020,          file = paste("../R_Data/p_scores_frame_truna_2020.RData") )
-save( p_scores_frame_ritualnii_poslugi_2020, file = paste("../R_Data/p_scores_frame_ritualnii_poslugi_2020.RData") )
+save( p_scores_frame_ritualni_poslugi_2020, file = paste("../R_Data/p_scores_frame_ritualni_poslugi_2020.RData") )
 # 2021
 save( p_scores_frame_grob_2021,             file = paste("../R_Data/p_scores_frame_grob_2021.RData") )
 save( p_scores_frame_pominki_2021,          file = paste("../R_Data/p_scores_frame_pominki_2021.RData") )
 save( p_scores_frame_ritualnie_uslugi_2021, file = paste("../R_Data/p_scores_frame_ritualnie_uslugi_2021.RData") )
 save( p_scores_frame_truna_2021,          file = paste("../R_Data/p_scores_frame_truna_2021.RData") )
-save( p_scores_frame_ritualnii_poslugi_2021, file = paste("../R_Data/p_scores_frame_ritualnii_poslugi_2021.RData") )
+save( p_scores_frame_ritualni_poslugi_2021, file = paste("../R_Data/p_scores_frame_ritualni_poslugi_2021.RData") )
 
 # 2020 and 2021
 save( p_scores_frame_grob_2020_2021,             file = paste("../R_Data/p_scores_frame_grob_2020_2021.RData") )
 save( p_scores_frame_pominki_2020_2021,          file = paste("../R_Data/p_scores_frame_pominki_2020_2021.RData") )
 save( p_scores_frame_ritualnie_uslugi_2020_2021, file = paste("../R_Data/p_scores_frame_ritualnie_uslugi_2020_2021.RData") )
 save( p_scores_frame_truna_2020_2021,          file = paste("../R_Data/p_scores_frame_truna_2020_2021.RData") )
-save( p_scores_frame_ritualnii_poslugi_2020_2021, file = paste("../R_Data/p_scores_frame_ritualnii_poslugi_2020_2021.RData") )
+save( p_scores_frame_ritualni_poslugi_2020_2021, file = paste("../R_Data/p_scores_frame_ritualni_poslugi_2020_2021.RData") )
 
 
 
 
 
 # Generating pdf output.
-pdf( paste( "../Plots/FigureTBD02a.pdf", sep = ""), height = 15, width = 25)
+pdf( paste( "../Plots/FigureTBD02a.pdf", sep = ""), height = 18, width = 27)
 # Defining the number of plots
 par( par(mfrow=c(2,3)),  mar=c(7.1, 5.1, 5.1, 2.1)  )
 # par( par(mfrow=c(3,2), by.col = TRUE),  mar=c(7.1, 5.1, 5.1, 2.1)  )
@@ -1238,26 +1234,26 @@ text(x, y, txt, cex = 4)
 
 
 # Fifth graph
-lower_index_ritualnii_poslugi <- 1
-upper_index_ritualnii_poslugi <- length(p_scores_frame_ritualnii_poslugi_2020_2021$p_score_value)
-range_total <- c(lower_index_ritualnii_poslugi:upper_index_ritualnii_poslugi)
+lower_index_ritualni_poslugi <- 1
+upper_index_ritualni_poslugi <- length(p_scores_frame_ritualni_poslugi_2020_2021$p_score_value)
+range_total <- c(lower_index_ritualni_poslugi:upper_index_ritualni_poslugi)
 
-p_score_min_ritualnii_poslugi <- min(p_scores_frame_ritualnii_poslugi_2020_2021$p_score_value[range_total])
-p_score_max_ritualnii_poslugi <- max(p_scores_frame_ritualnii_poslugi_2020_2021$p_score_value[range_total])
+p_score_min_ritualni_poslugi <- min(p_scores_frame_ritualni_poslugi_2020_2021$p_score_value[range_total])
+p_score_max_ritualni_poslugi <- max(p_scores_frame_ritualni_poslugi_2020_2021$p_score_value[range_total])
 
 
-barplot( p_scores_frame_ritualnii_poslugi_2020_2021$p_score_value[range_total], 
-         col= p_scores_frame_ritualnii_poslugi_2020_2021$color[range_total], 
+barplot( p_scores_frame_ritualni_poslugi_2020_2021$p_score_value[range_total], 
+         col= p_scores_frame_ritualni_poslugi_2020_2021$color[range_total], 
          legend = TRUE, 
          border =  TRUE, 
          #xlim = c(1, 5), 
-         ylim = c(p_score_min_ritualnii_poslugi-15, p_score_max_ritualnii_poslugi+15), 
+         ylim = c(p_score_min_ritualni_poslugi-15, p_score_max_ritualni_poslugi+15), 
          args.legend = list(bty="n", border=TRUE), 
          ylab = "", 
          xlab = "", 
-         main = "P-Scores (in Percent) for 2020-2021\nGoogle Trend: \"ritualnii poslugi\"",
+         main = "P-Scores (in Percent) for 2020-2021\nGoogle Trend: \"ritualni poslugi\"",
          # names.arg = as.character(p_scores_frame_five_jan_june$Month), 
-         names.arg = p_scores_frame_ritualnii_poslugi_2020_2021$month_text3[range_total], 
+         names.arg = p_scores_frame_ritualni_poslugi_2020_2021$month_text3[range_total], 
          cex.names = 1.25, 
          cex.lab = 2, 
          cex.axis = 1.75,
@@ -1299,11 +1295,11 @@ value_combine <- c(p_scores_frame_grob_2020_2021$average_2015_2019_years,
                    p_scores_frame_grob_2020_2021$Value,
                    p_scores_frame_pominki_2020_2021$average_2015_2019_years, 
                    p_scores_frame_pominki_2020_2021$Value,
-                   p_scores_frame_ritualnii_poslugi_2020_2021$average_2015_2019_years, 
-                   p_scores_frame_ritualnii_poslugi_2020_2021$Value)
+                   p_scores_frame_ritualni_poslugi_2020_2021$average_2015_2019_years, 
+                   p_scores_frame_ritualni_poslugi_2020_2021$Value)
 
-plot(x = as.integer(rownames(p_scores_frame_ritualnii_poslugi_2020_2021[range_total,])),
-     y = p_scores_frame_ritualnii_poslugi_2020_2021$average_2015_2019_years[range_total],
+plot(x = as.integer(rownames(p_scores_frame_ritualni_poslugi_2020_2021[range_total,])),
+     y = p_scores_frame_ritualni_poslugi_2020_2021$average_2015_2019_years[range_total],
      col = "#005BBB",
      # col = color_01, 
      lwd = 5,
@@ -1312,7 +1308,7 @@ plot(x = as.integer(rownames(p_scores_frame_ritualnii_poslugi_2020_2021[range_to
      # pch = 17,
      type = "l",
      # main = paste( colnames(proporions_all_locations_data_baseline)[compartment],  sep = ""),
-     main = "Averaged (2015-2019) vs 2020-2021 Data\nGoogle Trend: \"ritualnii poslugi\"",
+     main = "Averaged (2015-2019) vs 2020-2021 Data\nGoogle Trend: \"ritualni poslugi\"",
      # xlim = c( intersected_data$death_covid19,  combined_date_max  ),
      ylim = c( min(value_combine),
                max(value_combine) * 1.01 ),
@@ -1328,8 +1324,8 @@ plot(x = as.integer(rownames(p_scores_frame_ritualnii_poslugi_2020_2021[range_to
      cex.main = 2,
      cex.sub = 2
 )
-lines(x = as.integer(rownames(p_scores_frame_ritualnii_poslugi_2020_2021[range_total,])),
-      y = p_scores_frame_ritualnii_poslugi_2020_2021$average_2015_2019_years[range_total],
+lines(x = as.integer(rownames(p_scores_frame_ritualni_poslugi_2020_2021[range_total,])),
+      y = p_scores_frame_ritualni_poslugi_2020_2021$average_2015_2019_years[range_total],
       col = "#005BBB",
       #col = "#FFD500",
       # col = color_01, 
@@ -1338,8 +1334,8 @@ lines(x = as.integer(rownames(p_scores_frame_ritualnii_poslugi_2020_2021[range_t
       # pch = shape_01,
       # pch = 17,
       type = "p")
-lines(x = as.integer(rownames(p_scores_frame_ritualnii_poslugi_2020_2021[range_total,])),
-      y = p_scores_frame_ritualnii_poslugi_2020_2021$Value[range_total],
+lines(x = as.integer(rownames(p_scores_frame_ritualni_poslugi_2020_2021[range_total,])),
+      y = p_scores_frame_ritualni_poslugi_2020_2021$Value[range_total],
       #col = "#005BBB",
       col = "#FFD500",
       # col = color_01, 
@@ -1348,8 +1344,8 @@ lines(x = as.integer(rownames(p_scores_frame_ritualnii_poslugi_2020_2021[range_t
       # pch = shape_01,
       # pch = 17,
       type = "l")
-lines(x = as.integer(rownames(p_scores_frame_ritualnii_poslugi_2020_2021[range_total,])),
-      y = p_scores_frame_ritualnii_poslugi_2020_2021$Value[range_total],
+lines(x = as.integer(rownames(p_scores_frame_ritualni_poslugi_2020_2021[range_total,])),
+      y = p_scores_frame_ritualni_poslugi_2020_2021$Value[range_total],
       #col = "#005BBB",
       col = "#FFD500",
       # col = color_01, 
@@ -1378,19 +1374,19 @@ legend( x = "topleft",
 # X-axis
 # labels FAQ -> http://www.r-bloggers.com/rotated-axis-labels-in-r-plots/
 # Creating labels by month and converting.
-initial_date <- min(as.integer(rownames(p_scores_frame_ritualnii_poslugi_2020_2021[range_total,])))
-final_date   <- max(as.integer(rownames(p_scores_frame_ritualnii_poslugi_2020_2021[range_total,])))
+initial_date <- min(as.integer(rownames(p_scores_frame_ritualni_poslugi_2020_2021[range_total,])))
+final_date   <- max(as.integer(rownames(p_scores_frame_ritualni_poslugi_2020_2021[range_total,])))
 number_of_dates <- final_date - initial_date + 1
 
 
 # Indexes to display
-x_indexes_to_display <-  seq( from  =  1, to  = length(p_scores_frame_ritualnii_poslugi_2020_2021$Month[range_total]),  by = 1 )
+x_indexes_to_display <-  seq( from  =  1, to  = length(p_scores_frame_ritualni_poslugi_2020_2021$Month[range_total]),  by = 1 )
 # x_indexes_to_display[1] <- 1
 # Actual lab elements
 x_tlab <- x_indexes_to_display
 # ctual lab labels
 # x_lablist  <- as.character( p_scores_frame_five_jan_june$Month )
-x_lablist  <- as.character( p_scores_frame_ritualnii_poslugi_2020_2021$month_text3[range_total] )
+x_lablist  <- as.character( p_scores_frame_ritualni_poslugi_2020_2021$month_text3[range_total] )
 axis(1, at = x_tlab, labels = FALSE)
 text(x = x_tlab, y=par()$usr[3]-0.025*(par()$usr[4]-par()$usr[3]), labels = x_lablist, srt=45, adj=1, xpd=TRUE, cex = 1.5)
 

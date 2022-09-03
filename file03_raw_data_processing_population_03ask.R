@@ -1,12 +1,5 @@
-# Alexander Kirpich
-# Georgia State University
-# akirpich@gsu.edu
 
-# 2021.11.24. ask
 rm(list = ls(all = TRUE))
-# Extra check that we deleted everything.
-# 20 Digits Precision Representation
-# options(scipen=20)
 
 # Library to perform column medians and other useful matrix algebra computations.
 library(matrixStats)

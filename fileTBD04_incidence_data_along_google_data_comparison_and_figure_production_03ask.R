@@ -1,12 +1,8 @@
-# Alexander Kirpich
-# Georgia State University
-# akirpich@gsu.edu
 
-# 2021.10.01. ask
+
+
 rm(list=ls(all=TRUE))
-# Extra check that we deleted everything.
-# 20 Digits Precision Representation
-# options(scipen=20)
+
 
 # Library to perform colum medians and other usefull matrix algebra computations. 
 library(matrixStats)
@@ -40,7 +36,7 @@ load( file = paste("../R_Data/google_trends_grob_data.RData") )
 load( file = paste("../R_Data/google_trends_pominki_data.RData") )
 load( file = paste("../R_Data/google_trends_ritualnie_uslugi_data.RData") )
 load( file = paste("../R_Data/google_trends_truna_data.RData") )
-load( file = paste("../R_Data/google_trends_ritualnii_poslugi_data.RData") )
+load( file = paste("../R_Data/google_trends_ritualni_poslugi_data.RData") )
 dim(google_trends_grob_data)
 dim(google_trends_pominki_data)
 dim(google_trends_ritualnie_uslugi_data)
@@ -55,7 +51,7 @@ ls()
 
 
 # Frame to save results
-frame_results_combined <- data.frame( Name = c("grob", "pominki", "ritualnie_uslugi", "truna", "ritualnii_poslugi"),
+frame_results_combined <- data.frame( Name = c("grob", "pominki", "ritualnie_uslugi", "truna", "ritualni_poslugi"),
                                       rho_pearson = rep(0,5),
                                       rho_pearson_smooth = rep(0,5),
                                       rho_spearman = rep(0,5),
@@ -313,64 +309,64 @@ frame_results_combined$grangertest_smooth[index_to_save] <- grangertest(y = merg
 
 
 
-# ritualnii_poslugi time series
-merged_ritualnii_poslugi <- base::merge( x = google_trends_ritualnii_poslugi_data, y = ukraine_un_mortality_data_month_only_since_2015, by.x = "Date", by.y =  "date_fixed"   )
+# ritualni_poslugi time series
+merged_ritualni_poslugi <- base::merge( x = google_trends_ritualni_poslugi_data, y = ukraine_un_mortality_data_month_only_since_2015, by.x = "Date", by.y =  "date_fixed"   )
 # Geberating standardized values
-merged_ritualnii_poslugi$ritualnii_poslugi_scaled  <- 100 * merged_ritualnii_poslugi$ritualnii_poslugi / median(merged_ritualnii_poslugi$ritualnii_poslugi)
-merged_ritualnii_poslugi$value_scaled <- 100 * merged_ritualnii_poslugi$Value / median(merged_ritualnii_poslugi$Value)
-sum(!merged_ritualnii_poslugi$ritualnii_poslugi_scaled  == merged_ritualnii_poslugi$ritualnii_poslugi)
+merged_ritualni_poslugi$ritualni_poslugi_scaled  <- 100 * merged_ritualni_poslugi$ritualni_poslugi / median(merged_ritualni_poslugi$ritualni_poslugi)
+merged_ritualni_poslugi$value_scaled <- 100 * merged_ritualni_poslugi$Value / median(merged_ritualni_poslugi$Value)
+sum(!merged_ritualni_poslugi$ritualni_poslugi_scaled  == merged_ritualni_poslugi$ritualni_poslugi)
 
 
 # Add integer dates
-merged_ritualnii_poslugi$Date_integer <- as.integer(merged_ritualnii_poslugi$Date)
+merged_ritualni_poslugi$Date_integer <- as.integer(merged_ritualni_poslugi$Date)
 
 
 # loess fit_incidence_scaled
-loess_fit_ritualnii_poslugi_incidence_scaled <- loess( value_scaled ~ Date_integer, data = merged_ritualnii_poslugi, span = 0.25 )
-summary(loess_fit_ritualnii_poslugi_incidence_scaled)
-names(loess_fit_ritualnii_poslugi_incidence_scaled)
+loess_fit_ritualni_poslugi_incidence_scaled <- loess( value_scaled ~ Date_integer, data = merged_ritualni_poslugi, span = 0.25 )
+summary(loess_fit_ritualni_poslugi_incidence_scaled)
+names(loess_fit_ritualni_poslugi_incidence_scaled)
 
 # Predicted values
-merged_ritualnii_poslugi$incidence_scaled <- predict(loess_fit_ritualnii_poslugi_incidence_scaled)
+merged_ritualni_poslugi$incidence_scaled <- predict(loess_fit_ritualni_poslugi_incidence_scaled)
 
 
 
 # loess fit_predictor_scaled
-loess_fit_ritualnii_poslugi_predictor_scaled <- loess( ritualnii_poslugi_scaled ~ Date_integer, data = merged_ritualnii_poslugi, span = 0.25 )
-summary(loess_fit_ritualnii_poslugi_predictor_scaled)
-names(loess_fit_ritualnii_poslugi_predictor_scaled)
+loess_fit_ritualni_poslugi_predictor_scaled <- loess( ritualni_poslugi_scaled ~ Date_integer, data = merged_ritualni_poslugi, span = 0.25 )
+summary(loess_fit_ritualni_poslugi_predictor_scaled)
+names(loess_fit_ritualni_poslugi_predictor_scaled)
 
 # Predicted values
-merged_ritualnii_poslugi$predictor_scaled <- predict(loess_fit_ritualnii_poslugi_predictor_scaled)
+merged_ritualni_poslugi$predictor_scaled <- predict(loess_fit_ritualni_poslugi_predictor_scaled)
 
 # Correlations
 # original data re-scaled
-cor(merged_ritualnii_poslugi$value_scaled,  merged_ritualnii_poslugi$ritualnii_poslugi_scaled, method = "pearson")
-cor(merged_ritualnii_poslugi$value_scaled,  merged_ritualnii_poslugi$ritualnii_poslugi_scaled, method = "spearman")
+cor(merged_ritualni_poslugi$value_scaled,  merged_ritualni_poslugi$ritualni_poslugi_scaled, method = "pearson")
+cor(merged_ritualni_poslugi$value_scaled,  merged_ritualni_poslugi$ritualni_poslugi_scaled, method = "spearman")
 # smoothers fo te-scalled data
-cor(merged_ritualnii_poslugi$incidence_scaled,  merged_ritualnii_poslugi$predictor_scaled, method = "pearson")
-cor(merged_ritualnii_poslugi$incidence_scaled,  merged_ritualnii_poslugi$predictor_scaled, method = "spearman")
+cor(merged_ritualni_poslugi$incidence_scaled,  merged_ritualni_poslugi$predictor_scaled, method = "pearson")
+cor(merged_ritualni_poslugi$incidence_scaled,  merged_ritualni_poslugi$predictor_scaled, method = "spearman")
 
 # Granger's test
 # order 1
-grangertest(y = merged_ritualnii_poslugi$ritualnii_poslugi_scaled, x = merged_ritualnii_poslugi$value_scaled, order = 1)
-grangertest(y = merged_ritualnii_poslugi$predictor_scaled, x = merged_ritualnii_poslugi$incidence_scaled, order = 1)
+grangertest(y = merged_ritualni_poslugi$ritualni_poslugi_scaled, x = merged_ritualni_poslugi$value_scaled, order = 1)
+grangertest(y = merged_ritualni_poslugi$predictor_scaled, x = merged_ritualni_poslugi$incidence_scaled, order = 1)
 
 
 # Saving the results
-index_to_save <- which( frame_results_combined$Name =="ritualnii_poslugi")
+index_to_save <- which( frame_results_combined$Name =="ritualni_poslugi")
 # Correlations
 # original data re-scaled
-frame_results_combined$rho_pearson[index_to_save]   <-  cor(merged_ritualnii_poslugi$value_scaled,  merged_ritualnii_poslugi$ritualnii_poslugi_scaled, method = "pearson")
-frame_results_combined$rho_spearman[index_to_save]  <-  cor(merged_ritualnii_poslugi$value_scaled,  merged_ritualnii_poslugi$ritualnii_poslugi_scaled, method = "spearman")
+frame_results_combined$rho_pearson[index_to_save]   <-  cor(merged_ritualni_poslugi$value_scaled,  merged_ritualni_poslugi$ritualni_poslugi_scaled, method = "pearson")
+frame_results_combined$rho_spearman[index_to_save]  <-  cor(merged_ritualni_poslugi$value_scaled,  merged_ritualni_poslugi$ritualni_poslugi_scaled, method = "spearman")
 # smoothers fo te-scalled data
-frame_results_combined$rho_pearson_smooth[index_to_save]   <-  cor(merged_ritualnii_poslugi$incidence_scaled,  merged_ritualnii_poslugi$predictor_scaled, method = "pearson")
-frame_results_combined$rho_spearman_smooth[index_to_save]  <-  cor(merged_ritualnii_poslugi$incidence_scaled,  merged_ritualnii_poslugi$predictor_scaled, method = "spearman")
+frame_results_combined$rho_pearson_smooth[index_to_save]   <-  cor(merged_ritualni_poslugi$incidence_scaled,  merged_ritualni_poslugi$predictor_scaled, method = "pearson")
+frame_results_combined$rho_spearman_smooth[index_to_save]  <-  cor(merged_ritualni_poslugi$incidence_scaled,  merged_ritualni_poslugi$predictor_scaled, method = "spearman")
 
 # Granger's test
 # order 1
-frame_results_combined$grangertest[index_to_save]        <- grangertest(y = merged_ritualnii_poslugi$ritualnii_poslugi_scaled, x = merged_ritualnii_poslugi$value_scaled, order = 1)$"Pr(>F)"[2]
-frame_results_combined$grangertest_smooth[index_to_save] <- grangertest(y = merged_ritualnii_poslugi$predictor_scaled, x = merged_ritualnii_poslugi$incidence_scaled, order = 1)$"Pr(>F)"[2]
+frame_results_combined$grangertest[index_to_save]        <- grangertest(y = merged_ritualni_poslugi$ritualni_poslugi_scaled, x = merged_ritualni_poslugi$value_scaled, order = 1)$"Pr(>F)"[2]
+frame_results_combined$grangertest_smooth[index_to_save] <- grangertest(y = merged_ritualni_poslugi$predictor_scaled, x = merged_ritualni_poslugi$incidence_scaled, order = 1)$"Pr(>F)"[2]
 
 
 
@@ -786,16 +782,16 @@ text(x, y, txt, cex = 4)
 
 
 # Third plot
-# ritualnii_poslugi
-plot(x = merged_ritualnii_poslugi$Date,
-     y = merged_ritualnii_poslugi$value_scaled,
+# ritualni_poslugi
+plot(x = merged_ritualni_poslugi$Date,
+     y = merged_ritualni_poslugi$value_scaled,
      col = "#00bb61",
      lwd = 5,
      pch = 19,
      type = "p",
-     main = "Mortality vs Google Trend \"ritualnii poslugi\"",
-     ylim = c( min(merged_ritualnii_poslugi$value_scaled, merged_ritualnii_poslugi$ritualnii_poslugi_scaled)* 0.70, 
-               max(merged_ritualnii_poslugi$value_scaled, merged_ritualnii_poslugi$ritualnii_poslugi_scaled) ),
+     main = "Mortality vs Google Trend \"ritualni poslugi\"",
+     ylim = c( min(merged_ritualni_poslugi$value_scaled, merged_ritualni_poslugi$ritualni_poslugi_scaled)* 0.70, 
+               max(merged_ritualni_poslugi$value_scaled, merged_ritualni_poslugi$ritualni_poslugi_scaled) ),
      xlab = "",
      ylab = "Value (Standardized)",     
      xaxt='n',
@@ -806,22 +802,22 @@ plot(x = merged_ritualnii_poslugi$Date,
      cex.main = 1.55,
      cex.sub = 2
 )
-lines(x = merged_ritualnii_poslugi$Date,
-      y = merged_ritualnii_poslugi$ritualnii_poslugi_scaled,
+lines(x = merged_ritualni_poslugi$Date,
+      y = merged_ritualni_poslugi$ritualni_poslugi_scaled,
       col = "darkgoldenrod4",
       lwd = 5,
       pch = 15,
       type = "p",
       cex = 1.15
 )
-lines(x = merged_ritualnii_poslugi$Date,
-      y = merged_ritualnii_poslugi$incidence_scaled,
+lines(x = merged_ritualni_poslugi$Date,
+      y = merged_ritualni_poslugi$incidence_scaled,
       col = "#005BBB",
       lwd = 5,
       type = "l"
 )
-lines(x = merged_ritualnii_poslugi$Date,
-      y = merged_ritualnii_poslugi$predictor_scaled,
+lines(x = merged_ritualni_poslugi$Date,
+      y = merged_ritualni_poslugi$predictor_scaled,
       col = "#FFD500",
       lwd = 5,
       type = "l"
@@ -841,11 +837,11 @@ legend( x = "topleft",
 # X-axis
 # labels FAQ -> http://www.r-bloggers.com/rotated-axis-labels-in-r-plots/
 # Creating labels by month and converting.
-initial_value_ritualnii_poslugi <- as.integer( min(merged_ritualnii_poslugi$Date) )
-final_value_ritualnii_poslugi   <- as.integer( max(merged_ritualnii_poslugi$Date) )
-number_of_value_ritualnii_poslugi <- final_value_ritualnii_poslugi - initial_value_ritualnii_poslugi
+initial_value_ritualni_poslugi <- as.integer( min(merged_ritualni_poslugi$Date) )
+final_value_ritualni_poslugi   <- as.integer( max(merged_ritualni_poslugi$Date) )
+number_of_value_ritualni_poslugi <- final_value_ritualni_poslugi - initial_value_ritualni_poslugi
 
-x_tlab <- seq( from  = initial_value_ritualnii_poslugi, to  = final_value_ritualnii_poslugi,  by = trunc(number_of_value_ritualnii_poslugi/15) )   
+x_tlab <- seq( from  = initial_value_ritualni_poslugi, to  = final_value_ritualni_poslugi,  by = trunc(number_of_value_ritualni_poslugi/15) )   
 x_lablist <- as.character( as.Date(x_tlab, origin = "1970-01-01") ) 
 axis(1, at = x_tlab, labels = FALSE)
 text(x = x_tlab, y=par()$usr[3]-0.05*(par()$usr[4]-par()$usr[3]), labels = x_lablist, srt=45, adj=1, xpd=TRUE, cex.axis = 5)
@@ -854,9 +850,9 @@ text(x = x_tlab, y=par()$usr[3]-0.05*(par()$usr[4]-par()$usr[3]), labels = x_lab
 # Y-axis
 # Adding axis label
 # labels FAQ -> https://stackoverflow.com/questions/26180178/r-boxplot-how-to-move-the-x-axis-label-down
-y_min_value_ritualnii_poslugi <- round( min(merged_ritualnii_poslugi$value_scaled, merged_ritualnii_poslugi$ritualnii_poslugi_scaled) )
-y_max_value_ritualnii_poslugi <- round( max(merged_ritualnii_poslugi$value_scaled, merged_ritualnii_poslugi$ritualnii_poslugi_scaled) )
-y_tlab  <- round( seq( from = y_min_value_ritualnii_poslugi, to = y_max_value_ritualnii_poslugi, by = (y_max_value_ritualnii_poslugi-y_min_value_ritualnii_poslugi)/5 ) )
+y_min_value_ritualni_poslugi <- round( min(merged_ritualni_poslugi$value_scaled, merged_ritualni_poslugi$ritualni_poslugi_scaled) )
+y_max_value_ritualni_poslugi <- round( max(merged_ritualni_poslugi$value_scaled, merged_ritualni_poslugi$ritualni_poslugi_scaled) )
+y_tlab  <- round( seq( from = y_min_value_ritualni_poslugi, to = y_max_value_ritualni_poslugi, by = (y_max_value_ritualni_poslugi-y_min_value_ritualni_poslugi)/5 ) )
 y_lablist <- as.character( round(y_tlab,  digits = 4) )
 axis(2, at = y_tlab, labels = y_lablist, cex.axis = 1.1)
 
@@ -1291,16 +1287,16 @@ text(x, y, txt, cex = 4)
 
 
 # Third plot
-# ritualnii_poslugi
-plot(x = merged_ritualnii_poslugi$Date,
-     y = merged_ritualnii_poslugi$value_scaled,
+# ritualni_poslugi
+plot(x = merged_ritualni_poslugi$Date,
+     y = merged_ritualni_poslugi$value_scaled,
      col = "#00bb61",
      lwd = 5,
      pch = 19,
      type = "l",
-     main = "Mortality vs Google Trend \"ritualnii poslugi\"",
-     ylim = c( min(merged_ritualnii_poslugi$value_scaled, merged_ritualnii_poslugi$ritualnii_poslugi_scaled)* 0.70, 
-               max(merged_ritualnii_poslugi$value_scaled, merged_ritualnii_poslugi$ritualnii_poslugi_scaled) ),
+     main = "Mortality vs Google Trend \"ritualni poslugi\"",
+     ylim = c( min(merged_ritualni_poslugi$value_scaled, merged_ritualni_poslugi$ritualni_poslugi_scaled)* 0.70, 
+               max(merged_ritualni_poslugi$value_scaled, merged_ritualni_poslugi$ritualni_poslugi_scaled) ),
      xlab = "",
      ylab = "Value (Standardized)",     
      xaxt='n',
@@ -1311,22 +1307,22 @@ plot(x = merged_ritualnii_poslugi$Date,
      cex.main = 1.55,
      cex.sub = 2
 )
-lines(x = merged_ritualnii_poslugi$Date,
-      y = merged_ritualnii_poslugi$ritualnii_poslugi_scaled,
+lines(x = merged_ritualni_poslugi$Date,
+      y = merged_ritualni_poslugi$ritualni_poslugi_scaled,
       col = "darkgoldenrod4",
       lwd = 5,
       pch = 15,
       type = "l",
       cex = 1.15
 )
-lines(x = merged_ritualnii_poslugi$Date,
-      y = merged_ritualnii_poslugi$incidence_scaled,
+lines(x = merged_ritualni_poslugi$Date,
+      y = merged_ritualni_poslugi$incidence_scaled,
       col = "#005BBB",
       lwd = 5,
       type = "l"
 )
-lines(x = merged_ritualnii_poslugi$Date,
-      y = merged_ritualnii_poslugi$predictor_scaled,
+lines(x = merged_ritualni_poslugi$Date,
+      y = merged_ritualni_poslugi$predictor_scaled,
       col = "#FFD500",
       lwd = 5,
       type = "l"
@@ -1346,11 +1342,11 @@ legend( x = "topleft",
 # X-axis
 # labels FAQ -> http://www.r-bloggers.com/rotated-axis-labels-in-r-plots/
 # Creating labels by month and converting.
-initial_value_ritualnii_poslugi <- as.integer( min(merged_ritualnii_poslugi$Date) )
-final_value_ritualnii_poslugi   <- as.integer( max(merged_ritualnii_poslugi$Date) )
-number_of_value_ritualnii_poslugi <- final_value_ritualnii_poslugi - initial_value_ritualnii_poslugi
+initial_value_ritualni_poslugi <- as.integer( min(merged_ritualni_poslugi$Date) )
+final_value_ritualni_poslugi   <- as.integer( max(merged_ritualni_poslugi$Date) )
+number_of_value_ritualni_poslugi <- final_value_ritualni_poslugi - initial_value_ritualni_poslugi
 
-x_tlab <- seq( from  = initial_value_ritualnii_poslugi, to  = final_value_ritualnii_poslugi,  by = trunc(number_of_value_ritualnii_poslugi/15) )   
+x_tlab <- seq( from  = initial_value_ritualni_poslugi, to  = final_value_ritualni_poslugi,  by = trunc(number_of_value_ritualni_poslugi/15) )   
 x_lablist <- as.character( as.Date(x_tlab, origin = "1970-01-01") ) 
 axis(1, at = x_tlab, labels = FALSE)
 text(x = x_tlab, y=par()$usr[3]-0.05*(par()$usr[4]-par()$usr[3]), labels = x_lablist, srt=45, adj=1, xpd=TRUE, cex.axis = 5)
@@ -1359,9 +1355,9 @@ text(x = x_tlab, y=par()$usr[3]-0.05*(par()$usr[4]-par()$usr[3]), labels = x_lab
 # Y-axis
 # Adding axis label
 # labels FAQ -> https://stackoverflow.com/questions/26180178/r-boxplot-how-to-move-the-x-axis-label-down
-y_min_value_ritualnii_poslugi <- round( min(merged_ritualnii_poslugi$value_scaled, merged_ritualnii_poslugi$ritualnii_poslugi_scaled) )
-y_max_value_ritualnii_poslugi <- round( max(merged_ritualnii_poslugi$value_scaled, merged_ritualnii_poslugi$ritualnii_poslugi_scaled) )
-y_tlab  <- round( seq( from = y_min_value_ritualnii_poslugi, to = y_max_value_ritualnii_poslugi, by = (y_max_value_ritualnii_poslugi-y_min_value_ritualnii_poslugi)/5 ) )
+y_min_value_ritualni_poslugi <- round( min(merged_ritualni_poslugi$value_scaled, merged_ritualni_poslugi$ritualni_poslugi_scaled) )
+y_max_value_ritualni_poslugi <- round( max(merged_ritualni_poslugi$value_scaled, merged_ritualni_poslugi$ritualni_poslugi_scaled) )
+y_tlab  <- round( seq( from = y_min_value_ritualni_poslugi, to = y_max_value_ritualni_poslugi, by = (y_max_value_ritualni_poslugi-y_min_value_ritualni_poslugi)/5 ) )
 y_lablist <- as.character( round(y_tlab,  digits = 4) )
 axis(2, at = y_tlab, labels = y_lablist, cex.axis = 1.1)
 

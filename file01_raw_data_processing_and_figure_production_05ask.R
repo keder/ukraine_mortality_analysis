@@ -1,12 +1,5 @@
-# Alexander Kirpich
-# Georgia State University
-# akirpich@gsu.edu
 
-# 2021.11.24. ask
 rm(list=ls(all=TRUE))
-# Extra check that we deleted everything.
-# 20 Digits Precision Representation
-# options(scipen=20)
 
 # Library to perform colum medians and other usefull matrix algebra computations. 
 library(matrixStats)
@@ -39,9 +32,12 @@ belarus_un_mortality_relative_path  <- "../Data/Ukraine_data/UNdata_Export_20220
 ukraine_mortality_path = "../Data/Ukraine_data/raw_mortality.csv"
 proportion_max = 0.25
 
+causes_relative_path <- "../Data/Ukraine_data/causes.csv"
 
-
-
+mortality_causes_data <- read.table(file = causes_relative_path, sep = ";", header = TRUE)
+mortality_causes_data$date = as.Date(paste(mortality_causes_data$date_str, "15", sep="-"))
+new_names = gsub("\\.+", "_", names(mortality_causes_data))
+names(mortality_causes_data) = new_names
 
 
 
@@ -80,8 +76,11 @@ for (unique_month_current in unique_month )
     
 }
 
-ukraine_covid_mortality$date_text = paste0(ukraine_covid_mortality$date_text, "-15")
-ukraine_covid_mortality$Date = as.Date(ukraine_covid_mortality$date_text)
+ukraine_covid_mortality$Date = as.Date(paste0(ukraine_covid_mortality$date_text, "-15"))
+mortality_causes_data_cut = mortality_causes_data[which(mortality_causes_data$date >= ukraine_covid_mortality$Date[1]),]
+ukraine_covid_mortality = ukraine_covid_mortality[which(ukraine_covid_mortality$Date <= max(mortality_causes_data$date)),]
+ukraine_covid_mortality$death_covid19 = mortality_causes_data_cut$covid_19_identified_
+
 
 # Saving the data as RData file.
 save( ukraine_covid_mortality, file = paste("../R_Data/ukraine_covid_mortality.RData") )
@@ -164,7 +163,7 @@ save( ukraine_un_mortality_data_month_only_since_2015, file = paste("../R_Data/u
 ukraine_un_mortality_data_month_only_since_2015$date_text <- format( ukraine_un_mortality_data_month_only_since_2015$date_fixed, "%Y-%m-%d" )
 
 intersected_data <- merge( x = ukraine_un_mortality_data_month_only_since_2015, 
-       y = ukraine_covid_mortality )
+       y = ukraine_covid_mortality, by.x = "date_fixed", by.y = "Date")
 
 
 
@@ -1023,18 +1022,11 @@ layout(matrix(c(1,2,3), nrow = 3, ncol = 1, byrow = TRUE))
 plot(x = ukraine_un_mortality_data_month_only_since_2015$date_fixed,
      y = ukraine_un_mortality_data_month_only_since_2015$Value,
      col = "#005BBB",
-     # col = color_01, 
      lwd = 5,
-     # pch = 16,
-     # pch = shape_01,
-     # pch = 17,
      type = "l",
-     # main = paste( colnames(proporions_all_locations_data_baseline)[compartment],  sep = ""),
      main = "Monthly Mortality (Total)",
      xlim = c( combined_date_min,  combined_date_max  ),
      ylim = c( combined_value_min, combined_value_max ),
-     # ylim = c(0, y_max_value_current * 1.2  ),
-     # xlab = "Time",
      xlab = "",     
      ylab = "Counts",
      xaxt='n',
@@ -1162,11 +1154,16 @@ lines(x = intersected_data$date_fixed,
       # pch = shape_01,
       # pch = 17,
       type = "p")
+lines(x = rep( as.Date("2020-03-01", origin ="1970-01-01"), 2), 
+      y = c( min(intersected_data$death_covid19),  max(intersected_data$death_covid19) ),
+      col="red", 
+      lwd = 1, 
+      lty = 2)
 legend( x = "topleft", 
-        inset= c(0.04, 0.04), 
-        legend = c("Interpolated Records"), 
+        inset= c(0.14, 0.04), 
+        legend = c("Interpolated Records", "Epidemic Start"), 
         col = "black", 
-        fill = c("#FFD500"),   
+        fill = c("#FFD500", "red"),
         pt.cex = c(4, 2),
         # pch = c(19, 20),  
         cex = 1.5 ) 
@@ -1226,7 +1223,7 @@ proportion_covid19 <- intersected_data$death_covid19/intersected_data$Value
 
 summary_to_plot <-  rbind( proportion_covid19,
                            (proportion_max - proportion_covid19)  )
-colnames(summary_to_plot) <- format(intersected_data$date_fixed, "%Y-%m-%d")
+colnames(summary_to_plot) <- format(intersected_data$date_fixed, "%Y-%m")
 rownames(summary_to_plot) <- NULL
 
 barplot( summary_to_plot, col=c("#FFD500", "#005BBB"), 
