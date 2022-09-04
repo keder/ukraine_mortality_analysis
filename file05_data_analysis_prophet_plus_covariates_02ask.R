@@ -196,7 +196,7 @@ barplot(prophet_predictions_five_plus_original_data_Age65Up_subset$p_scores_uppe
       args.legend = list(bty = "n", border = TRUE),
       ylab = "",
       xlab = "",
-      main = "P-Scores For 2015/01-2020/02 Model Fits\n & 2020/03-2021/02 Prediction",
+      main = "P-Scores For 2015/01-2020/02 Model Fits\n & 2020/03-2021/12 Prediction",
       # names.arg = as.character(p_scores_frame_five_jan_june$Month),
       names.arg = prophet_predictions_five_plus_original_data_Age65Up_subset$year_month_text[range_five],
       cex.names = 1.25,
@@ -264,7 +264,7 @@ plot(
       # pch = 17,
       type = "l",
       # main = paste( colnames(proporions_all_locations_data_baseline)[compartment],  sep = ""),
-      main = "Reported (2015/01-2020/02)\nFitted (2015/01-2021/12) & Predicted (2020/03-2021/12)",
+      main = "Reported (2015/01-2021/12)\nFitted (2015/01-2020/02) & Predicted (2020/03-2021/12)",
       # xlim = c( intersected_data$death_covid19,  combined_date_max  ),
       ylim = c(
             min(value_combine),
@@ -344,7 +344,7 @@ lines(
 )
 
 lines(
-      x = rep(max(as.integer(prophet_predictions_five_plus_original_data_Age65Up_subset$ds)[range_five]) - pandemic_data_length * 30, 10),
+      x = rep(pandemic_start, 10),
       y = c(rep(min(value_combine), 5), rep(max(value_combine), 5)),
       col = "red",
       lwd = 1,

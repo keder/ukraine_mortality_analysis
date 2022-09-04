@@ -34,7 +34,7 @@ rm(list = ls(all = TRUE))
 # library("forecast") - libary for time series forecasting.
 # library("forecast")
 
-pandemic_start <- as.Date("2020-02-15")
+pandemic_start <- as.Date("2020-03-15")
 
 
 # install.packages("prophet")
@@ -240,7 +240,7 @@ plot(
       # pch = 17,
       type = "l",
       # main = paste( colnames(proporions_all_locations_data_baseline)[compartment],  sep = ""),
-      main = "Reported (2015/01-2020/02)\nFitted (2015/01-2020/02) & Predicted (2020/03-2021/12)",
+      main = "Reported (2015/01-2021/12)\nFitted (2015/01-2020/02) & Predicted (2020/03-2021/12)",
       # xlim = c( intersected_data$death_covid19,  combined_date_max  ),
       ylim = c(
             min(value_combine),
@@ -320,7 +320,7 @@ lines(
 )
 
 lines(
-      x = rep(max(as.integer(prophet_predictions_five_plus_original_data_subset$ds)[range_five]) - pandemic_data_length * 30, 10),
+      x = rep(as.integer(pandemic_start), 10),
       y = c(rep(min(value_combine), 5), rep(max(value_combine), 5)),
       col = "red",
       lwd = 1,

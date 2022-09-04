@@ -207,7 +207,7 @@ plot(
       # pch = 17,
       type = "l",
       # main = paste( colnames(proporions_all_locations_data_baseline)[compartment],  sep = ""),
-      main = "Reported (2015/01-2020/02)\nFitted (2015/01-2021/12) & Predicted (2020/03-2021/12)",
+      main = "Reported (2015/01-2021/12)\nFitted (2015/01-2020/02) & Predicted (2020/03-2021/12)",
       # xlim = c( intersected_data$death_covid19,  combined_date_max  ),
       ylim = c(
             min(value_combine),
