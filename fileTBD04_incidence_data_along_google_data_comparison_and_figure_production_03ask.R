@@ -72,6 +72,7 @@ sum(!merged_grob$grob_scaled  == merged_grob$grob)
 
 # Add integer dates
 merged_grob$Date_integer <- as.integer(merged_grob$Date)
+merged_grob$date_text <- format( merged_grob$Date, "%Y-%m" )
 
 
 # loess fit_incidence_scaled
@@ -135,6 +136,7 @@ sum(!merged_pominki$pominki_scaled  == merged_pominki$pominki)
 
 # Add integer dates
 merged_pominki$Date_integer <- as.integer(merged_pominki$Date)
+merged_pominki$date_text <- format( merged_grob$Date, "%Y-%m" )
 
 
 # loess fit_incidence_scaled
@@ -197,6 +199,7 @@ sum(!merged_ritualnie_uslugi$ritualnie_uslugi_scaled  == merged_ritualnie_uslugi
 
 # Add integer dates
 merged_ritualnie_uslugi$Date_integer <- as.integer(merged_ritualnie_uslugi$Date)
+merged_ritualnie_uslugi$date_text <- format( merged_grob$Date, "%Y-%m" )
 
 
 # loess fit_incidence_scaled
@@ -257,6 +260,8 @@ sum(!merged_truna$truna_scaled  == merged_truna$truna)
 
 # Add integer dates
 merged_truna$Date_integer <- as.integer(merged_truna$Date)
+merged_truna$date_text <- format( merged_grob$Date, "%Y-%m" )
+
 
 # loess fit_incidence_scaled
 loess_fit_truna_incidence_scaled <- loess( value_scaled ~ Date_integer, data = merged_truna, span = 0.25 )
@@ -319,6 +324,7 @@ sum(!merged_ritualni_poslugi$ritualni_poslugi_scaled  == merged_ritualni_poslugi
 
 # Add integer dates
 merged_ritualni_poslugi$Date_integer <- as.integer(merged_ritualni_poslugi$Date)
+merged_ritualni_poslugi$date_text <- format( merged_grob$Date, "%Y-%m" )
 
 
 # loess fit_incidence_scaled
@@ -389,9 +395,9 @@ print.xtable( x = frame_results_combined_xtable, type="latex", file = frame_resu
 
 
 # Generating pdf output.
-pdf( paste( "../Plots/FigureTBD04a.pdf", sep = ""), height = 5, width = 25)
+pdf( paste( "../Plots/FigureTBD04a.pdf", sep = ""), height = 5, width = 15)
 # Definign the number of plots
-par( par(mfrow=c(1,5)),  mar=c(7.1, 5.1, 3, 2.1)  )
+par( par(mfrow=c(1,3)),  mar=c(7.1, 5.1, 3, 2.1)  )
 
 
 # First plot
@@ -455,7 +461,7 @@ final_value_grob   <- as.integer( max(merged_grob$Date) )
 number_of_value_grob <- final_value_grob - initial_value_grob
 
 x_tlab <- seq( from  = initial_value_grob, to  = final_value_grob,  by = trunc(number_of_value_grob/15) )   
-x_lablist <- as.character( as.Date(x_tlab, origin = "1970-01-01") ) 
+x_lablist <- format( as.Date(x_tlab, origin = "1970-01-01"), "%Y-%m" )
 axis(1, at = x_tlab, labels = FALSE)
 text(x = x_tlab, y=par()$usr[3]-0.05*(par()$usr[4]-par()$usr[3]), labels = x_lablist, srt=45, adj=1, xpd=TRUE, cex.axis = 5)
 
@@ -552,7 +558,7 @@ final_value_pominki   <- as.integer( max(merged_pominki$Date) )
 number_of_value_pominki <- final_value_pominki - initial_value_pominki
 
 x_tlab <- seq( from  = initial_value_pominki, to  = final_value_pominki,  by = trunc(number_of_value_pominki/15) )   
-x_lablist <- as.character( as.Date(x_tlab, origin = "1970-01-01") ) 
+x_lablist <- x_lablist <- format( as.Date(x_tlab, origin = "1970-01-01"), "%Y-%m" )
 axis(1, at = x_tlab, labels = FALSE)
 text(x = x_tlab, y=par()$usr[3]-0.05*(par()$usr[4]-par()$usr[3]), labels = x_lablist, srt=45, adj=1, xpd=TRUE, cex.axis = 5)
 
@@ -650,7 +656,7 @@ final_value_ritualnie_uslugi   <- as.integer( max(merged_ritualnie_uslugi$Date) 
 number_of_value_ritualnie_uslugi <- final_value_ritualnie_uslugi - initial_value_ritualnie_uslugi
 
 x_tlab <- seq( from  = initial_value_ritualnie_uslugi, to  = final_value_ritualnie_uslugi,  by = trunc(number_of_value_ritualnie_uslugi/15) )   
-x_lablist <- as.character( as.Date(x_tlab, origin = "1970-01-01") ) 
+x_lablist <- x_lablist <- format( as.Date(x_tlab, origin = "1970-01-01"), "%Y-%m" )
 axis(1, at = x_tlab, labels = FALSE)
 text(x = x_tlab, y=par()$usr[3]-0.05*(par()$usr[4]-par()$usr[3]), labels = x_lablist, srt=45, adj=1, xpd=TRUE, cex.axis = 5)
 
@@ -680,6 +686,16 @@ txt <- "C"
 x <- x[1] + strwidth(txt, cex=4) * 6 / 5
 y <- y[2] - strheight(txt, cex=4) * 3.5 / 5
 text(x, y, txt, cex = 4)
+
+dev.off()
+
+
+
+
+# Generating pdf output.
+pdf( paste( "../Plots/FigureTBD04b.pdf", sep = ""), height = 5, width = 15)
+# Definign the number of plots
+par( par(mfrow=c(1,3)),  mar=c(7.1, 5.1, 3, 2.1)  )
 
 
 
@@ -744,7 +760,7 @@ final_value_truna   <- as.integer( max(merged_truna$Date) )
 number_of_value_truna <- final_value_truna - initial_value_truna
 
 x_tlab <- seq( from  = initial_value_truna, to  = final_value_truna,  by = trunc(number_of_value_truna/15) )   
-x_lablist <- as.character( as.Date(x_tlab, origin = "1970-01-01") ) 
+x_lablist <- format( as.Date(x_tlab, origin = "1970-01-01"), "%Y-%m" )
 axis(1, at = x_tlab, labels = FALSE)
 text(x = x_tlab, y=par()$usr[3]-0.05*(par()$usr[4]-par()$usr[3]), labels = x_lablist, srt=45, adj=1, xpd=TRUE, cex.axis = 5)
 
@@ -755,6 +771,101 @@ text(x = x_tlab, y=par()$usr[3]-0.05*(par()$usr[4]-par()$usr[3]), labels = x_lab
 y_min_value_truna <- round( min(merged_truna$value_scaled, merged_truna$truna_scaled) )
 y_max_value_truna <- round( max(merged_truna$value_scaled, merged_truna$truna_scaled) )
 y_tlab  <- round( seq( from = y_min_value_truna, to = y_max_value_truna, by = (y_max_value_truna-y_min_value_truna)/5 ) )
+y_lablist <- as.character( round(y_tlab,  digits = 4) )format( merged_grob$Date, "%Y-%m" )
+axis(2, at = y_tlab, labels = y_lablist, cex.axis = 1.1)
+
+
+# Label B
+par(xpd = NA )
+
+di <- dev.size("in")
+x <- grconvertX(c(0, di[1]), from="in", to="user")
+y <- grconvertY(c(0, di[2]), from="in", to="user")
+
+fig <- par("fig")
+x <- x[1] + (x[2] - x[1]) * fig[1:2]
+y <- y[1] + (y[2] - y[1]) * fig[3:4]
+
+txt <- "A"
+x <- x[1] + strwidth(txt, cex=4) * 6 / 5
+y <- y[2] - strheight(txt, cex=4) * 3.5 / 5
+text(x, y, txt, cex = 4)
+
+
+
+
+# Second plot
+# pominki
+plot(x = merged_pominki$Date,
+     y = merged_pominki$value_scaled,
+     col = "#00bb61",
+     lwd = 5,
+     pch = 19,
+     type = "p",
+     main = "Mortality vs Google Trend \"pominki\"",
+     ylim = c( min(merged_pominki$value_scaled, merged_pominki$pominki_scaled), 
+               max(merged_pominki$value_scaled, merged_pominki$pominki_scaled) ),
+     xlab = "",
+     ylab = "Value (Standardized)",     
+     xaxt='n',
+     yaxt='n',
+     cex = 1,
+     cex.axis = 1.55,
+     cex.lab = 1.55,
+     cex.main = 1.55,
+     cex.sub = 2
+)
+lines(x = merged_pominki$Date,
+      y = merged_pominki$pominki_scaled,
+      col = "darkgoldenrod4",
+      lwd = 5,
+      pch = 15,
+      type = "p",
+      cex = 1.15
+)
+lines(x = merged_pominki$Date,
+      y = merged_pominki$incidence_scaled,
+      col = "#005BBB",
+      lwd = 5,
+      type = "l"
+)
+lines(x = merged_pominki$Date,
+      y = merged_pominki$predictor_scaled,
+      col = "#FFD500",
+      lwd = 5,
+      type = "l"
+)
+
+legend( x = "topleft", 
+        inset= c(0.05, 0.05), 
+        legend = c("Mortality Data", "Search Data", "Mortality Smooter", "Search Smooter"), 
+        col = "black", 
+        fill = c("#00bb61", "darkgoldenrod4", "#005BBB", "#FFD500"),   
+        pt.cex = 4,  
+        cex = 1 ) 
+# labels FAQ -> http://www.r-bloggers.com/rotated-axis-labels-in-r-plots/
+# Creating labels by month and converting.
+
+
+# X-axis
+# labels FAQ -> http://www.r-bloggers.com/rotated-axis-labels-in-r-plots/
+# Creating labels by month and converting.
+initial_value_pominki <- as.integer( min(merged_pominki$Date) )
+final_value_pominki   <- as.integer( max(merged_pominki$Date) )
+number_of_value_pominki <- final_value_pominki - initial_value_pominki
+
+x_tlab <- seq( from  = initial_value_pominki, to  = final_value_pominki,  by = trunc(number_of_value_pominki/15) )   
+x_lablist <- format( as.Date(x_tlab, origin = "1970-01-01"), "%Y-%m" )
+axis(1, at = x_tlab, labels = FALSE)
+text(x = x_tlab, y=par()$usr[3]-0.05*(par()$usr[4]-par()$usr[3]), labels = x_lablist, srt=45, adj=1, xpd=TRUE, cex.axis = 5)
+
+
+# Y-axis
+# Adding axis label
+# labels FAQ -> https://stackoverflow.com/questions/26180178/r-boxplot-how-to-move-the-x-axis-label-down
+y_min_value_pominki <- round( min(merged_pominki$value_scaled, merged_pominki$pominki_scaled) )
+y_max_value_pominki <- round( max(merged_pominki$value_scaled, merged_pominki$pominki_scaled) )
+y_tlab  <- round( seq( from = y_min_value_pominki, to = y_max_value_pominki, by = (y_max_value_pominki-y_min_value_pominki)/5 ) )
 y_lablist <- as.character( round(y_tlab,  digits = 4) )
 axis(2, at = y_tlab, labels = y_lablist, cex.axis = 1.1)
 
@@ -770,13 +881,10 @@ fig <- par("fig")
 x <- x[1] + (x[2] - x[1]) * fig[1:2]
 y <- y[1] + (y[2] - y[1]) * fig[3:4]
 
-txt <- "D"
+txt <- "B"
 x <- x[1] + strwidth(txt, cex=4) * 6 / 5
 y <- y[2] - strheight(txt, cex=4) * 3.5 / 5
 text(x, y, txt, cex = 4)
-
-
-
 
 
 
@@ -842,7 +950,7 @@ final_value_ritualni_poslugi   <- as.integer( max(merged_ritualni_poslugi$Date) 
 number_of_value_ritualni_poslugi <- final_value_ritualni_poslugi - initial_value_ritualni_poslugi
 
 x_tlab <- seq( from  = initial_value_ritualni_poslugi, to  = final_value_ritualni_poslugi,  by = trunc(number_of_value_ritualni_poslugi/15) )   
-x_lablist <- as.character( as.Date(x_tlab, origin = "1970-01-01") ) 
+x_lablist <- format( as.Date(x_tlab, origin = "1970-01-01"), "%Y-%m" )
 axis(1, at = x_tlab, labels = FALSE)
 text(x = x_tlab, y=par()$usr[3]-0.05*(par()$usr[4]-par()$usr[3]), labels = x_lablist, srt=45, adj=1, xpd=TRUE, cex.axis = 5)
 
@@ -868,7 +976,7 @@ fig <- par("fig")
 x <- x[1] + (x[2] - x[1]) * fig[1:2]
 y <- y[1] + (y[2] - y[1]) * fig[3:4]
 
-txt <- "E"
+txt <- "C"
 x <- x[1] + strwidth(txt, cex=4) * 6 / 5
 y <- y[2] - strheight(txt, cex=4) * 3.5 / 5
 text(x, y, txt, cex = 4)
@@ -893,7 +1001,7 @@ dev.off()
 
 
 # Generating pdf output.
-pdf( paste( "../Plots/FigureTBD04b.pdf", sep = ""), height = 5, width = 25)
+pdf( paste( "../Plots/FigureTBD04c.pdf", sep = ""), height = 5, width = 25)
 # Definign the number of plots
 par( par(mfrow=c(1,5)),  mar=c(5.1, 5.1, 3, 2.1)  )
 
@@ -959,7 +1067,7 @@ final_value_grob   <- as.integer( max(merged_grob$Date) )
 number_of_value_grob <- final_value_grob - initial_value_grob
 
 x_tlab <- seq( from  = initial_value_grob, to  = final_value_grob,  by = trunc(number_of_value_grob/15) )   
-x_lablist <- as.character( as.Date(x_tlab, origin = "1970-01-01") ) 
+x_lablist <- format( as.Date(x_tlab, origin = "1970-01-01"), "%Y-%m" )
 axis(1, at = x_tlab, labels = FALSE)
 text(x = x_tlab, y=par()$usr[3]-0.05*(par()$usr[4]-par()$usr[3]), labels = x_lablist, srt=45, adj=1, xpd=TRUE, cex.axis = 5)
 
@@ -1056,7 +1164,7 @@ final_value_pominki   <- as.integer( max(merged_pominki$Date) )
 number_of_value_pominki <- final_value_pominki - initial_value_pominki
 
 x_tlab <- seq( from  = initial_value_pominki, to  = final_value_pominki,  by = trunc(number_of_value_pominki/15) )   
-x_lablist <- as.character( as.Date(x_tlab, origin = "1970-01-01") ) 
+x_lablist <- format( as.Date(x_tlab, origin = "1970-01-01"), "%Y-%m" )
 axis(1, at = x_tlab, labels = FALSE)
 text(x = x_tlab, y=par()$usr[3]-0.05*(par()$usr[4]-par()$usr[3]), labels = x_lablist, srt=45, adj=1, xpd=TRUE, cex.axis = 5)
 
@@ -1154,7 +1262,7 @@ final_value_ritualnie_uslugi   <- as.integer( max(merged_ritualnie_uslugi$Date) 
 number_of_value_ritualnie_uslugi <- final_value_ritualnie_uslugi - initial_value_ritualnie_uslugi
 
 x_tlab <- seq( from  = initial_value_ritualnie_uslugi, to  = final_value_ritualnie_uslugi,  by = trunc(number_of_value_ritualnie_uslugi/15) )   
-x_lablist <- as.character( as.Date(x_tlab, origin = "1970-01-01") ) 
+x_lablist <- format( as.Date(x_tlab, origin = "1970-01-01"), "%Y-%m" )
 axis(1, at = x_tlab, labels = FALSE)
 text(x = x_tlab, y=par()$usr[3]-0.05*(par()$usr[4]-par()$usr[3]), labels = x_lablist, srt=45, adj=1, xpd=TRUE, cex.axis = 5)
 
@@ -1249,7 +1357,7 @@ final_value_truna   <- as.integer( max(merged_truna$Date) )
 number_of_value_truna <- final_value_truna - initial_value_truna
 
 x_tlab <- seq( from  = initial_value_truna, to  = final_value_truna,  by = trunc(number_of_value_truna/15) )   
-x_lablist <- as.character( as.Date(x_tlab, origin = "1970-01-01") ) 
+x_lablist <- format( as.Date(x_tlab, origin = "1970-01-01"), "%Y-%m" )
 axis(1, at = x_tlab, labels = FALSE)
 text(x = x_tlab, y=par()$usr[3]-0.05*(par()$usr[4]-par()$usr[3]), labels = x_lablist, srt=45, adj=1, xpd=TRUE, cex.axis = 5)
 
@@ -1347,7 +1455,7 @@ final_value_ritualni_poslugi   <- as.integer( max(merged_ritualni_poslugi$Date) 
 number_of_value_ritualni_poslugi <- final_value_ritualni_poslugi - initial_value_ritualni_poslugi
 
 x_tlab <- seq( from  = initial_value_ritualni_poslugi, to  = final_value_ritualni_poslugi,  by = trunc(number_of_value_ritualni_poslugi/15) )   
-x_lablist <- as.character( as.Date(x_tlab, origin = "1970-01-01") ) 
+x_lablist <- format( as.Date(x_tlab, origin = "1970-01-01"), "%Y-%m" )
 axis(1, at = x_tlab, labels = FALSE)
 text(x = x_tlab, y=par()$usr[3]-0.05*(par()$usr[4]-par()$usr[3]), labels = x_lablist, srt=45, adj=1, xpd=TRUE, cex.axis = 5)
 

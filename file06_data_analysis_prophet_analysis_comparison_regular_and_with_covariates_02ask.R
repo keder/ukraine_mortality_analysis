@@ -25,7 +25,7 @@ load(file = paste("../R_Data/prophet_predictions_five_plus_original_data_Age65Up
 # Saving the data as RData file.
 load(file = paste("../R_Data/prophet_predictions_five_plus_original_data_Age65Up_subset.RData"))
 
-pandemic_start <- as.Date("2020-02-15")
+pandemic_start <- as.Date("2020-03-15")
 
 
 
@@ -137,10 +137,10 @@ value_combine <- c(
 
 if (dim(prophet_predictions_five_plus_original_data_Age65Up_subset)[1] > dim(prophet_predictions_five_plus_original_data_subset)[1]) {
         data_length <- dim(prophet_predictions_five_plus_original_data_subset)[1]
-        pandemic_data_length <- data_length - which(prophet_predictions_five_plus_original_data_subset$ds == pandemic_start)
+        pandemic_data_length <- data_length - max(which(prophet_predictions_five_plus_original_data_subset$ds < pandemic_start))
 } else {
         data_length <- dim(prophet_predictions_five_plus_original_data_Age65Up_subset)[1]
-        pandemic_data_length <- data_length - which(prophet_predictions_five_plus_original_data_Age65Up_subset$ds == pandemic_start)
+        pandemic_data_length <- data_length - max(which(prophet_predictions_five_plus_original_data_Age65Up_subset$ds < pandemic_start))
 }
 plot(
         x = head(as.integer(prophet_predictions_five_plus_original_data_Age65Up_subset$yhat_upper), data_length),
@@ -258,7 +258,7 @@ value_combine <- c(
         prophet_predictions_five_plus_original_data_subset$y
 )
 
-pandemic_data_length <- dim(prophet_predictions_five_plus_original_data_subset)[1] - which(prophet_predictions_five_plus_original_data_subset$ds == pandemic_start)
+pandemic_data_length <- dim(prophet_predictions_five_plus_original_data_subset)[1] - max(which(prophet_predictions_five_plus_original_data_subset$ds < pandemic_start))
 plot(
         x = as.integer(prophet_predictions_five_plus_original_data_subset$y),
         y = as.integer(prophet_predictions_five_plus_original_data_subset$yhat_upper),
@@ -375,7 +375,7 @@ value_combine <- c(
         prophet_predictions_five_plus_original_data_Age65Up_subset$y
 )
 
-pandemic_data_length <- dim(prophet_predictions_five_plus_original_data_Age65Up_subset)[1] - which(prophet_predictions_five_plus_original_data_Age65Up_subset$ds == pandemic_start)
+pandemic_data_length <- dim(prophet_predictions_five_plus_original_data_Age65Up_subset)[1] - max(which(prophet_predictions_five_plus_original_data_Age65Up_subset$ds < pandemic_start))
 plot(
         x = as.integer(prophet_predictions_five_plus_original_data_Age65Up_subset$y),
         y = as.integer(prophet_predictions_five_plus_original_data_Age65Up_subset$yhat_upper),

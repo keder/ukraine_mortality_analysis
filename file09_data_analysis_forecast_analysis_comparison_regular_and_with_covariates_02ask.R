@@ -25,7 +25,7 @@ load( file = paste("../R_Data/arima_predictions_five_plus_original_data_subset.R
 load( file = paste("../R_Data/arima_predictions_five_plus_original_data_Age65Up_subset.RData") )
 
 
-pandemic_start <- as.Date("2020-02-15")
+pandemic_start <- as.Date("2020-03-15")
 
 
 
@@ -128,7 +128,7 @@ value_combine <- c(arima_predictions_five_plus_original_data_subset$y_hat,
                    arima_predictions_five_plus_original_data_Age65Up_subset$y_hat)
 
 
-pandemic_data_length <- dim(arima_predictions_five_plus_original_data_Age65Up_subset)[1] - which(arima_predictions_five_plus_original_data_Age65Up_subset$ds == pandemic_start)
+pandemic_data_length <- dim(arima_predictions_five_plus_original_data_Age65Up_subset)[1] - max(which(arima_predictions_five_plus_original_data_Age65Up_subset$ds < pandemic_start))
 plot(x = as.integer(arima_predictions_five_plus_original_data_Age65Up_subset$y_hat),
      y = as.integer(head(arima_predictions_five_plus_original_data_subset$y_hat, length(arima_predictions_five_plus_original_data_Age65Up_subset$y_hat))),
      col = c( rep( "#005BBB", dim(arima_predictions_five_plus_original_data_subset)[1] - pandemic_data_length ),
@@ -233,7 +233,7 @@ value_combine <- c(arima_predictions_five_plus_original_data_subset$y_hat,
                    arima_predictions_five_plus_original_data_subset$y)
 
 
-pandemic_data_length <- dim(arima_predictions_five_plus_original_data_subset)[1] - which(arima_predictions_five_plus_original_data_subset$ds == pandemic_start)
+pandemic_data_length <- dim(arima_predictions_five_plus_original_data_subset)[1] - max(which(arima_predictions_five_plus_original_data_subset$ds < pandemic_start))
 plot(x = as.integer(arima_predictions_five_plus_original_data_subset$y),
      y = as.integer(arima_predictions_five_plus_original_data_subset$y_hat),
      col = c( rep( "#005BBB", dim(arima_predictions_five_plus_original_data_subset)[1] - pandemic_data_length ),
@@ -338,7 +338,7 @@ value_combine <- c(arima_predictions_five_plus_original_data_Age65Up_subset$y_ha
                    arima_predictions_five_plus_original_data_Age65Up_subset$y)
 
 
-pandemic_data_length <- dim(arima_predictions_five_plus_original_data_Age65Up_subset)[1] - which(arima_predictions_five_plus_original_data_Age65Up_subset$ds == pandemic_start)
+pandemic_data_length <- dim(arima_predictions_five_plus_original_data_Age65Up_subset)[1] - max(which(arima_predictions_five_plus_original_data_Age65Up_subset$ds < pandemic_start))
 plot(x = as.integer(arima_predictions_five_plus_original_data_Age65Up_subset$y),
      y = as.integer(arima_predictions_five_plus_original_data_Age65Up_subset$y_hat),
      col = c( rep( "#005BBB", dim(arima_predictions_five_plus_original_data_Age65Up_subset)[1] - pandemic_data_length ),

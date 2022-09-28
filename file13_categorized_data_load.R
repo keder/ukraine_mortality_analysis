@@ -66,7 +66,7 @@ plot_mortality_graph <- function(name, y_values, x_values) {
         type = "p"
     )
     lines(
-        x = rep(as.Date("2020-03-01", origin = "1970-01-01"), 2),
+        x = rep(as.Date("2020-03-15", origin = "1970-01-01"), 2),
         y = c(min(y_values), max(y_values)),
         col = "red",
         lwd = 1,

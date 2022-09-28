@@ -21,12 +21,12 @@ library("prophet")
 
 load(file = "../R_Data/mortality_causes_data.RData")
 
-pandemic_start <- as.Date("2020-02-15")
+pandemic_start <- as.Date("2020-03-15")
 
 dates <- mortality_causes_data$date
 mortality_causes_data <- mortality_causes_data[, 1:(ncol(mortality_causes_data) - 4)]
 
-number_of_records <- which(dates == pandemic_start)
+number_of_records <- max(which(dates < pandemic_start))
 
 prophet_pscores <- mortality_causes_data
 prophet_pscores_lower <- mortality_causes_data
@@ -128,15 +128,15 @@ for (i in 2:ncol(mortality_causes_data))
     p_score_min <- min(prophet_pscores[, i])
     p_score_max <- max(prophet_pscores[, i])
 
-    pdf(paste0("../Plots/causes/prophet_pscores_", cause_names[i], ".pdf"), height = 15, width = 18)
+    pdf(paste0("../Plots/causes/prophet_pscores_", cause_names[i], ".pdf"), height = 15, width = 25)
     # Definign the number of plots
     par(par(mfrow = c(2, 1)), mar = c(5.5, 5.1, 5.1, 2.1))
 
     lower_index_five <- 1
     upper_index_five <- length(prophet_pscores[, i])
     range_five <- c(lower_index_five:upper_index_five)
-    pandemic_data_length <- upper_index_five - which(dates == pandemic_start)
-    range_five_last4 <- c(upper_index_five - c(pandemic_data_length:0))
+    pandemic_data_length <- upper_index_five - max(which(dates < pandemic_start))
+    range_five_last4 <- c((upper_index_five - pandemic_data_length + 1):upper_index_five)
 
     barplot(prophet_pscores[, i],
         col = c(rep("#005BBB", length(prophet_pscores[, i]) - pandemic_data_length), rep("#FFD500", pandemic_data_length)),
@@ -147,7 +147,7 @@ for (i in 2:ncol(mortality_causes_data))
         args.legend = list(bty = "n", border = TRUE),
         ylab = "",
         xlab = "",
-        main = "P-Scores For 2015/01-2020/02 Model Fits\n & 2020/03-2021/12 Prediction",
+        main = paste0("P-Scores For 2015/01-2020/02 Model Fits\n & 2020/03-2021/12 Prediction (", gsub("_", " ", cause_names[i]), ")"),
         # names.arg = as.character(p_scores_frame_five_jan_june$Month),
         # names.arg = as.character(p_scores_frame_five_jan_june$Month),
         # names.arg = as.character(p_scores_frame_five_jan_june$Month),
@@ -333,7 +333,7 @@ for (i in 2:ncol(mortality_causes_data))
     # x_lablist  <- as.character( p_scores_frame_five_jan_june$Month )
     x_lablist <- strftime(dates, format = "%Y-%m")
     axis(1, at = x_tlab, labels = FALSE)
-    text(x = x_tlab, y = par()$usr[3] - 0.03 * (par()$usr[4] - par()$usr[3]), labels = x_lablist, srt = 45, adj = 1, xpd = TRUE, cex = 0.9)
+    text(x = x_tlab, y = par()$usr[3] - 0.03 * (par()$usr[4] - par()$usr[3]), labels = x_lablist, srt = 45, adj = 1, xpd = TRUE, cex = 1.2)
 
 
     # Y-axis

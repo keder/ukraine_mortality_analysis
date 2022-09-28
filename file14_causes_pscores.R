@@ -19,7 +19,7 @@ library(readxl)
 
 load(file = "../R_Data/mortality_causes_data.RData")
 
-pandemic_start <- as.Date("2020-02-15")
+pandemic_start <- as.Date("2020-03-15")
 
 cause_indexes <- 2:(ncol(mortality_causes_data) - 4)
 causes <- names(mortality_causes_data)[cause_indexes]
@@ -56,10 +56,10 @@ for (i in 1:nrow(mortality_causes_data)) {
 }
 
 plot_pscore_graph <- function(name, y_values, x_values, params) {
-    pdf(paste0("../Plots/causes/pscore_", gsub("\\s+", "_", name), ".pdf"), height = 16, width = 20)
+    pdf(paste0("../Plots/causes/pscore_", gsub("\\s+", "_", name), ".pdf"), height = 15, width = 25)
     par( par(mfrow=c(2,1)),  mar=c(5.5, 5.1, 5.1, 2.1)  )
 
-    pandemic_data_length <- length(y_values) - which(x_values == pandemic_start)
+    pandemic_data_length <- length(y_values) - max(which(x_values < pandemic_start))
 
     barplot(y_values,
         col = c(rep("#005BBB", length(y_values) - pandemic_data_length), rep("#FFD500", pandemic_data_length)),
@@ -70,9 +70,9 @@ plot_pscore_graph <- function(name, y_values, x_values, params) {
         args.legend = list(bty = "n", border = TRUE),
         ylab = "",
         xlab = "",
-        main = paste0("P-Scores (in Percent) for 2015-2021\nWith 2015-2019 Years Average (", name, ")"),
+        main = paste0("P-Scores (in Percent) for 2015-2021\nWith 2015-2019 Years Average (", gsub("_", " ", name), ")"),
         # names.arg = as.character(p_scores_frame_five$Month),
-        names.arg = as.character(x_values),
+        names.arg = format( x_values, "%Y-%m" ),
         cex.names = 1.2,
         cex.lab = 2,
         cex.axis = 1.75,
@@ -160,7 +160,7 @@ plot_averages_graph <- function(name, values, averages, x_values, params) {
         x = as.integer(x_values),
         y = values,
         # col = "#005BBB",
-        col = "#FFD500",
+        col = "#00bb61",
         # col = color_01,
         lwd = 5,
         pch = 19,
@@ -172,7 +172,7 @@ plot_averages_graph <- function(name, values, averages, x_values, params) {
         x = as.integer(x_values),
         y = values,
         # col = "#005BBB",
-        col = "#FFD500",
+        col = "#00bb61",
         # col = color_01,
         lwd = 15,
         pch = 19,
@@ -194,7 +194,7 @@ plot_averages_graph <- function(name, values, averages, x_values, params) {
         inset = c(params$legend2_x, params$legend2_y),
         legend = c("Averaged Data", "2015-2021 Data", "Epidemic Start"),
         col = "black",
-        fill = c("#005BBB", "#FFD500", "red"),
+        fill = c("#005BBB", "#00bb61", "red"),
         pt.cex = c(4, 2),
         # pch = c(19, 20),
         cex = params$cex2
@@ -217,7 +217,7 @@ plot_averages_graph <- function(name, values, averages, x_values, params) {
     # Indexes to display on the graph (i.e. coordinates on x axis)
     x_indexes_to_display <- seq(from = x_values[1], to = max(x_values), by = 2 * floor(lenght_in_time / number_of_dates))
     # Actual lab elements as text to be printed.
-    x_lablist <- substr(x = x_indexes_to_display, start = 1, stop = 7)
+    x_lablist <- format( x_indexes_to_display, "%Y-%m" )
     # Adding dashes to coordinates
     axis(1, at = x_indexes_to_display, labels = FALSE)
     # Adding actual labels

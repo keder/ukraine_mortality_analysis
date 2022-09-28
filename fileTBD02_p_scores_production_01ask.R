@@ -34,6 +34,7 @@ load( file = paste("../R_Data/google_trends_ritualni_poslugi_data.RData") )
 ls()
 
 
+pandemic_start <- as.Date("2020-03-15")
 
 # Fix 2020.04.25
 # Computing non-parametric p-scores
@@ -579,7 +580,7 @@ lines(x = as.integer(rownames(p_scores_frame_grob_2020_2021[range_total,])),
 lines(x = as.integer(rownames(p_scores_frame_grob_2020_2021[range_total,])),
       y = p_scores_frame_grob_2020_2021$Value[range_total],
       #col = "#005BBB",
-      col = "#FFD500",
+      col = "#00bb61",
       # col = color_01, 
       lwd = 5,
       pch = 19,
@@ -589,23 +590,23 @@ lines(x = as.integer(rownames(p_scores_frame_grob_2020_2021[range_total,])),
 lines(x = as.integer(rownames(p_scores_frame_grob_2020_2021[range_total,])),
       y = p_scores_frame_grob_2020_2021$Value[range_total],
       #col = "#005BBB",
-      col = "#FFD500",
+      col = "#00bb61",
       # col = color_01, 
       lwd = 15,
       pch = 19,
       # pch = shape_01,
       # pch = 17,
       type = "p")
-lines(x = rep(2.5, 10), 
+lines(x = rep(3, 10), 
       y = c( rep( min(value_combine), 5),  rep( max(value_combine), 5) ), 
       col="red", 
       lwd = 1, 
       lty = 2)
 legend( x = "topright", 
-        inset= c(0.04, 0.04), 
+        inset= c(0.06, 0.04), 
         legend = c("Averaged Trend", "Google Trend", "Epidemic Start"), 
         col = "black", 
-        fill = c("#005BBB", "#FFD500", "red"),   
+        fill = c("#005BBB", "#00bb61", "red"),   
         pt.cex = c(4, 2),
         # pch = c(19, 20),  
         cex = 2 ) 
@@ -766,7 +767,7 @@ lines(x = as.integer(rownames(p_scores_frame_pominki_2020_2021[range_total,])),
 lines(x = as.integer(rownames(p_scores_frame_pominki_2020_2021[range_total,])),
       y = p_scores_frame_pominki_2020_2021$Value[range_total],
       #col = "#005BBB",
-      col = "#FFD500",
+      col = "#00bb61",
       # col = color_01, 
       lwd = 5,
       pch = 19,
@@ -776,23 +777,23 @@ lines(x = as.integer(rownames(p_scores_frame_pominki_2020_2021[range_total,])),
 lines(x = as.integer(rownames(p_scores_frame_pominki_2020_2021[range_total,])),
       y = p_scores_frame_pominki_2020_2021$Value[range_total],
       #col = "#005BBB",
-      col = "#FFD500",
+      col = "#00bb61",
       # col = color_01, 
       lwd = 15,
       pch = 19,
       # pch = shape_01,
       # pch = 17,
       type = "p")
-lines(x = rep(2.5, 10), 
+lines(x = rep(3, 10), 
       y = c( rep( min(value_combine), 5),  rep( max(value_combine), 5) ), 
       col="red", 
       lwd = 1, 
       lty = 2)
 legend( x = "topleft", 
-        inset= c(0.12, 0.04), 
+        inset= c(0.14, 0.04), 
         legend = c("Averaged Trend", "Google Trend", "Epidemic Start"), 
         col = "black", 
-        fill = c("#005BBB", "#FFD500", "red"),   
+        fill = c("#005BBB", "#00bb61", "red"),   
         pt.cex = c(4, 2),
         # pch = c(19, 20),  
         cex = 2 ) 
@@ -953,7 +954,7 @@ lines(x = as.integer(rownames(p_scores_frame_ritualnie_uslugi_2020_2021[range_to
 lines(x = as.integer(rownames(p_scores_frame_ritualnie_uslugi_2020_2021[range_total,])),
       y = p_scores_frame_ritualnie_uslugi_2020_2021$Value[range_total],
       #col = "#005BBB",
-      col = "#FFD500",
+      col = "#00bb61",
       # col = color_01, 
       lwd = 5,
       pch = 19,
@@ -963,14 +964,14 @@ lines(x = as.integer(rownames(p_scores_frame_ritualnie_uslugi_2020_2021[range_to
 lines(x = as.integer(rownames(p_scores_frame_ritualnie_uslugi_2020_2021[range_total,])),
       y = p_scores_frame_ritualnie_uslugi_2020_2021$Value[range_total],
       #col = "#005BBB",
-      col = "#FFD500",
+      col = "#00bb61",
       # col = color_01, 
       lwd = 15,
       pch = 19,
       # pch = shape_01,
       # pch = 17,
       type = "p")
-lines(x = rep(2.5, 10), 
+lines(x = rep(3, 10), 
       y = c( rep( min(value_combine), 5),  rep( max(value_combine), 5) ), 
       col="red", 
       lwd = 1, 
@@ -979,7 +980,7 @@ legend( x = "topleft",
         inset= c(0.26, 0.04), 
         legend = c("Averaged Trend", "Google Trend", "Epidemic Start"), 
         col = "black", 
-        fill = c("#005BBB", "#FFD500", "red"),   
+        fill = c("#005BBB", "#00bb61", "red"),   
         pt.cex = c(4, 2),
         # pch = c(19, 20),  
         cex = 2 ) 
@@ -1040,11 +1041,13 @@ dev.off()
 
 
 # Generating pdf output.
-pdf( paste( "../Plots/FigureTBD02b.pdf", sep = ""), height = 15, width = 15)
-# Definign the number of plots
-par( par(mfrow=c(2,2)),  mar=c(7.1, 5.1, 5.1, 2.1)  )
+pdf( paste( "../Plots/FigureTBD02b.pdf", sep = ""), height = 18, width = 27)
+# Defining the number of plots
+par( par(mfrow=c(2,3)),  mar=c(7.1, 5.1, 5.1, 2.1)  )
+# par( par(mfrow=c(3,2), by.col = TRUE),  mar=c(7.1, 5.1, 5.1, 2.1)  )
+# Defining layout
 # Matrix first
-layout_matrix <- matrix( c(1,3,2,4), nrow = 2, ncol = 2, byrow = TRUE)
+layout_matrix <- matrix( c(1,3,5,2,4,6), nrow = 2, ncol = 3, byrow = TRUE)
 # Setting layaout
 layout(layout_matrix)
 
@@ -1083,7 +1086,7 @@ legend( x = "topleft",
         fill = c("#005BBB", "#FFD500"),   
         pt.cex = c(4, 2),
         # pch = c(19, 20),  
-        cex = 1.6 ) 
+        cex = 2 ) 
 
 
 # Label G
@@ -1097,7 +1100,7 @@ fig <- par("fig")
 x <- x[1] + (x[2] - x[1]) * fig[1:2]
 y <- y[1] + (y[2] - y[1]) * fig[3:4]
 
-txt <- "G"
+txt <- "A"
 x <- x[1] + strwidth(txt, cex=4) * 6 / 5
 y <- y[2] - strheight(txt, cex=4) * 6 / 5
 text(x, y, txt, cex = 4)
@@ -1152,7 +1155,7 @@ lines(x = as.integer(rownames(p_scores_frame_truna_2020_2021[range_total,])),
 lines(x = as.integer(rownames(p_scores_frame_truna_2020_2021[range_total,])),
       y = p_scores_frame_truna_2020_2021$Value[range_total],
       #col = "#005BBB",
-      col = "#FFD500",
+      col = "#00bb61",
       # col = color_01, 
       lwd = 5,
       pch = 19,
@@ -1162,26 +1165,26 @@ lines(x = as.integer(rownames(p_scores_frame_truna_2020_2021[range_total,])),
 lines(x = as.integer(rownames(p_scores_frame_truna_2020_2021[range_total,])),
       y = p_scores_frame_truna_2020_2021$Value[range_total],
       #col = "#005BBB",
-      col = "#FFD500",
+      col = "#00bb61",
       # col = color_01, 
       lwd = 15,
       pch = 19,
       # pch = shape_01,
       # pch = 17,
       type = "p")
-lines(x = rep(2.5, 10), 
+lines(x = rep(3, 10), 
       y = c( rep( min(value_combine), 5),  rep( max(value_combine), 5) ), 
       col="red", 
       lwd = 1, 
       lty = 2)
 legend( x = "topleft", 
-        inset= c(0.12, 0.04), 
+        inset= c(0.14, 0.04), 
         legend = c("Averaged Trend", "Google Trend", "Epidemic Start"), 
         col = "black", 
-        fill = c("#005BBB", "#FFD500", "red"),   
+        fill = c("#005BBB", "#00bb61", "red"),   
         pt.cex = c(4, 2),
         # pch = c(19, 20),  
-        cex = 1.6 ) 
+        cex = 2 ) 
 # labels FAQ -> http://www.r-bloggers.com/rotated-axis-labels-in-r-plots/
 # Creating labels by month and converting.
 
@@ -1227,7 +1230,191 @@ fig <- par("fig")
 x <- x[1] + (x[2] - x[1]) * fig[1:2]
 y <- y[1] + (y[2] - y[1]) * fig[3:4]
 
-txt <- "I"
+txt <- "D"
+x <- x[1] + strwidth(txt, cex=4) * 6 / 5
+y <- y[2] - strheight(txt, cex=4) * 6 / 5
+text(x, y, txt, cex = 4)
+
+
+# Third plot
+lower_index_pominki <- 1
+upper_index_pominki <- length(p_scores_frame_pominki_2020_2021$p_score_value)
+range_total <- c(lower_index_pominki:upper_index_pominki)
+
+p_score_min_pominki <- min(p_scores_frame_pominki_2020_2021$p_score_value[range_total])
+p_score_max_pominki <- max(p_scores_frame_pominki_2020_2021$p_score_value[range_total])
+
+
+barplot( p_scores_frame_pominki_2020_2021$p_score_value[range_total], 
+         col= p_scores_frame_pominki_2020_2021$color[range_total], 
+         legend = TRUE, 
+         border =  TRUE, 
+         #xlim = c(1, 5), 
+         ylim = c(p_score_min_pominki-15, p_score_max_pominki+15), 
+         args.legend = list(bty="n", border=TRUE), 
+         ylab = "", 
+         xlab = "", 
+         main = "P-Scores (in Percent) for 2020-2021\nGoogle Trend: \"pominki\"",
+         # names.arg = as.character(p_scores_frame_five_jan_june$Month), 
+         names.arg = p_scores_frame_pominki_2020_2021$month_text3[range_total], 
+         cex.names = 1.25, 
+         cex.lab = 2, 
+         cex.axis = 1.75,
+         cex.main = 2, 
+         cex = 2,
+         las = 2)
+
+legend( x = "topleft", 
+        inset= c(0.06, 0.08), 
+        legend = c("Pre Epidemic", "During Epidemic"), 
+        col = "black", 
+        fill = c("#005BBB", "#FFD500"),   
+        pt.cex = c(4, 2),
+        # pch = c(19, 20),  
+        cex = 2 ) 
+
+
+# Label C
+par(xpd = NA )
+
+di <- dev.size("in")
+x <- grconvertX(c(0, di[1]), from="in", to="user")
+y <- grconvertY(c(0, di[2]), from="in", to="user")
+
+fig <- par("fig")
+x <- x[1] + (x[2] - x[1]) * fig[1:2]
+y <- y[1] + (y[2] - y[1]) * fig[3:4]
+
+txt <- "B"
+x <- x[1] + strwidth(txt, cex=4) * 6 / 5
+y <- y[2] - strheight(txt, cex=4) * 6 / 5
+text(x, y, txt, cex = 4)
+
+
+
+# Fourth graph
+value_combine <- c(p_scores_frame_grob_2020_2021$average_2015_2019_years, 
+                   p_scores_frame_grob_2020_2021$Value,
+                   p_scores_frame_pominki_2020_2021$average_2015_2019_years, 
+                   p_scores_frame_pominki_2020_2021$Value,
+                   p_scores_frame_ritualnie_uslugi_2020_2021$average_2015_2019_years, 
+                   p_scores_frame_ritualnie_uslugi_2020_2021$Value)
+
+plot(x = as.integer(rownames(p_scores_frame_pominki_2020_2021[range_total,])),
+     y = p_scores_frame_pominki_2020_2021$average_2015_2019_years[range_total],
+     col = "#005BBB",
+     # col = color_01, 
+     lwd = 5,
+     # pch = 16,
+     # pch = shape_01,
+     # pch = 17,
+     type = "l",
+     # main = paste( colnames(proporions_all_locations_data_baseline)[compartment],  sep = ""),
+     main = "Averaged (2015-2019) vs 2020-2021 Data\nGoogle Trend: \"pominki\"",
+     # xlim = c( intersected_data$death_covid19,  combined_date_max  ),
+     ylim = c( min(value_combine),
+               max(value_combine) * 1.01 ),
+     # ylim = c(0, y_max_value_current * 1.2  ),
+     # xlab = "Time",
+     xlab = "",     
+     ylab = "Trend Value",
+     xaxt='n',
+     yaxt='n',
+     cex = 3,
+     cex.axis = 1.55,
+     cex.lab = 2,
+     cex.main = 2,
+     cex.sub = 2
+)
+lines(x = as.integer(rownames(p_scores_frame_pominki_2020_2021[range_total,])),
+      y = p_scores_frame_pominki_2020_2021$average_2015_2019_years[range_total],
+      col = "#005BBB",
+      #col = "#FFD500",
+      # col = color_01, 
+      lwd = 15,
+      pch = 19,
+      # pch = shape_01,
+      # pch = 17,
+      type = "p")
+lines(x = as.integer(rownames(p_scores_frame_pominki_2020_2021[range_total,])),
+      y = p_scores_frame_pominki_2020_2021$Value[range_total],
+      #col = "#005BBB",
+      col = "#00bb61",
+      # col = color_01, 
+      lwd = 5,
+      pch = 19,
+      # pch = shape_01,
+      # pch = 17,
+      type = "l")
+lines(x = as.integer(rownames(p_scores_frame_pominki_2020_2021[range_total,])),
+      y = p_scores_frame_pominki_2020_2021$Value[range_total],
+      #col = "#005BBB",
+      col = "#00bb61",
+      # col = color_01, 
+      lwd = 15,
+      pch = 19,
+      # pch = shape_01,
+      # pch = 17,
+      type = "p")
+lines(x = rep(3, 10), 
+      y = c( rep( min(value_combine), 5),  rep( max(value_combine), 5) ), 
+      col="red", 
+      lwd = 1, 
+      lty = 2)
+legend( x = "topleft", 
+        inset= c(0.14, 0.04), 
+        legend = c("Averaged Trend", "Google Trend", "Epidemic Start"), 
+        col = "black", 
+        fill = c("#005BBB", "#00bb61", "red"),   
+        pt.cex = c(4, 2),
+        # pch = c(19, 20),  
+        cex = 2 ) 
+# labels FAQ -> http://www.r-bloggers.com/rotated-axis-labels-in-r-plots/
+# Creating labels by month and converting.
+
+
+# X-axis
+# labels FAQ -> http://www.r-bloggers.com/rotated-axis-labels-in-r-plots/
+# Creating labels by month and converting.
+initial_date <- min(as.integer(rownames(p_scores_frame_pominki_2020_2021[range_total,])))
+final_date   <- max(as.integer(rownames(p_scores_frame_pominki_2020_2021[range_total,])))
+number_of_dates <- final_date - initial_date + 1
+
+
+# Indexes to display
+x_indexes_to_display <-  seq( from  =  1, to  = length(p_scores_frame_pominki_2020_2021$Month[range_total]),  by = 1 )
+# x_indexes_to_display[1] <- 1
+# Actual lab elements
+x_tlab <- x_indexes_to_display
+# ctual lab labels
+# x_lablist  <- as.character( p_scores_frame_five_jan_june$Month )
+x_lablist  <- as.character( p_scores_frame_pominki_2020_2021$month_text3[range_total] )
+axis(1, at = x_tlab, labels = FALSE)
+text(x = x_tlab, y=par()$usr[3]-0.025*(par()$usr[4]-par()$usr[3]), labels = x_lablist, srt=45, adj=1, xpd=TRUE, cex = 1.5)
+
+
+# Y-axis
+# Adding axis label
+# labels FAQ -> https://stackoverflow.com/questions/26180178/r-boxplot-how-to-move-the-x-axis-label-down
+y_min_value <- min( value_combine )
+y_max_value <- max( value_combine )
+y_tlab  <- seq( from = y_min_value, to = y_max_value, by = (y_max_value-y_min_value)/5 )
+y_lablist <- as.character( round(y_tlab,  digits = 0) )
+axis(2, at = y_tlab, labels = y_lablist, cex.axis = 1.5)
+
+
+# Label D
+par(xpd = NA )
+
+di <- dev.size("in")
+x <- grconvertX(c(0, di[1]), from="in", to="user")
+y <- grconvertY(c(0, di[2]), from="in", to="user")
+
+fig <- par("fig")
+x <- x[1] + (x[2] - x[1]) * fig[1:2]
+y <- y[1] + (y[2] - y[1]) * fig[3:4]
+
+txt <- "E"
 x <- x[1] + strwidth(txt, cex=4) * 6 / 5
 y <- y[2] - strheight(txt, cex=4) * 6 / 5
 text(x, y, txt, cex = 4)
@@ -1282,7 +1469,7 @@ fig <- par("fig")
 x <- x[1] + (x[2] - x[1]) * fig[1:2]
 y <- y[1] + (y[2] - y[1]) * fig[3:4]
 
-txt <- "H"
+txt <- "C"
 x <- x[1] + strwidth(txt, cex=4) * 6 / 5
 y <- y[2] - strheight(txt, cex=4) * 6 / 5
 text(x, y, txt, cex = 4)
@@ -1337,7 +1524,7 @@ lines(x = as.integer(rownames(p_scores_frame_ritualni_poslugi_2020_2021[range_to
 lines(x = as.integer(rownames(p_scores_frame_ritualni_poslugi_2020_2021[range_total,])),
       y = p_scores_frame_ritualni_poslugi_2020_2021$Value[range_total],
       #col = "#005BBB",
-      col = "#FFD500",
+      col = "#00bb61",
       # col = color_01, 
       lwd = 5,
       pch = 19,
@@ -1347,14 +1534,14 @@ lines(x = as.integer(rownames(p_scores_frame_ritualni_poslugi_2020_2021[range_to
 lines(x = as.integer(rownames(p_scores_frame_ritualni_poslugi_2020_2021[range_total,])),
       y = p_scores_frame_ritualni_poslugi_2020_2021$Value[range_total],
       #col = "#005BBB",
-      col = "#FFD500",
+      col = "#00bb61",
       # col = color_01, 
       lwd = 15,
       pch = 19,
       # pch = shape_01,
       # pch = 17,
       type = "p")
-lines(x = rep(2.5, 10), 
+lines(x = rep(3, 10), 
       y = c( rep( min(value_combine), 5),  rep( max(value_combine), 5) ), 
       col="red", 
       lwd = 1, 
@@ -1363,10 +1550,10 @@ legend( x = "topleft",
         inset= c(0.16, 0.04), 
         legend = c("Averaged Trend", "Google Trend", "Epidemic Start"), 
         col = "black", 
-        fill = c("#005BBB", "#FFD500", "red"),   
+        fill = c("#005BBB", "#00bb61", "red"),   
         pt.cex = c(4, 2),
         # pch = c(19, 20),  
-        cex = 1.6 ) 
+        cex = 2 ) 
 # labels FAQ -> http://www.r-bloggers.com/rotated-axis-labels-in-r-plots/
 # Creating labels by month and converting.
 
@@ -1412,7 +1599,7 @@ fig <- par("fig")
 x <- x[1] + (x[2] - x[1]) * fig[1:2]
 y <- y[1] + (y[2] - y[1]) * fig[3:4]
 
-txt <- "J"
+txt <- "F"
 x <- x[1] + strwidth(txt, cex=4) * 6 / 5
 y <- y[2] - strheight(txt, cex=4) * 6 / 5
 text(x, y, txt, cex = 4)

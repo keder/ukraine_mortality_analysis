@@ -20,7 +20,7 @@ library(readxl)
 library(rjson)
 
 
-pandemic_start <- as.Date("2020-02-15")
+pandemic_start <- as.Date("2020-03-15")
 
 
 # Loding data saved in file01
@@ -124,14 +124,14 @@ p_score_max <- max(p_scores_frame_five$p_score_value)
 
 
 # Generating pdf output.
-pdf("../Plots/Figure02c.pdf", height = 15, width = 15)
+pdf("../Plots/Figure02c.pdf", height = 15, width = 25)
 # Definign the number of plots
 par(par(mfrow = c(2, 1)), mar = c(7.1, 5.1, 5.1, 2.1))
 
 
 # First plot
 
-pandemic_data_length = nrow(p_scores_frame_five) - which(p_scores_frame_five$date == pandemic_start)
+pandemic_data_length = nrow(p_scores_frame_five) - max(which(p_scores_frame_five$date < pandemic_start))
 
 barplot(p_scores_frame_five$p_score_value,
       col = c(rep("#005BBB", nrow(p_scores_frame_five) - pandemic_data_length), rep("#FFD500", pandemic_data_length)),

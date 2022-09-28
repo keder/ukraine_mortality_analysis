@@ -54,14 +54,15 @@ load( file = paste("../R_Data/google_trends_ritualni_poslugi_data.RData") )
 ls()
 
 
-
+pandemic_start <- as.Date("2020-03-15")
+cut_date <- as.Date("2020-01-15")
 
 
 # grob
 
 # Fixing the data for the package 
 # Number of records BEFORE the epidemic start
-number_of_records_grob <- dim(google_trends_grob_data)[1] - 18
+number_of_records_grob <- max(which(google_trends_grob_data$Date < pandemic_start))
 
 data_to_feed_full_grob      <- data.frame( ds =  google_trends_grob_data$Date,
                                            y  =  google_trends_grob_data$grob )
@@ -156,7 +157,7 @@ p_score_max_grob <- max( c(prophet_predictions_grob_plus_original_data_subset$p_
 
 # Fixing the data for the package 
 # Number of records BEFORE the epidemic start
-number_of_records_pominki <- dim(google_trends_pominki_data)[1] - 18
+number_of_records_pominki <- max(which(google_trends_pominki_data$Date < pandemic_start))
 
 data_to_feed_full_pominki      <- data.frame( ds =  google_trends_pominki_data$Date,
                                            y  =  google_trends_pominki_data$pominki )
@@ -246,7 +247,7 @@ p_score_max_pominki <- max( c(prophet_predictions_pominki_plus_original_data_sub
 
 # Fixing the data for the package 
 # Number of records BEFORE the epidemic start
-number_of_records_ritualnie_uslugi <- dim(google_trends_ritualnie_uslugi_data)[1] - 18
+number_of_records_ritualnie_uslugi <- max(which(google_trends_ritualnie_uslugi_data$Date < pandemic_start))
 
 data_to_feed_full_ritualnie_uslugi      <- data.frame( ds =  google_trends_ritualnie_uslugi_data$Date,
                                               y  =  google_trends_ritualnie_uslugi_data$ritualnie_uslugi )
@@ -332,7 +333,7 @@ p_score_max_ritualnie_uslugi <- max( c(prophet_predictions_ritualnie_uslugi_plus
 
 # Fixing the data for the package 
 # Number of records BEFORE the epidemic start
-number_of_records_truna <- dim(google_trends_truna_data)[1] - 18
+number_of_records_truna <- max(which(google_trends_truna_data$Date < pandemic_start))
 
 data_to_feed_full_truna      <- data.frame( ds =  google_trends_truna_data$Date,
                                            y  =  google_trends_truna_data$truna )
@@ -422,7 +423,7 @@ p_score_max_truna <- max( c(prophet_predictions_truna_plus_original_data_subset$
 
 # Fixing the data for the package 
 # Number of records BEFORE the epidemic start
-number_of_records_ritualni_poslugi <- dim(google_trends_ritualni_poslugi_data)[1] - 18
+number_of_records_ritualni_poslugi <- max(which(google_trends_ritualni_poslugi_data$Date < pandemic_start))
 
 data_to_feed_full_ritualni_poslugi      <- data.frame( ds =  google_trends_ritualni_poslugi_data$Date,
                                               y  =  google_trends_ritualni_poslugi_data$ritualni_poslugi )
@@ -510,7 +511,6 @@ p_score_max_ritualni_poslugi <- max( c(prophet_predictions_ritualni_poslugi_plus
 
 # Generating pdf output.
 pdf( paste( "../Plots/FigureTBD03a.pdf", sep = ""), height = 15, width = 25)
-# Definign the number of plots
 # Defining the number of plots
 par( par(mfrow=c(3,2)),  mar=c(7.1, 5.1, 5.1, 2.1)  )
 # par( par(mfrow=c(3,2), by.col = TRUE),  mar=c(7.1, 5.1, 5.1, 2.1)  )
@@ -526,13 +526,14 @@ layout(layout_matrix)
 
 # First plot
 
-lower_index_grob <- length(prophet_predictions_grob_plus_original_data_subset$p_scores_upper) - 19
+lower_index_grob <- max(which(prophet_predictions_grob_plus_original_data_subset$ds < cut_date)) + 1
 upper_index_grob <- length(prophet_predictions_grob_plus_original_data_subset$p_scores_upper)
 range_grob <- c(lower_index_grob:upper_index_grob)
-range_grob_last18 <- c(upper_index_grob - c(19:0))
+pandemic_data_length = upper_index_grob - max(which(prophet_predictions_grob_plus_original_data_subset$ds < pandemic_start))
+range_grob_last18 <- c((upper_index_grob - pandemic_data_length + 1):upper_index_grob)
 
 barplot( prophet_predictions_grob_plus_original_data_subset$p_scores_upper[range_grob], 
-         col= c( rep("#005BBB", 2), rep("#FFD500", (length(range_grob_last18)-2)) ), 
+         col= c( rep("#005BBB", 2), rep("#FFD500", (length(range_grob)-2)) ), 
          legend = TRUE, 
          border =  TRUE, 
          #xlim = c(1, 5), 
@@ -550,7 +551,7 @@ barplot( prophet_predictions_grob_plus_original_data_subset$p_scores_upper[range
          cex = 2,
          las = 2)
 
-legend( x = "topleft", 
+legend( x = "topright", 
         inset= c(0.06, 0.08), 
         legend = c("Pre Epidemic", "During Epidemic"), 
         col = "black", 
@@ -662,7 +663,7 @@ lines(x = as.integer(prophet_predictions_grob_plus_original_data_subset$ds),
       # pch = shape_01,
       # pch = 17,
       type = "p")
-lines(x = rep( prophet_predictions_grob_plus_original_data_subset$ds[range_grob[1]]+15, 10), 
+lines(x = rep( pandemic_start, 10), 
       y = c( rep( min(value_combine), 5),  rep( max(value_combine), 5) ), 
       col="red", 
       lwd = 1, 
@@ -735,13 +736,14 @@ text(x, y, txt, cex = 4)
 
 # Second plot
 
-lower_index_pominki <- length(prophet_predictions_pominki_plus_original_data_subset$p_scores_upper) - 19
+lower_index_pominki <- max(which(prophet_predictions_pominki_plus_original_data_subset$ds < cut_date)) + 1
 upper_index_pominki <- length(prophet_predictions_pominki_plus_original_data_subset$p_scores_upper)
 range_pominki <- c(lower_index_pominki:upper_index_pominki)
-range_pominki_last18 <- c(upper_index_pominki - c(19:0))
+pandemic_data_length = upper_index_pominki - max(which(prophet_predictions_grob_plus_original_data_subset$ds < pandemic_start))
+range_pominki_last18 <- c((upper_index_pominki - pandemic_data_length + 1):upper_index_pominki)
 
 barplot( prophet_predictions_pominki_plus_original_data_subset$p_scores_upper[range_pominki], 
-         col= c( rep("#005BBB", 2), rep("#FFD500", (length(range_pominki_last18)-2)) ), 
+         col= c( rep("#005BBB", 2), rep("#FFD500", (length(range_pominki)-2)) ), 
          legend = TRUE, 
          border =  TRUE, 
          #xlim = c(1, 5), 
@@ -871,7 +873,7 @@ lines(x = as.integer(prophet_predictions_pominki_plus_original_data_subset$ds),
       # pch = shape_01,
       # pch = 17,
       type = "p")
-lines(x = rep( prophet_predictions_pominki_plus_original_data_subset$ds[range_pominki[1]]+15, 10), 
+lines(x = rep( pandemic_start, 10), 
       y = c( rep( min(value_combine), 5),  rep( max(value_combine), 5) ), 
       col="red", 
       lwd = 1, 
@@ -945,13 +947,14 @@ text(x, y, txt, cex = 4)
 
 # Third plot
 
-lower_index_ritualnie_uslugi <- length(prophet_predictions_ritualnie_uslugi_plus_original_data_subset$p_scores_upper) - 19
+lower_index_ritualnie_uslugi <- max(which(prophet_predictions_ritualnie_uslugi_plus_original_data_subset$ds < cut_date)) + 1
 upper_index_ritualnie_uslugi <- length(prophet_predictions_ritualnie_uslugi_plus_original_data_subset$p_scores_upper)
 range_ritualnie_uslugi <- c(lower_index_ritualnie_uslugi:upper_index_ritualnie_uslugi)
-range_ritualnie_uslugi_last18 <- c(upper_index_ritualnie_uslugi - c(19:0))
+pandemic_data_length = upper_index_ritualnie_uslugi - max(which(prophet_predictions_ritualnie_uslugi_plus_original_data_subset$ds < pandemic_start))
+range_ritualnie_uslugi_last18 <- c((upper_index_ritualnie_uslugi - pandemic_data_length + 1):upper_index_ritualnie_uslugi)
 
 barplot( prophet_predictions_ritualnie_uslugi_plus_original_data_subset$p_scores_upper[range_ritualnie_uslugi], 
-         col= c( rep("#005BBB", 2), rep("#FFD500", (length(range_ritualnie_uslugi_last18)-2)) ), 
+         col= c( rep("#005BBB", 2), rep("#FFD500", (length(range_ritualnie_uslugi)-2)) ), 
          legend = TRUE, 
          border =  TRUE, 
          #xlim = c(1, 5), 
@@ -1084,7 +1087,7 @@ lines(x = as.integer(prophet_predictions_ritualnie_uslugi_plus_original_data_sub
       # pch = shape_01,
       # pch = 17,
       type = "p")
-lines(x = rep( prophet_predictions_ritualnie_uslugi_plus_original_data_subset$ds[range_ritualnie_uslugi[1]]+15, 10), 
+lines(x = rep( pandemic_start, 10), 
       y = c( rep( min(value_combine), 5),  rep( max(value_combine), 5) ), 
       col="red", 
       lwd = 1, 
@@ -1160,13 +1163,13 @@ dev.off()
 
 
 # Generating pdf output.
-pdf( paste( "../Plots/FigureTBD03b.pdf", sep = ""), height = 15, width = 15)
-# Definign the number of plots
-par( par(mfrow=c(2,2)),  mar=c(7.1, 5.1, 5.1, 2.1)  )
+pdf( paste( "../Plots/FigureTBD03b.pdf", sep = ""), height = 15, width = 25)
+# Defining the number of plots
+par( par(mfrow=c(3,2)),  mar=c(7.1, 5.1, 5.1, 2.1)  )
 # par( par(mfrow=c(3,2), by.col = TRUE),  mar=c(7.1, 5.1, 5.1, 2.1)  )
 # Defining layout
 # Matrix first
-layout_matrix <- matrix( c(1,3,2,4), nrow = 2, ncol = 2, byrow = TRUE)
+layout_matrix <- matrix( c(1,3,5,2,4,6), nrow = 2, ncol = 3, byrow = TRUE)
 # Setting layaout
 layout(layout_matrix)
 
@@ -1176,13 +1179,14 @@ layout(layout_matrix)
 
 # Second plot
 
-lower_index_truna <- length(prophet_predictions_truna_plus_original_data_subset$p_scores_upper) - 19
+lower_index_truna <- max(which(prophet_predictions_truna_plus_original_data_subset$ds < cut_date)) + 1
 upper_index_truna <- length(prophet_predictions_truna_plus_original_data_subset$p_scores_upper)
 range_truna <- c(lower_index_truna:upper_index_truna)
-range_truna_last18 <- c(upper_index_truna - c(19:0))
+pandemic_data_length = upper_index_truna - max(which(prophet_predictions_truna_plus_original_data_subset$ds < pandemic_start))
+range_truna_last18 <- c((upper_index_truna - pandemic_data_length + 1):upper_index_truna)
 
 barplot( prophet_predictions_truna_plus_original_data_subset$p_scores_upper[range_truna], 
-         col= c( rep("#005BBB", 2), rep("#FFD500", (length(range_truna_last18)-2)) ), 
+         col= c( rep("#005BBB", 2), rep("#FFD500", (length(range_truna)-2)) ), 
          legend = TRUE, 
          border =  TRUE, 
          #xlim = c(1, 5), 
@@ -1221,7 +1225,7 @@ fig <- par("fig")
 x <- x[1] + (x[2] - x[1]) * fig[1:2]
 y <- y[1] + (y[2] - y[1]) * fig[3:4]
 
-txt <- "G"
+txt <- "A"
 x <- x[1] + strwidth(txt, cex=4) * 6 / 5
 y <- y[2] - strheight(txt, cex=4) * 6 / 5
 text(x, y, txt, cex = 4)
@@ -1312,7 +1316,7 @@ lines(x = as.integer(prophet_predictions_truna_plus_original_data_subset$ds),
       # pch = shape_01,
       # pch = 17,
       type = "p")
-lines(x = rep( prophet_predictions_truna_plus_original_data_subset$ds[range_truna[1]]+15, 10), 
+lines(x = rep( pandemic_start, 10), 
       y = c( rep( min(value_combine), 5),  rep( max(value_combine), 5) ), 
       col="red", 
       lwd = 1, 
@@ -1371,13 +1375,218 @@ fig <- par("fig")
 x <- x[1] + (x[2] - x[1]) * fig[1:2]
 y <- y[1] + (y[2] - y[1]) * fig[3:4]
 
-txt <- "I"
+txt <- "D"
 x <- x[1] + strwidth(txt, cex=4) * 6 / 5
 y <- y[2] - strheight(txt, cex=4) * 6 / 5
 text(x, y, txt, cex = 4)
 
 
 
+
+# pominki
+
+# Second plot
+
+lower_index_pominki <- max(which(prophet_predictions_pominki_plus_original_data_subset$ds < cut_date)) + 1
+upper_index_pominki <- length(prophet_predictions_pominki_plus_original_data_subset$p_scores_upper)
+range_pominki <- c(lower_index_pominki:upper_index_pominki)
+pandemic_data_length = upper_index_pominki - max(which(prophet_predictions_pominki_plus_original_data_subset$ds < pandemic_start))
+range_pominki_last18 <- c((upper_index_pominki - pandemic_data_length + 1):upper_index_pominki)
+
+barplot( prophet_predictions_pominki_plus_original_data_subset$p_scores_upper[range_pominki], 
+         col= c( rep("#005BBB", 2), rep("#FFD500", (length(range_pominki)-2)) ), 
+         legend = TRUE, 
+         border =  TRUE, 
+         #xlim = c(1, 5), 
+         ylim = c(p_score_min_pominki-15, p_score_max_pominki+15), 
+         args.legend = list(bty="n", border=TRUE), 
+         ylab = "", 
+         xlab = "", 
+         main = "P-Scores (in Percent) for 2020-2021\nGoogle Trend: \"pominki\"",
+         # names.arg = as.character(p_scores_frame_pominki_jan_june$Month), 
+         names.arg = prophet_predictions_pominki_plus_original_data_subset$year_month_text[range_pominki], 
+         cex.names = 1.25, 
+         cex.lab = 2, 
+         cex.axis = 1.75,
+         cex.main = 2, 
+         cex = 2,
+         las = 2)
+
+legend( x = "topleft", 
+        inset= c(0.06, 0.08), 
+        legend = c("Pre Epidemic", "During Epidemic"), 
+        col = "black", 
+        fill = c("#005BBB", "#FFD500"),   
+        pt.cex = c(4, 2),
+        # pch = c(19, 20),  
+        cex = 2 ) 
+
+
+# Label B
+par(xpd = NA )
+
+di <- dev.size("in")
+x <- grconvertX(c(0, di[1]), from="in", to="user")
+y <- grconvertY(c(0, di[2]), from="in", to="user")
+
+fig <- par("fig")
+x <- x[1] + (x[2] - x[1]) * fig[1:2]
+y <- y[1] + (y[2] - y[1]) * fig[3:4]
+
+txt <- "B"
+x <- x[1] + strwidth(txt, cex=4) * 6 / 5
+y <- y[2] - strheight(txt, cex=4) * 6 / 5
+text(x, y, txt, cex = 4)
+
+
+
+# pominki
+
+# Fifths graph
+
+value_combine <- c(prophet_predictions_pominki_plus_original_data_subset$yhat_upper, 
+                   prophet_predictions_pominki_plus_original_data_subset$y)
+
+
+plot(x = as.integer(prophet_predictions_pominki_plus_original_data_subset$ds),
+     y = prophet_predictions_pominki_plus_original_data_subset$yhat_upper,
+     col = "#005BBB",
+     # col = color_01, 
+     lwd = 5,
+     # pch = 16,
+     # pch = shape_01,
+     # pch = 17,
+     type = "l",
+     # main = paste( colnames(proporions_all_locations_data_baseline)[compartment],  sep = ""),
+     main = "Fitted (2015-2019) and Predicted (2020-21) \nvs 2015-2021 Data\nGoogle Trend: \"pominki\"",
+     # xlim = c( intersected_data$death_covid19,  combined_date_max  ),
+     ylim = c( min(value_combine),
+               max(value_combine) * 1.175 ),
+     # ylim = c(0, y_max_value_current * 1.2  ),
+     # xlab = "Time",
+     xlab = "",     
+     ylab = "Counts",
+     xaxt='n',
+     yaxt='n',
+     cex = 3,
+     cex.axis = 1.55,
+     cex.lab = 2,
+     cex.main = 1.6,
+     cex.sub = 2
+)
+lines(x = as.integer(prophet_predictions_pominki_plus_original_data_subset$ds),
+      y = prophet_predictions_pominki_plus_original_data_subset$yhat_upper,
+      col = "#005BBB",
+      #col = "#00bb61",
+      # col = color_01, 
+      lwd = 15,
+      pch = 19,
+      # pch = shape_01,
+      # pch = 17,
+      type = "p")
+lines(x = as.integer(prophet_predictions_pominki_plus_original_data_subset$ds)[range_pominki_last18],
+      y = prophet_predictions_pominki_plus_original_data_subset$yhat_upper[range_pominki_last18],
+      # col = "#005BBB",
+      col = "#FFD500",
+      # col = color_01, 
+      lwd = 5,
+      # pch = 16,
+      # pch = shape_01,
+      # pch = 17,
+      type = "l")
+lines(x = as.integer(prophet_predictions_pominki_plus_original_data_subset$ds)[range_pominki_last18],
+      y = prophet_predictions_pominki_plus_original_data_subset$yhat_upper[range_pominki_last18],
+      #col = "#005BBB",
+      col = "#FFD500",
+      # col = color_01, 
+      lwd = 15,
+      pch = 19,
+      # pch = shape_01,
+      # pch = 17,
+      type = "p")
+lines(x = as.integer(prophet_predictions_pominki_plus_original_data_subset$ds),
+      y = prophet_predictions_pominki_plus_original_data_subset$y,
+      #col = "#005BBB",
+      col = "#00bb61",
+      # col = color_01, 
+      lwd = 5,
+      pch = 19,
+      # pch = shape_01,
+      # pch = 17,
+      type = "l")
+lines(x = as.integer(prophet_predictions_pominki_plus_original_data_subset$ds),
+      y = prophet_predictions_pominki_plus_original_data_subset$y,
+      #col = "#005BBB",
+      col = "#00bb61",
+      # col = color_01, 
+      lwd = 15,
+      pch = 19,
+      # pch = shape_01,
+      # pch = 17,
+      type = "p")
+lines(x = rep( pandemic_start, 10), 
+      y = c( rep( min(value_combine), 5),  rep( max(value_combine), 5) ), 
+      col="red", 
+      lwd = 1, 
+      lty = 2)
+legend( x = "topleft", 
+        inset= c(0.12, 0.04), 
+        legend = c("Fitted Trend", "Predicted Trend", "Actual Trend", "Epidemic Start"), 
+        col = "black", 
+        fill = c("#005BBB", "#FFD500", "#00bb61", "red"),   
+        pt.cex = c(4, 2),
+        # pch = c(19, 20),  
+        cex = 1.85 ) 
+# labels FAQ -> http://www.r-bloggers.com/rotated-axis-labels-in-r-plots/
+# Creating labels by month and converting.
+
+
+# X-axis
+# labels FAQ -> http://www.r-bloggers.com/rotated-axis-labels-in-r-plots/
+# Creating labels by month and converting.
+initial_date <- min(as.integer(prophet_predictions_pominki_plus_original_data_subset$ds))
+final_date   <- max(as.integer(prophet_predictions_pominki_plus_original_data_subset$ds))
+number_of_dates <- length( as.integer(prophet_predictions_pominki_plus_original_data_subset$ds) )
+
+
+# Indexes to display
+x_indexes_to_display <-  seq( from  =  1, to  = length(prophet_predictions_pominki_plus_original_data_subset$ds),  by = 5 )
+# x_indexes_to_display <-  prophet_predictions_pominki_plus_original_data_subset$ds
+# x_indexes_to_display[1] <- 1
+# Actual lab elements
+x_tlab <- prophet_predictions_pominki_plus_original_data_subset$ds[x_indexes_to_display]
+# ctual lab labels
+# x_lablist  <- as.character( p_scores_frame_pominki_jan_june$Month )
+x_lablist  <- as.character( prophet_predictions_pominki_plus_original_data_subset$year_month_text[x_indexes_to_display] )
+axis(1, at = x_tlab, labels = FALSE)
+text(x = x_tlab, y=par()$usr[3]-0.03*(par()$usr[4]-par()$usr[3]), labels = x_lablist, srt=45, adj=1, xpd=TRUE, cex = 1.5)
+
+
+# Y-axis
+# Adding axis label
+# labels FAQ -> https://stackoverflow.com/questions/26180178/r-boxplot-how-to-move-the-x-axis-label-down
+y_min_value <- min( value_combine  )
+y_max_value <- max( value_combine  )
+y_tlab  <- seq( from = y_min_value, to = y_max_value, by = (y_max_value-y_min_value)/5 )
+y_lablist <- as.character( round(y_tlab,  digits = 0) )
+axis(2, at = y_tlab, labels = y_lablist, cex.axis = 1.5)
+
+
+# Label E
+par(xpd = NA )
+
+di <- dev.size("in")
+x <- grconvertX(c(0, di[1]), from="in", to="user")
+y <- grconvertY(c(0, di[2]), from="in", to="user")
+
+fig <- par("fig")
+x <- x[1] + (x[2] - x[1]) * fig[1:2]
+y <- y[1] + (y[2] - y[1]) * fig[3:4]
+
+txt <- "E"
+x <- x[1] + strwidth(txt, cex=4) * 6 / 5
+y <- y[2] - strheight(txt, cex=4) * 6 / 5
+text(x, y, txt, cex = 4)
 
 
 
@@ -1386,13 +1595,14 @@ text(x, y, txt, cex = 4)
 
 # Third plot
 
-lower_index_ritualni_poslugi <- length(prophet_predictions_ritualni_poslugi_plus_original_data_subset$p_scores_upper) - 19
+lower_index_ritualni_poslugi <- max(which(prophet_predictions_ritualni_poslugi_plus_original_data_subset$ds < cut_date)) + 1
 upper_index_ritualni_poslugi <- length(prophet_predictions_ritualni_poslugi_plus_original_data_subset$p_scores_upper)
 range_ritualni_poslugi <- c(lower_index_ritualni_poslugi:upper_index_ritualni_poslugi)
-range_ritualni_poslugi_last18 <- c(upper_index_ritualni_poslugi - c(19:0))
+pandemic_data_length = upper_index_ritualni_poslugi - max(which(prophet_predictions_ritualni_poslugi_plus_original_data_subset$ds < pandemic_start))
+range_ritualni_poslugi_last18 <- c((upper_index_ritualni_poslugi - pandemic_data_length + 1):upper_index_ritualni_poslugi)
 
 barplot( prophet_predictions_ritualni_poslugi_plus_original_data_subset$p_scores_upper[range_ritualni_poslugi], 
-         col= c( rep("#005BBB", 2), rep("#FFD500", (length(range_ritualni_poslugi_last18)-2)) ), 
+         col= c( rep("#005BBB", 2), rep("#FFD500", (length(range_ritualni_poslugi)-2)) ), 
          legend = TRUE, 
          border =  TRUE, 
          #xlim = c(1, 5), 
@@ -1431,7 +1641,7 @@ fig <- par("fig")
 x <- x[1] + (x[2] - x[1]) * fig[1:2]
 y <- y[1] + (y[2] - y[1]) * fig[3:4]
 
-txt <- "H"
+txt <- "C"
 x <- x[1] + strwidth(txt, cex=4) * 6 / 5
 y <- y[2] - strheight(txt, cex=4) * 6 / 5
 text(x, y, txt, cex = 4)
@@ -1525,7 +1735,7 @@ lines(x = as.integer(prophet_predictions_ritualni_poslugi_plus_original_data_sub
       # pch = shape_01,
       # pch = 17,
       type = "p")
-lines(x = rep( prophet_predictions_ritualni_poslugi_plus_original_data_subset$ds[range_ritualni_poslugi[1]]+15, 10), 
+lines(x = rep( pandemic_start, 10), 
       y = c( rep( min(value_combine), 5),  rep( max(value_combine), 5) ), 
       col="red", 
       lwd = 1, 
@@ -1584,7 +1794,7 @@ fig <- par("fig")
 x <- x[1] + (x[2] - x[1]) * fig[1:2]
 y <- y[1] + (y[2] - y[1]) * fig[3:4]
 
-txt <- "J"
+txt <- "F"
 x <- x[1] + strwidth(txt, cex=4) * 6 / 5
 y <- y[2] - strheight(txt, cex=4) * 6 / 5
 text(x, y, txt, cex = 4)

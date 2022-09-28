@@ -56,7 +56,7 @@ load(file = paste("../R_Data/demographics_aggregated_2011_2020.RData"))
 
 # Fixing the data for the package for five years
 # Number of records BEFORE the epidemic start
-number_of_records_five <- which(ukraine_un_mortality_data_month_only_since_2015$date_fixed == pandemic_start)
+number_of_records_five <- max(which(ukraine_un_mortality_data_month_only_since_2015$date_fixed < pandemic_start))
 
 data_to_feed_full_five <- data.frame(
       ds = ukraine_un_mortality_data_month_only_since_2015$date_fixed,
@@ -145,7 +145,7 @@ p_score_max <- max(c(prophet_predictions_five_plus_original_data_subset$p_scores
 
 
 # Generating pdf output.
-pdf(paste("../Plots/Figure03a.pdf", sep = ""), height = 15, width = 18)
+pdf(paste("../Plots/Figure03a.pdf", sep = ""), height = 15, width = 25)
 # Definign the number of plots
 par(par(mfrow = c(2, 1)), mar = c(5.5, 5.1, 5.1, 2.1))
 
@@ -155,11 +155,11 @@ par(par(mfrow = c(2, 1)), mar = c(5.5, 5.1, 5.1, 2.1))
 lower_index_five <- 1
 upper_index_five <- length(prophet_predictions_five_plus_original_data_subset$p_scores_upper)
 range_five <- c(lower_index_five:upper_index_five)
-pandemic_data_length = upper_index_five - which(prophet_predictions_five_plus_original_data_subset$ds == pandemic_start)
-range_five_last4 <- c(upper_index_five - c(pandemic_data_length:0))
+pandemic_data_length = upper_index_five - max(which(prophet_predictions_five_plus_original_data_subset$ds < pandemic_start))
+range_five_last4 <- c((upper_index_five - pandemic_data_length + 1):upper_index_five)
 
 barplot(prophet_predictions_five_plus_original_data_subset$p_scores_upper[range_five],
-      col = c(rep("#005BBB", length(prophet_predictions_five_plus_original_data_subset$p_scores[range_five]) - pandemic_data_length), rep("#FFD500", pandemic_data_length)),
+      col = c(rep("#005BBB", length(range_five) - pandemic_data_length), rep("#FFD500", pandemic_data_length)),
       legend = TRUE,
       border = TRUE,
       # xlim = c(1, 5),
@@ -361,7 +361,7 @@ x_tlab <- x_indexes_to_display
 # x_lablist  <- as.character( p_scores_frame_five_jan_june$Month )
 x_lablist <- as.character(prophet_predictions_five_plus_original_data_subset$year_month_text[range_five])
 axis(1, at = x_tlab, labels = FALSE)
-text(x = x_tlab, y = par()$usr[3] - 0.03 * (par()$usr[4] - par()$usr[3]), labels = x_lablist, srt = 45, adj = 1, xpd = TRUE, cex = 0.9)
+text(x = x_tlab, y = par()$usr[3] - 0.03 * (par()$usr[4] - par()$usr[3]), labels = x_lablist, srt = 45, adj = 1, xpd = TRUE, cex = 1.2)
 
 
 # Y-axis
