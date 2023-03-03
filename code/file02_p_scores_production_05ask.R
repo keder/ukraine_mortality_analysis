@@ -31,7 +31,7 @@ pandemic_start <- as.Date("2020-03-15")
 # Reading mortailty UN Data
 
 # Reading the RAW data in R
-load(file = paste("../R_Data/ukraine_un_mortality_data.RData"))
+load(file = paste("../../R_Data/ukraine_un_mortality_data.RData"))
 
 ls()
 
@@ -109,7 +109,7 @@ for (i in 1:nrow(p_scores_frame_five))
 
 # Fix 2021.05.06
 # Saving the data as RData file.
-save(p_scores_frame_five, file = paste("../R_Data/p_scores_frame_five.RData"))
+save(p_scores_frame_five, file = paste("../../R_Data/p_scores_frame_five.RData"))
 
 
 
@@ -124,7 +124,7 @@ p_score_max <- max(p_scores_frame_five$p_score_value)
 
 
 # Generating pdf output.
-pdf("../Plots/Figure02c.pdf", height = 15, width = 25)
+pdf("../../Plots/Figure02c.pdf", height = 15, width = 25)
 # Definign the number of plots
 par(par(mfrow = c(2, 1)), mar = c(7.1, 5.1, 5.1, 2.1))
 

@@ -17,16 +17,16 @@ library(methods)
 # Loading package requred to read library(readxl)
 library(readxl)
 
-causes_relative_path <- "../Data/Ukraine_data/causes.csv"
+causes_relative_path <- "../data/causes.csv"
 
 mortality_causes_data <- read.table(file = causes_relative_path, sep = ";", header = TRUE)
 mortality_causes_data$date = as.Date(paste(mortality_causes_data$date_str, "15", sep="-"))
 new_names = gsub("\\.+", "_", names(mortality_causes_data))
 names(mortality_causes_data) = new_names
-save(mortality_causes_data, file = paste("../R_Data/mortality_causes_data.RData"))
+save(mortality_causes_data, file = paste("../../R_Data/mortality_causes_data.RData"))
 
 plot_mortality_graph <- function(name, y_values, x_values) {
-    pdf(paste0("../Plots/causes/", gsub("\\s+", "_", name), ".pdf"), height = 8, width = 20)
+    pdf(paste0("../../Plots/causes/", gsub("\\s+", "_", name), ".pdf"), height = 8, width = 20)
     plot(
         x = x_values,
         y = y_values,

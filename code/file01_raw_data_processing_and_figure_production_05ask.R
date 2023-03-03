@@ -28,11 +28,11 @@ covid_mortality_data_path = "https://raw.githubusercontent.com/CSSEGISandData/CO
 # Mortality data from United Nations
 
 # data relative path
-belarus_un_mortality_relative_path  <- "../Data/Ukraine_data/UNdata_Export_20220304_172236734.csv"
-ukraine_mortality_path = "../Data/Ukraine_data/raw_mortality.csv"
+belarus_un_mortality_relative_path  <- "../data/UNdata_Export_20220304_172236734.csv"
+ukraine_mortality_path = "../data/raw_mortality.csv"
 proportion_max = 0.25
 
-causes_relative_path <- "../Data/Ukraine_data/causes.csv"
+causes_relative_path <- "../data/causes.csv"
 
 mortality_causes_data <- read.table(file = causes_relative_path, sep = ";", header = TRUE)
 mortality_causes_data$date = as.Date(paste(mortality_causes_data$date_str, "15", sep="-"))
@@ -46,7 +46,7 @@ names(mortality_causes_data) = new_names
 # COVID mortality
 covid_mortality_lines_all_raw = readLines(covid_mortality_data_path)
 covid_mortality_lines_all_raw[100] = gsub(pattern = "Cote d\\'Ivoire", replacement = "Cote dIvoire", x = covid_mortality_lines_all_raw[100])
-covid_mortality_data_all_raw_part00 = as.vector(data.frame(read.table(text = covid_mortality_lines_all_raw[1], sep = ",")))
+covid_mortality_data_all_raw_part00 = as.vector(unlist(read.table(text = head(covid_mortality_lines_all_raw, 1), sep = ",")))
 covid_mortality_data_all_raw = data.frame(read.table(text = covid_mortality_lines_all_raw[-1], sep = ","))
 names(covid_mortality_data_all_raw) = covid_mortality_data_all_raw_part00
 covid_mortality_data_all_raw_line = covid_mortality_data_all_raw[which(covid_mortality_data_all_raw$`Country/Region`=="Ukraine"),]
@@ -83,7 +83,7 @@ ukraine_covid_mortality$death_covid19 = mortality_causes_data_cut$covid_19_ident
 
 
 # Saving the data as RData file.
-save( ukraine_covid_mortality, file = paste("../R_Data/ukraine_covid_mortality.RData") )
+save( ukraine_covid_mortality, file = paste("../../R_Data/ukraine_covid_mortality.RData") )
 
 
 # General mortality
@@ -99,7 +99,7 @@ for (i in 1:nrow(mortality_data))
 }
 
 # Saving the data as RData file.
-save( mortality_data, file = paste("../R_Data/mortality_data.RData") )
+save( mortality_data, file = paste("../../R_Data/mortality_data.RData") )
 
 
 # Working with Unted Nations mortality data. 
@@ -136,7 +136,7 @@ ukraine_un_mortality_data = ukraine_un_mortality_data[which(!is.na(ukraine_un_mo
 ukraine_un_mortality_data <- ukraine_un_mortality_data[ order(ukraine_un_mortality_data$date_fixed),  ]
 
 # Saving the data as RData file.
-save( ukraine_un_mortality_data, file = paste("../R_Data/ukraine_un_mortality_data.RData") )
+save( ukraine_un_mortality_data, file = paste("../../R_Data/ukraine_un_mortality_data.RData") )
 
 # Fix 2021.04.28
 # Extracting month only data
@@ -150,7 +150,7 @@ ukraine_un_mortality_data_month_only_since_2015 <- ukraine_un_mortality_data[whi
 ukraine_un_mortality_data_month_only_since_2015 <- ukraine_un_mortality_data_month_only_since_2015[ order(ukraine_un_mortality_data_month_only_since_2015$date_fixed),  ]
 
 # Saving the data as RData file.
-save( ukraine_un_mortality_data_month_only_since_2015, file = paste("../R_Data/ukraine_un_mortality_data_month_only_since_2015.RData") )
+save( ukraine_un_mortality_data_month_only_since_2015, file = paste("../../R_Data/ukraine_un_mortality_data_month_only_since_2015.RData") )
 
 
 
@@ -169,7 +169,7 @@ intersected_data <- merge( x = ukraine_un_mortality_data_month_only_since_2015,
 
 
 # Generating pdf output.
-pdf("../Plots/Figure01a.pdf", height = 8, width = 20)
+pdf("../../Plots/Figure01a.pdf", height = 8, width = 20)
 # Definign the number of plots
 #par( par(mfrow=c(2,2)),  mar=c(5.1, 5.1, 5.1, 2.1)  )
 
@@ -266,7 +266,7 @@ dev.off()
 
 
 # Generating pdf output.
-pdf("../Plots/Figure01b.pdf", height = 8, width = 20)
+pdf("../../Plots/Figure01b.pdf", height = 8, width = 20)
 # Definign the number of plots
 #par( par(mfrow=c(2,2)),  mar=c(5.1, 5.1, 5.1, 2.1)  )
 
@@ -363,7 +363,7 @@ dev.off()
 
 
 # Generating pdf output.
-pdf("../Plots/Figure01c.pdf", height = 8, width = 20)
+pdf("../../Plots/Figure01c.pdf", height = 8, width = 20)
 # Definign the number of plots
 #par( par(mfrow=c(2,2)),  mar=c(5.1, 5.1, 5.1, 2.1)  )
 
@@ -464,7 +464,7 @@ dev.off()
 
 
 # Generating pdf output.
-pdf("../Plots/Figure01d.pdf", height = 15, width = 15)
+pdf("../../Plots/Figure01d.pdf", height = 15, width = 15)
 # Definign the number of plots
 par( par(mfrow=c(1,2)),  mar=c(8.5, 5.1, 5.1, 2.1)  )
 
@@ -732,7 +732,7 @@ dev.off()
 
 
 # Generating pdf output.
-pdf("../Plots/Figure01e.pdf", height = 15, width = 15)
+pdf("../../Plots/Figure01e.pdf", height = 15, width = 15)
 # Definign the number of plots
 par( par(mfrow=c(1,2)),  mar=c(8.5, 5.1, 5.1, 2.1)  )
 
@@ -1001,7 +1001,7 @@ dev.off()
 
 
 # Generating pdf output.
-pdf("../Plots/Figure01f.pdf", height = 15, width = 15)
+pdf("../../Plots/Figure01f.pdf", height = 15, width = 15)
 # Definign the number of plots
 par( par(mfrow=c(1,2)),  mar=c(8.5, 5.1, 5.1, 2.1)  )
 
@@ -1275,7 +1275,7 @@ dev.off()
 
 
 # Generating pdf output.
-pdf("../Plots/Figure01g.pdf", height = 15, width = 15)
+pdf("../../Plots/Figure01g.pdf", height = 15, width = 15)
 # Definign the number of plots
 par( par(mfrow=c(1,2)),  mar=c(8.5, 5.1, 5.1, 2.1)  )
 

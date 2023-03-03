@@ -28,63 +28,63 @@ pandemic_start <- "2020-03-15"
 
 
 # google trends data relative path
-google_trends_grob_data_relative_path              <- "../Data/Ukraine_data/grob_gt.csv"
-google_trends_pominki_data_relative_path           <- "../Data/Ukraine_data/pominki_gt.csv"
-google_trends_ritualnie_uslugi_data_relative_path  <- "../Data/Ukraine_data/ritualnie_uslugi_gt.csv"
-google_trends_truna_data_relative_path              <- "../Data/Ukraine_data/truna_gt.csv"
-google_trends_ritualni_poslugi_data_relative_path  <- "../Data/Ukraine_data/ritualni_poslugi_gt.csv"
+google_trends_grob_data_relative_path              <- "../data/grob_gt.csv"
+google_trends_pomynky_data_relative_path           <- "../data/pomynky_gt.csv"
+google_trends_ritualnie_uslugi_data_relative_path  <- "../data/ritualnie_uslugi_gt.csv"
+google_trends_truna_data_relative_path              <- "../data/truna_gt.csv"
+google_trends_rytualni_posluhy_data_relative_path  <- "../data/rytualni_posluhy_gt.csv"
 
 
 
 # Reading data
 google_trends_grob_data             <- read.table( file = google_trends_grob_data_relative_path,  sep =",", header = TRUE )
-google_trends_pominki_data          <- read.table( file = google_trends_pominki_data_relative_path,  sep =",", header = TRUE )
+google_trends_pomynky_data          <- read.table( file = google_trends_pomynky_data_relative_path,  sep =",", header = TRUE )
 google_trends_ritualnie_uslugi_data <- read.table( file = google_trends_ritualnie_uslugi_data_relative_path,  sep =",", header = TRUE )
 google_trends_truna_data         <- read.table( file = google_trends_truna_data_relative_path, sep =",", header = TRUE )
-google_trends_ritualni_poslugi_data <- read.table( file = google_trends_ritualni_poslugi_data_relative_path, sep =",", header = TRUE )
+google_trends_rytualni_posluhy_data <- read.table( file = google_trends_rytualni_posluhy_data_relative_path, sep =",", header = TRUE )
 names(google_trends_grob_data)[2]             <- "grob"
-names(google_trends_pominki_data)[2]          <- "pominki"
+names(google_trends_pomynky_data)[2]          <- "pomynky"
 names(google_trends_ritualnie_uslugi_data)[2] <- "ritualnie_uslugi"
 names(google_trends_truna_data)[2]          <- "truna"
-names(google_trends_ritualni_poslugi_data)[2] <- "ritualni_poslugi"
+names(google_trends_rytualni_posluhy_data)[2] <- "rytualni_posluhy"
 # Fixing dates
 google_trends_grob_data$Date             <- as.Date( paste0(google_trends_grob_data$Month, "-15") ) 
-google_trends_pominki_data$Date          <- as.Date( paste0(google_trends_pominki_data$Month, "-15") ) 
+google_trends_pomynky_data$Date          <- as.Date( paste0(google_trends_pomynky_data$Month, "-15") ) 
 google_trends_ritualnie_uslugi_data$Date <- as.Date( paste0(google_trends_ritualnie_uslugi_data$Month, "-15") ) 
 google_trends_truna_data$Date          <- as.Date( paste0(google_trends_truna_data$Month, "-15") ) 
-google_trends_ritualni_poslugi_data$Date <- as.Date( paste0(google_trends_ritualni_poslugi_data$Month, "-15") )  
+google_trends_rytualni_posluhy_data$Date <- as.Date( paste0(google_trends_rytualni_posluhy_data$Month, "-15") )  
 # Creating month
 google_trends_grob_data$Month_text             <- format(google_trends_grob_data$Date,"%B")
-google_trends_pominki_data$Month_text          <- format(google_trends_pominki_data$Date,"%B")
+google_trends_pomynky_data$Month_text          <- format(google_trends_pomynky_data$Date,"%B")
 google_trends_ritualnie_uslugi_data$Month_text <- format(google_trends_ritualnie_uslugi_data$Date,"%B")
 google_trends_truna_data$Month_text          <- format(google_trends_truna_data$Date,"%B")
-google_trends_ritualni_poslugi_data$Month_text <- format(google_trends_ritualni_poslugi_data$Date,"%B")
+google_trends_rytualni_posluhy_data$Month_text <- format(google_trends_rytualni_posluhy_data$Date,"%B")
 # Cut 2022 data
 google_trends_grob_data = google_trends_grob_data[which(google_trends_grob_data$Date < cut_date),]
-google_trends_pominki_data = google_trends_pominki_data[which(google_trends_pominki_data$Date < cut_date),]
+google_trends_pomynky_data = google_trends_pomynky_data[which(google_trends_pomynky_data$Date < cut_date),]
 google_trends_ritualnie_uslugi_data = google_trends_ritualnie_uslugi_data[which(google_trends_ritualnie_uslugi_data$Date < cut_date),]
 google_trends_truna_data = google_trends_truna_data[which(google_trends_truna_data$Date < cut_date),]
-google_trends_ritualni_poslugi_data = google_trends_ritualni_poslugi_data[which(google_trends_ritualni_poslugi_data$Date < cut_date),]
+google_trends_rytualni_posluhy_data = google_trends_rytualni_posluhy_data[which(google_trends_rytualni_posluhy_data$Date < cut_date),]
 
 
 # Summaries
 head(google_trends_grob_data)
-head(google_trends_pominki_data)
+head(google_trends_pomynky_data)
 head(google_trends_ritualnie_uslugi_data)
 # Dimensions
 dim(google_trends_grob_data)
-dim(google_trends_pominki_data)
+dim(google_trends_pomynky_data)
 dim(google_trends_ritualnie_uslugi_data)
 
 
 
 
 # Saving the trends data as RData file.
-save( google_trends_grob_data, file = paste("../R_Data/google_trends_grob_data.RData") )
-save( google_trends_pominki_data, file = paste("../R_Data/google_trends_pominki_data.RData") )
-save( google_trends_ritualnie_uslugi_data, file = paste("../R_Data/google_trends_ritualnie_uslugi_data.RData") )
-save( google_trends_truna_data, file = paste("../R_Data/google_trends_truna_data.RData") )
-save( google_trends_ritualni_poslugi_data, file = paste("../R_Data/google_trends_ritualni_poslugi_data.RData") )
+save( google_trends_grob_data, file = paste("../../R_Data/google_trends_grob_data.RData") )
+save( google_trends_pomynky_data, file = paste("../../R_Data/google_trends_pomynky_data.RData") )
+save( google_trends_ritualnie_uslugi_data, file = paste("../../R_Data/google_trends_ritualnie_uslugi_data.RData") )
+save( google_trends_truna_data, file = paste("../../R_Data/google_trends_truna_data.RData") )
+save( google_trends_rytualni_posluhy_data, file = paste("../../R_Data/google_trends_rytualni_posluhy_data.RData") )
 ls()
 
 
@@ -93,7 +93,7 @@ ls()
 
 
 # Generating pdf output.
-pdf( paste( "../Plots/FigureTBD01a.pdf", sep = ""), height = 10, width = 9)
+pdf( paste( "../../Plots/FigureTBD01a.pdf", sep = ""), height = 10, width = 9)
 # Definign the number of plots
 par( par(mfrow=c(3,1)),  mar=c(5.1, 5.1, 3, 2.1)  )
 
@@ -211,8 +211,8 @@ text(x, y, txt, cex = 4)
 
 # Second graph
 
-combined_value_min <- min( google_trends_pominki_data$pominki )
-combined_value_max <- max( google_trends_pominki_data$pominki )
+combined_value_min <- min( google_trends_pomynky_data$pomynky )
+combined_value_max <- max( google_trends_pomynky_data$pomynky )
 
 combined_date_min  <- min( google_trends_grob_data$Date )
 combined_date_max  <- max( google_trends_grob_data$Date )
@@ -220,7 +220,7 @@ combined_date_max  <- max( google_trends_grob_data$Date )
 
 # First plot (Belarus)
 plot(x = google_trends_grob_data$Date,
-     y = google_trends_pominki_data$pominki,
+     y = google_trends_pomynky_data$pomynky,
      col = "#005BBB",
      # col = color_01, 
      lwd = 5,
@@ -245,7 +245,7 @@ plot(x = google_trends_grob_data$Date,
      cex.sub = 2
 )
 lines(x = google_trends_grob_data$Date,
-      y = google_trends_pominki_data$pominki,
+      y = google_trends_pomynky_data$pomynky,
       #col = "#005BBB",
       col = "#005BBB",
       # col = color_01, 
@@ -431,7 +431,7 @@ dev.off()
 
 
 # Generating pdf output.
-pdf( paste( "../Plots/FigureTBD01b.pdf", sep = ""), height = 10, width = 9)
+pdf( paste( "../../Plots/FigureTBD01b.pdf", sep = ""), height = 10, width = 9)
 # Definign the number of plots
 par( par(mfrow=c(3,1)),  mar=c(5.1, 5.1, 3, 2.1)  )
 
@@ -545,8 +545,8 @@ text(x, y, txt, cex = 4)
 
 # Second graph
 
-combined_value_min <- min( google_trends_pominki_data$pominki )
-combined_value_max <- max( google_trends_pominki_data$pominki )
+combined_value_min <- min( google_trends_pomynky_data$pomynky )
+combined_value_max <- max( google_trends_pomynky_data$pomynky )
 
 combined_date_min  <- min( google_trends_grob_data$Date )
 combined_date_max  <- max( google_trends_grob_data$Date )
@@ -554,7 +554,7 @@ combined_date_max  <- max( google_trends_grob_data$Date )
 
 # First plot (Belarus)
 plot(x = google_trends_grob_data$Date,
-     y = google_trends_pominki_data$pominki,
+     y = google_trends_pomynky_data$pomynky,
      col = "#005BBB",
      # col = color_01, 
      lwd = 5,
@@ -563,7 +563,7 @@ plot(x = google_trends_grob_data$Date,
      # pch = 17,
      type = "l",
      # main = paste( colnames(proporions_all_locations_data_baseline)[compartment],  sep = ""),
-     main = "Google Trend: \"pominki\"",
+     main = "Google Trend: \"pomynky\"",
      xlim = c( combined_date_min,  combined_date_max  ),
      ylim = c( combined_value_min*0.9, combined_value_max * 1.10 ),
      # ylim = c(0, y_max_value_current * 1.2  ),
@@ -579,7 +579,7 @@ plot(x = google_trends_grob_data$Date,
      cex.sub = 2
 )
 lines(x = google_trends_grob_data$Date,
-      y = google_trends_pominki_data$pominki,
+      y = google_trends_pomynky_data$pomynky,
       #col = "#005BBB",
       col = "#005BBB",
       # col = color_01, 
@@ -654,8 +654,8 @@ text(x, y, txt, cex = 4)
 
 # 5 graph
 
-combined_value_min <- min( google_trends_ritualni_poslugi_data[,2] )
-combined_value_max <- max( google_trends_ritualni_poslugi_data[,2] )
+combined_value_min <- min( google_trends_rytualni_posluhy_data[,2] )
+combined_value_max <- max( google_trends_rytualni_posluhy_data[,2] )
 
 combined_date_min  <- min( google_trends_grob_data$Date )
 combined_date_max  <- max( google_trends_grob_data$Date )
@@ -663,7 +663,7 @@ combined_date_max  <- max( google_trends_grob_data$Date )
 
 # First plot (Belarus)
 plot(x = google_trends_grob_data$Date,
-     y = google_trends_ritualni_poslugi_data[,2],
+     y = google_trends_rytualni_posluhy_data[,2],
      col = "#005BBB",
      # col = color_01, 
      lwd = 5,
@@ -672,7 +672,7 @@ plot(x = google_trends_grob_data$Date,
      # pch = 17,
      type = "l",
      # main = paste( colnames(proporions_all_locations_data_baseline)[compartment],  sep = ""),
-     main = "Google Trend: \"ritualni poslugi\"",
+     main = "Google Trend: \"rytualni posluhy\"",
      xlim = c( combined_date_min,  combined_date_max  ),
      ylim = c( combined_value_min*0.9, combined_value_max * 1.10 ),
      # ylim = c(0, y_max_value_current * 1.2  ),
@@ -688,7 +688,7 @@ plot(x = google_trends_grob_data$Date,
      cex.sub = 2
 )
 lines(x = google_trends_grob_data$Date,
-      y = google_trends_ritualni_poslugi_data[,2],
+      y = google_trends_rytualni_posluhy_data[,2],
       #col = "#005BBB",
       col = "#005BBB",
       # col = color_01, 

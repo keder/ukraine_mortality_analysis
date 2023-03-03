@@ -14,7 +14,7 @@ library(xtable)
 # Non-parametric Results load
 
 # Loading the data as RData file.
-load( file = paste("../R_Data/p_scores_frame_five.RData") )
+load( file = paste("../../R_Data/p_scores_frame_five.RData") )
 
 
 
@@ -22,9 +22,9 @@ load( file = paste("../R_Data/p_scores_frame_five.RData") )
 # Prophet Results load
 
 # Loading the data as RData file.
-load( file = paste("../R_Data/prophet_predictions_five_plus_original_data_subset.RData") )
+load( file = paste("../../R_Data/prophet_predictions_five_plus_original_data_subset.RData") )
 # Loading the data as RData file.
-load( file = paste("../R_Data/prophet_predictions_five_plus_original_data_Age65Up_subset.RData") )
+load( file = paste("../../R_Data/prophet_predictions_five_plus_original_data_Age65Up_subset.RData") )
 
 
 
@@ -32,9 +32,9 @@ load( file = paste("../R_Data/prophet_predictions_five_plus_original_data_Age65U
 # ARIMA Results load
 
 # Loading the data as RData file.
-load( file = paste("../R_Data/arima_predictions_five_plus_original_data_subset.RData") )
+load( file = paste("../../R_Data/arima_predictions_five_plus_original_data_subset.RData") )
 # Loading the data as RData file.
-load( file = paste("../R_Data/arima_predictions_five_plus_original_data_Age65Up_subset.RData") )
+load( file = paste("../../R_Data/arima_predictions_five_plus_original_data_Age65Up_subset.RData") )
 
 
 
@@ -189,9 +189,9 @@ counts_different_methods_five_2021[5,]$Total = sum(counts_different_methods_five
 
 # Fix 2021.05.06
 # Saving the data as RData file.
-save( p_scores_different_methods_five_2020, file = paste("../R_Data/p_scores_different_methods_five_2020.RData") )
+save( p_scores_different_methods_five_2020, file = paste("../../R_Data/p_scores_different_methods_five_2020.RData") )
 # Saving the data as RData file.
-save( counts_different_methods_five_2020,   file = paste("../R_Data/counts_different_methods_five_2020.RData") )
+save( counts_different_methods_five_2020,   file = paste("../../R_Data/counts_different_methods_five_2020.RData") )
 
 # Creating xtable object
 p_scores_different_methods_five_xtable <- xtable(x = p_scores_different_methods_five_2020, digits = 2 )  
@@ -201,22 +201,22 @@ counts_different_methods_five_xtable   <- xtable(x = counts_different_methods_fi
 
 # Exporting as tex file
 # Creating a path 
-p_scores_different_methods_five_xtable_path_out <- paste("../R_Output/p_scores_different_methods_five_xtable_2020.tex", sep ="")
+p_scores_different_methods_five_xtable_path_out <- paste("../../R_Output/p_scores_different_methods_five_xtable_2020.tex", sep ="")
 # Printing
 print.xtable( x = p_scores_different_methods_five_xtable, type="latex", file = p_scores_different_methods_five_xtable_path_out, include.rownames = FALSE )
-write.csv(p_scores_different_methods_five_xtable, "../R_Output/p_scores_different_methods_five_xtable_2020.csv")
+write.csv(p_scores_different_methods_five_xtable, "../../R_Output/p_scores_different_methods_five_xtable_2020.csv")
 
 # Creating a path 
-counts_different_methods_five_xtable_path_out <- paste("../R_Output/counts_different_methods_five_xtable_2020.tex", sep ="")
+counts_different_methods_five_xtable_path_out <- paste("../../R_Output/counts_different_methods_five_xtable_2020.tex", sep ="")
 # Printing
 print.xtable( x = counts_different_methods_five_xtable, type="latex", file = counts_different_methods_five_xtable_path_out, include.rownames = FALSE )
 
 
 
 
-save( p_scores_different_methods_five_2021, file = paste("../R_Data/p_scores_different_methods_five_2021.RData") )
+save( p_scores_different_methods_five_2021, file = paste("../../R_Data/p_scores_different_methods_five_2021.RData") )
 # Saving the data as RData file.
-save( counts_different_methods_five_2021,   file = paste("../R_Data/counts_different_methods_five_2021.RData") )
+save( counts_different_methods_five_2021,   file = paste("../../R_Data/counts_different_methods_five_2021.RData") )
 
 # Creating xtable object
 p_scores_different_methods_five_xtable <- xtable(x = p_scores_different_methods_five_2021, digits = 2 )  
@@ -226,13 +226,13 @@ counts_different_methods_five_xtable   <- xtable(x = counts_different_methods_fi
 
 # Exporting as tex file
 # Creating a path 
-p_scores_different_methods_five_xtable_path_out <- paste("../R_Output/p_scores_different_methods_five_xtable_2021.tex", sep ="")
+p_scores_different_methods_five_xtable_path_out <- paste("../../R_Output/p_scores_different_methods_five_xtable_2021.tex", sep ="")
 # Printing
 print.xtable( x = p_scores_different_methods_five_xtable, type="latex", file = p_scores_different_methods_five_xtable_path_out, include.rownames = FALSE )
-write.csv(p_scores_different_methods_five_xtable, "../R_Output/p_scores_different_methods_five_xtable_2021.csv")
+write.csv(p_scores_different_methods_five_xtable, "../../R_Output/p_scores_different_methods_five_xtable_2021.csv")
 
 # Creating a path 
-counts_different_methods_five_xtable_path_out <- paste("../R_Output/counts_different_methods_five_xtable_2021.tex", sep ="")
+counts_different_methods_five_xtable_path_out <- paste("../../R_Output/counts_different_methods_five_xtable_2021.tex", sep ="")
 # Printing
 print.xtable( x = counts_different_methods_five_xtable, type="latex", file = counts_different_methods_five_xtable_path_out, include.rownames = FALSE )
 

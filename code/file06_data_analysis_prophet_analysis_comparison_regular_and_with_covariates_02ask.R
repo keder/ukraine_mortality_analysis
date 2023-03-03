@@ -6,24 +6,24 @@ rm(list = ls(all = TRUE))
 # Reading previous datasets
 
 # Monthly overall mortality data since 2015
-load(file = paste("../R_Data/ukraine_un_mortality_data_month_only_since_2015.RData"))
+load(file = paste("../../R_Data/ukraine_un_mortality_data_month_only_since_2015.RData"))
 
 # Loading demograhics data
-load(file = paste("../R_Data/demographics_aggregated_2011_2020.RData"))
+load(file = paste("../../R_Data/demographics_aggregated_2011_2020.RData"))
 
 
 # Loading data
-load(file = paste("../R_Data/prophet_predictions_five_plus_original_data.RData"))
+load(file = paste("../../R_Data/prophet_predictions_five_plus_original_data.RData"))
 
 # Saving the data as RData file.
-load(file = paste("../R_Data/prophet_predictions_five_plus_original_data_subset.RData"))
+load(file = paste("../../R_Data/prophet_predictions_five_plus_original_data_subset.RData"))
 
 
 # Loading data
-load(file = paste("../R_Data/prophet_predictions_five_plus_original_data_Age65Up.RData"))
+load(file = paste("../../R_Data/prophet_predictions_five_plus_original_data_Age65Up.RData"))
 
 # Saving the data as RData file.
-load(file = paste("../R_Data/prophet_predictions_five_plus_original_data_Age65Up_subset.RData"))
+load(file = paste("../../R_Data/prophet_predictions_five_plus_original_data_Age65Up_subset.RData"))
 
 pandemic_start <- as.Date("2020-03-15")
 
@@ -58,7 +58,7 @@ p_score_max <- max(c(prophet_predictions_five_plus_original_data_Age65Up_subset$
 
 
 # Generating pdf output.
-pdf(paste("../Plots/FigureS02a.pdf", sep = ""), height = 15, width = 15)
+pdf(paste("../../Plots/FigureS02a.pdf", sep = ""), height = 15, width = 15)
 # Definign the number of plots
 par(par(mfrow = c(2, 2)), mar = c(5.1, 5.1, 5.1, 2.1))
 

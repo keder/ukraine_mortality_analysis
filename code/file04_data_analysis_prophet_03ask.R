@@ -46,10 +46,10 @@ library("prophet")
 # Reading previous datasets
 
 # Monthly overall mortality data since 2015
-load(file = paste("../R_Data/ukraine_un_mortality_data_month_only_since_2015.RData"))
+load(file = paste("../../R_Data/ukraine_un_mortality_data_month_only_since_2015.RData"))
 
 # Loading demograhics data
-load(file = paste("../R_Data/demographics_aggregated_2011_2020.RData"))
+load(file = paste("../../R_Data/demographics_aggregated_2011_2020.RData"))
 
 
 
@@ -124,14 +124,14 @@ prophet_predictions_five_plus_original_data$year_month_text <- substr(x = as.cha
 
 
 # Saving the data as RData file.
-save(prophet_predictions_five_plus_original_data, file = paste("../R_Data/prophet_predictions_five_plus_original_data.RData"))
+save(prophet_predictions_five_plus_original_data, file = paste("../../R_Data/prophet_predictions_five_plus_original_data.RData"))
 
 # Creating a sumbset with predicitons only
 prophet_predictions_five_plus_original_data_subset <-
       prophet_predictions_five_plus_original_data[, c("ds", "year_month_text", "y", "yhat", "yhat_lower", "yhat_upper", "p_scores", "p_scores_lower", "p_scores_upper", "raw_y_minus_yhat_upper")]
 
 # Saving the data as RData file.
-save(prophet_predictions_five_plus_original_data_subset, file = paste("../R_Data/prophet_predictions_five_plus_original_data_subset.RData"))
+save(prophet_predictions_five_plus_original_data_subset, file = paste("../../R_Data/prophet_predictions_five_plus_original_data_subset.RData"))
 
 
 
@@ -145,7 +145,7 @@ p_score_max <- max(c(prophet_predictions_five_plus_original_data_subset$p_scores
 
 
 # Generating pdf output.
-pdf(paste("../Plots/Figure03a.pdf", sep = ""), height = 15, width = 25)
+pdf(paste("../../Plots/Figure03a.pdf", sep = ""), height = 15, width = 25)
 # Definign the number of plots
 par(par(mfrow = c(2, 1)), mar = c(5.5, 5.1, 5.1, 2.1))
 

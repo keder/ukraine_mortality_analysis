@@ -47,10 +47,10 @@ library("prophet")
 
 
 # Monthly overall mortality data since 2015
-load( file = paste("../R_Data/ukraine_un_mortality_data_month_only_since_2015.RData") )
+load( file = paste("../../R_Data/ukraine_un_mortality_data_month_only_since_2015.RData") )
 
 # Loading demograhics data
-load( file = paste("../R_Data/demographics_aggregated_2011_2020.RData") )
+load( file = paste("../../R_Data/demographics_aggregated_2011_2020.RData") )
 
 
 
@@ -122,10 +122,10 @@ tail(prophet_predictions_extra_year_plus_original_data)
 
 
 # Saving the data as RData file.
-save( prophet_predictions_extra_year, file = paste("../R_Data/prophet_predictions_extra_year.RData") )
+save( prophet_predictions_extra_year, file = paste("../../R_Data/prophet_predictions_extra_year.RData") )
 
 # Saving the data as RData file.
-save( prophet_predictions_extra_year_plus_original_data, file = paste("../R_Data/prophet_predictions_extra_year_plus_original_data.RData") )
+save( prophet_predictions_extra_year_plus_original_data, file = paste("../../R_Data/prophet_predictions_extra_year_plus_original_data.RData") )
 
 
 

@@ -46,11 +46,11 @@ library("prophet")
 
 
 # Loading the trends data from RData files.
-load( file = paste("../R_Data/google_trends_grob_data.RData") )
-load( file = paste("../R_Data/google_trends_pominki_data.RData") )
-load( file = paste("../R_Data/google_trends_ritualnie_uslugi_data.RData") )
-load( file = paste("../R_Data/google_trends_truna_data.RData") )
-load( file = paste("../R_Data/google_trends_ritualni_poslugi_data.RData") )
+load( file = paste("../../R_Data/google_trends_grob_data.RData") )
+load( file = paste("../../R_Data/google_trends_pomynky_data.RData") )
+load( file = paste("../../R_Data/google_trends_ritualnie_uslugi_data.RData") )
+load( file = paste("../../R_Data/google_trends_truna_data.RData") )
+load( file = paste("../../R_Data/google_trends_rytualni_posluhy_data.RData") )
 ls()
 
 
@@ -127,14 +127,14 @@ prophet_predictions_grob_plus_original_data$year_month_text <- substr(x = as.cha
 
 
 # Saving the data as RData file.
-save( prophet_predictions_grob_plus_original_data, file = paste("../R_Data/prophet_predictions_grob_plus_original_data.RData") )
+save( prophet_predictions_grob_plus_original_data, file = paste("../../R_Data/prophet_predictions_grob_plus_original_data.RData") )
 
 # Creating a sumbset with predicitons only
 prophet_predictions_grob_plus_original_data_subset <- 
   prophet_predictions_grob_plus_original_data[, c("ds", "year_month_text", "y", "yhat", "yhat_lower", "yhat_upper", "p_scores", "p_scores_lower", "p_scores_upper", "raw_y_minus_yhat_upper") ]
 
 # Saving the data as RData file.
-save( prophet_predictions_grob_plus_original_data_subset, file = paste("../R_Data/prophet_predictions_grob_plus_original_data_subset.RData") )
+save( prophet_predictions_grob_plus_original_data_subset, file = paste("../../R_Data/prophet_predictions_grob_plus_original_data_subset.RData") )
 
 # Min and Max
 p_score_min_grob <- min( c(prophet_predictions_grob_plus_original_data_subset$p_scores) )
@@ -153,87 +153,87 @@ p_score_max_grob <- max( c(prophet_predictions_grob_plus_original_data_subset$p_
 
 
 
-# pominki
+# pomynky
 
 # Fixing the data for the package 
 # Number of records BEFORE the epidemic start
-number_of_records_pominki <- max(which(google_trends_pominki_data$Date < pandemic_start))
+number_of_records_pomynky <- max(which(google_trends_pomynky_data$Date < pandemic_start))
 
-data_to_feed_full_pominki      <- data.frame( ds =  google_trends_pominki_data$Date,
-                                           y  =  google_trends_pominki_data$pominki )
+data_to_feed_full_pomynky      <- data.frame( ds =  google_trends_pomynky_data$Date,
+                                           y  =  google_trends_pomynky_data$pomynky )
 
-data_to_feed_truncated_pominki <- data.frame( ds =  google_trends_pominki_data$Date[c(1:number_of_records_pominki)],
-                                           y  =  google_trends_pominki_data$pominki[c(1:number_of_records_pominki)] )
+data_to_feed_truncated_pomynky <- data.frame( ds =  google_trends_pomynky_data$Date[c(1:number_of_records_pomynky)],
+                                           y  =  google_trends_pomynky_data$pomynky[c(1:number_of_records_pomynky)] )
 
 
 # Listing names of the created objects.
-names(data_to_feed_full_pominki)
-names(data_to_feed_truncated_pominki)
+names(data_to_feed_full_pomynky)
+names(data_to_feed_truncated_pomynky)
 
 
 # Creating a prophet object.
-prophet_object_pominki <- prophet(data_to_feed_truncated_pominki)
+prophet_object_pomynky <- prophet(data_to_feed_truncated_pomynky)
 
 # Full frame for predictions. Dates only extraction
-data_to_feed_full_pominki_only <- subset( data_to_feed_full_pominki, select = -c(y) ) 
+data_to_feed_full_pomynky_only <- subset( data_to_feed_full_pomynky, select = -c(y) ) 
 
 # Precting for the specified dates.
-prophet_predictions_pominki <- predict(prophet_object_pominki, data_to_feed_full_pominki_only )
+prophet_predictions_pomynky <- predict(prophet_object_pomynky, data_to_feed_full_pomynky_only )
 # Fixing dates
-prophet_predictions_pominki$ds <- as.Date(prophet_predictions_pominki$ds)
+prophet_predictions_pomynky$ds <- as.Date(prophet_predictions_pomynky$ds)
 
 
 
 # Summaries for mortalities
-dim(prophet_predictions_pominki)
-head(prophet_predictions_pominki)
-tail(prophet_predictions_pominki)
+dim(prophet_predictions_pomynky)
+head(prophet_predictions_pomynky)
+tail(prophet_predictions_pomynky)
 
 # Adding original data
-prophet_predictions_pominki_plus_original_data <- base::merge( x = data_to_feed_full_pominki, y = prophet_predictions_pominki, by = "ds" )
-dim(prophet_predictions_pominki_plus_original_data)
+prophet_predictions_pomynky_plus_original_data <- base::merge( x = data_to_feed_full_pomynky, y = prophet_predictions_pomynky, by = "ds" )
+dim(prophet_predictions_pomynky_plus_original_data)
 
 
 # Summaries for mortalities
-dim(prophet_predictions_pominki_plus_original_data)
-head(prophet_predictions_pominki_plus_original_data)
-tail(prophet_predictions_pominki_plus_original_data)
+dim(prophet_predictions_pomynky_plus_original_data)
+head(prophet_predictions_pomynky_plus_original_data)
+tail(prophet_predictions_pomynky_plus_original_data)
 
 
 # lower scores
-prophet_predictions_pominki_plus_original_data$p_scores_lower <- 
-  100 * ( prophet_predictions_pominki_plus_original_data$y - prophet_predictions_pominki_plus_original_data$yhat_lower ) / prophet_predictions_pominki_plus_original_data$yhat_lower
+prophet_predictions_pomynky_plus_original_data$p_scores_lower <- 
+  100 * ( prophet_predictions_pomynky_plus_original_data$y - prophet_predictions_pomynky_plus_original_data$yhat_lower ) / prophet_predictions_pomynky_plus_original_data$yhat_lower
 # upper scores
-prophet_predictions_pominki_plus_original_data$p_scores_upper <- 
-  100 * ( prophet_predictions_pominki_plus_original_data$y - prophet_predictions_pominki_plus_original_data$yhat_upper ) / prophet_predictions_pominki_plus_original_data$yhat_upper
+prophet_predictions_pomynky_plus_original_data$p_scores_upper <- 
+  100 * ( prophet_predictions_pomynky_plus_original_data$y - prophet_predictions_pomynky_plus_original_data$yhat_upper ) / prophet_predictions_pomynky_plus_original_data$yhat_upper
 # scores
-prophet_predictions_pominki_plus_original_data$p_scores <- 
-  100 * ( prophet_predictions_pominki_plus_original_data$y - prophet_predictions_pominki_plus_original_data$yhat ) / prophet_predictions_pominki_plus_original_data$yhat
+prophet_predictions_pomynky_plus_original_data$p_scores <- 
+  100 * ( prophet_predictions_pomynky_plus_original_data$y - prophet_predictions_pomynky_plus_original_data$yhat ) / prophet_predictions_pomynky_plus_original_data$yhat
 
 
 # Computing the raw excess trends
 # raw excess
-prophet_predictions_pominki_plus_original_data$raw_y_minus_yhat_upper <- 
-  prophet_predictions_pominki_plus_original_data$y - prophet_predictions_pominki_plus_original_data$yhat_upper
+prophet_predictions_pomynky_plus_original_data$raw_y_minus_yhat_upper <- 
+  prophet_predictions_pomynky_plus_original_data$y - prophet_predictions_pomynky_plus_original_data$yhat_upper
 
 
 # Creating year and month in text  
-prophet_predictions_pominki_plus_original_data$year_month_text <- substr(x = as.character(prophet_predictions_pominki_plus_original_data$ds), start = 1, stop = 7)
+prophet_predictions_pomynky_plus_original_data$year_month_text <- substr(x = as.character(prophet_predictions_pomynky_plus_original_data$ds), start = 1, stop = 7)
 
 
 # Saving the data as RData file.
-save( prophet_predictions_pominki_plus_original_data, file = paste("../R_Data/prophet_predictions_pominki_plus_original_data.RData") )
+save( prophet_predictions_pomynky_plus_original_data, file = paste("../../R_Data/prophet_predictions_pomynky_plus_original_data.RData") )
 
 # Creating a sumbset with predicitons only
-prophet_predictions_pominki_plus_original_data_subset <- 
-  prophet_predictions_pominki_plus_original_data[, c("ds", "year_month_text", "y", "yhat", "yhat_lower", "yhat_upper", "p_scores", "p_scores_lower", "p_scores_upper", "raw_y_minus_yhat_upper") ]
+prophet_predictions_pomynky_plus_original_data_subset <- 
+  prophet_predictions_pomynky_plus_original_data[, c("ds", "year_month_text", "y", "yhat", "yhat_lower", "yhat_upper", "p_scores", "p_scores_lower", "p_scores_upper", "raw_y_minus_yhat_upper") ]
 
 # Saving the data as RData file.
-save( prophet_predictions_pominki_plus_original_data_subset, file = paste("../R_Data/prophet_predictions_pominki_plus_original_data_subset.RData") )
+save( prophet_predictions_pomynky_plus_original_data_subset, file = paste("../../R_Data/prophet_predictions_pomynky_plus_original_data_subset.RData") )
 
 # Min and Max
-p_score_min_pominki <- min( c(prophet_predictions_pominki_plus_original_data_subset$p_scores) )
-p_score_max_pominki <- max( c(prophet_predictions_pominki_plus_original_data_subset$p_scores) )
+p_score_min_pomynky <- min( c(prophet_predictions_pomynky_plus_original_data_subset$p_scores) )
+p_score_max_pomynky <- max( c(prophet_predictions_pomynky_plus_original_data_subset$p_scores) )
 
 
 
@@ -312,14 +312,14 @@ prophet_predictions_ritualnie_uslugi_plus_original_data$year_month_text <- subst
 
 
 # Saving the data as RData file.
-save( prophet_predictions_ritualnie_uslugi_plus_original_data, file = paste("../R_Data/prophet_predictions_ritualnie_uslugi_plus_original_data.RData") )
+save( prophet_predictions_ritualnie_uslugi_plus_original_data, file = paste("../../R_Data/prophet_predictions_ritualnie_uslugi_plus_original_data.RData") )
 
 # Creating a sumbset with predicitons only
 prophet_predictions_ritualnie_uslugi_plus_original_data_subset <- 
   prophet_predictions_ritualnie_uslugi_plus_original_data[, c("ds", "year_month_text", "y", "yhat", "yhat_lower", "yhat_upper", "p_scores", "p_scores_lower", "p_scores_upper", "raw_y_minus_yhat_upper") ]
 
 # Saving the data as RData file.
-save( prophet_predictions_ritualnie_uslugi_plus_original_data_subset, file = paste("../R_Data/prophet_predictions_ritualnie_uslugi_plus_original_data_subset.RData") )
+save( prophet_predictions_ritualnie_uslugi_plus_original_data_subset, file = paste("../../R_Data/prophet_predictions_ritualnie_uslugi_plus_original_data_subset.RData") )
 
 # Min and Max
 p_score_min_ritualnie_uslugi <- min( c(prophet_predictions_ritualnie_uslugi_plus_original_data_subset$p_scores) )
@@ -398,14 +398,14 @@ prophet_predictions_truna_plus_original_data$year_month_text <- substr(x = as.ch
 
 
 # Saving the data as RData file.
-save( prophet_predictions_truna_plus_original_data, file = paste("../R_Data/prophet_predictions_truna_plus_original_data.RData") )
+save( prophet_predictions_truna_plus_original_data, file = paste("../../R_Data/prophet_predictions_truna_plus_original_data.RData") )
 
 # Creating a sumbset with predicitons only
 prophet_predictions_truna_plus_original_data_subset <- 
   prophet_predictions_truna_plus_original_data[, c("ds", "year_month_text", "y", "yhat", "yhat_lower", "yhat_upper", "p_scores", "p_scores_lower", "p_scores_upper", "raw_y_minus_yhat_upper") ]
 
 # Saving the data as RData file.
-save( prophet_predictions_truna_plus_original_data_subset, file = paste("../R_Data/prophet_predictions_truna_plus_original_data_subset.RData") )
+save( prophet_predictions_truna_plus_original_data_subset, file = paste("../../R_Data/prophet_predictions_truna_plus_original_data_subset.RData") )
 
 # Min and Max
 p_score_min_truna <- min( c(prophet_predictions_truna_plus_original_data_subset$p_scores) )
@@ -419,87 +419,87 @@ p_score_max_truna <- max( c(prophet_predictions_truna_plus_original_data_subset$
 
 
 
-# ritualni_poslugi
+# rytualni_posluhy
 
 # Fixing the data for the package 
 # Number of records BEFORE the epidemic start
-number_of_records_ritualni_poslugi <- max(which(google_trends_ritualni_poslugi_data$Date < pandemic_start))
+number_of_records_rytualni_posluhy <- max(which(google_trends_rytualni_posluhy_data$Date < pandemic_start))
 
-data_to_feed_full_ritualni_poslugi      <- data.frame( ds =  google_trends_ritualni_poslugi_data$Date,
-                                              y  =  google_trends_ritualni_poslugi_data$ritualni_poslugi )
+data_to_feed_full_rytualni_posluhy      <- data.frame( ds =  google_trends_rytualni_posluhy_data$Date,
+                                              y  =  google_trends_rytualni_posluhy_data$rytualni_posluhy )
 
-data_to_feed_truncated_ritualni_poslugi <- data.frame( ds =  google_trends_ritualni_poslugi_data$Date[c(1:number_of_records_ritualni_poslugi)],
-                                              y  =  google_trends_ritualni_poslugi_data$ritualni_poslugi[c(1:number_of_records_ritualni_poslugi)] )
+data_to_feed_truncated_rytualni_posluhy <- data.frame( ds =  google_trends_rytualni_posluhy_data$Date[c(1:number_of_records_rytualni_posluhy)],
+                                              y  =  google_trends_rytualni_posluhy_data$rytualni_posluhy[c(1:number_of_records_rytualni_posluhy)] )
 
 
 # Listing names of the created objects.
-names(data_to_feed_full_ritualni_poslugi)
-names(data_to_feed_truncated_ritualni_poslugi)
+names(data_to_feed_full_rytualni_posluhy)
+names(data_to_feed_truncated_rytualni_posluhy)
 
 
 # Creating a prophet object.
-prophet_object_ritualni_poslugi <- prophet(data_to_feed_truncated_ritualni_poslugi)
+prophet_object_rytualni_posluhy <- prophet(data_to_feed_truncated_rytualni_posluhy)
 
 # Full frame for predictions. Dates only extraction
-data_to_feed_full_ritualni_poslugi_only <- subset( data_to_feed_full_ritualni_poslugi, select = -c(y) ) 
+data_to_feed_full_rytualni_posluhy_only <- subset( data_to_feed_full_rytualni_posluhy, select = -c(y) ) 
 
 # Precting for the specified dates.
-prophet_predictions_ritualni_poslugi <- predict(prophet_object_ritualni_poslugi, data_to_feed_full_ritualni_poslugi_only )
+prophet_predictions_rytualni_posluhy <- predict(prophet_object_rytualni_posluhy, data_to_feed_full_rytualni_posluhy_only )
 # Fixing dates
-prophet_predictions_ritualni_poslugi$ds <- as.Date(prophet_predictions_ritualni_poslugi$ds)
+prophet_predictions_rytualni_posluhy$ds <- as.Date(prophet_predictions_rytualni_posluhy$ds)
 
 
 
 # Summaries for mortalities
-dim(prophet_predictions_ritualni_poslugi)
-head(prophet_predictions_ritualni_poslugi)
-tail(prophet_predictions_ritualni_poslugi)
+dim(prophet_predictions_rytualni_posluhy)
+head(prophet_predictions_rytualni_posluhy)
+tail(prophet_predictions_rytualni_posluhy)
 
 # Adding original data
-prophet_predictions_ritualni_poslugi_plus_original_data <- base::merge( x = data_to_feed_full_ritualni_poslugi, y = prophet_predictions_ritualni_poslugi, by = "ds" )
-dim(prophet_predictions_ritualni_poslugi_plus_original_data)
+prophet_predictions_rytualni_posluhy_plus_original_data <- base::merge( x = data_to_feed_full_rytualni_posluhy, y = prophet_predictions_rytualni_posluhy, by = "ds" )
+dim(prophet_predictions_rytualni_posluhy_plus_original_data)
 
 
 # Summaries for mortalities
-dim(prophet_predictions_ritualni_poslugi_plus_original_data)
-head(prophet_predictions_ritualni_poslugi_plus_original_data)
-tail(prophet_predictions_ritualni_poslugi_plus_original_data)
+dim(prophet_predictions_rytualni_posluhy_plus_original_data)
+head(prophet_predictions_rytualni_posluhy_plus_original_data)
+tail(prophet_predictions_rytualni_posluhy_plus_original_data)
 
 
 # lower scores
-prophet_predictions_ritualni_poslugi_plus_original_data$p_scores_lower <- 
-  100 * ( prophet_predictions_ritualni_poslugi_plus_original_data$y - prophet_predictions_ritualni_poslugi_plus_original_data$yhat_lower ) / prophet_predictions_ritualni_poslugi_plus_original_data$yhat_lower
+prophet_predictions_rytualni_posluhy_plus_original_data$p_scores_lower <- 
+  100 * ( prophet_predictions_rytualni_posluhy_plus_original_data$y - prophet_predictions_rytualni_posluhy_plus_original_data$yhat_lower ) / prophet_predictions_rytualni_posluhy_plus_original_data$yhat_lower
 # upper scores
-prophet_predictions_ritualni_poslugi_plus_original_data$p_scores_upper <- 
-  100 * ( prophet_predictions_ritualni_poslugi_plus_original_data$y - prophet_predictions_ritualni_poslugi_plus_original_data$yhat_upper ) / prophet_predictions_ritualni_poslugi_plus_original_data$yhat_upper
+prophet_predictions_rytualni_posluhy_plus_original_data$p_scores_upper <- 
+  100 * ( prophet_predictions_rytualni_posluhy_plus_original_data$y - prophet_predictions_rytualni_posluhy_plus_original_data$yhat_upper ) / prophet_predictions_rytualni_posluhy_plus_original_data$yhat_upper
 # scores
-prophet_predictions_ritualni_poslugi_plus_original_data$p_scores <- 
-  100 * ( prophet_predictions_ritualni_poslugi_plus_original_data$y - prophet_predictions_ritualni_poslugi_plus_original_data$yhat ) / prophet_predictions_ritualni_poslugi_plus_original_data$yhat
+prophet_predictions_rytualni_posluhy_plus_original_data$p_scores <- 
+  100 * ( prophet_predictions_rytualni_posluhy_plus_original_data$y - prophet_predictions_rytualni_posluhy_plus_original_data$yhat ) / prophet_predictions_rytualni_posluhy_plus_original_data$yhat
 
 
 # Computing the raw excess trends
 # raw excess
-prophet_predictions_ritualni_poslugi_plus_original_data$raw_y_minus_yhat_upper <- 
-  prophet_predictions_ritualni_poslugi_plus_original_data$y - prophet_predictions_ritualni_poslugi_plus_original_data$yhat_upper
+prophet_predictions_rytualni_posluhy_plus_original_data$raw_y_minus_yhat_upper <- 
+  prophet_predictions_rytualni_posluhy_plus_original_data$y - prophet_predictions_rytualni_posluhy_plus_original_data$yhat_upper
 
 
 # Creating year and month in text  
-prophet_predictions_ritualni_poslugi_plus_original_data$year_month_text <- substr(x = as.character(prophet_predictions_ritualni_poslugi_plus_original_data$ds), start = 1, stop = 7)
+prophet_predictions_rytualni_posluhy_plus_original_data$year_month_text <- substr(x = as.character(prophet_predictions_rytualni_posluhy_plus_original_data$ds), start = 1, stop = 7)
 
 
 # Saving the data as RData file.
-save( prophet_predictions_ritualni_poslugi_plus_original_data, file = paste("../R_Data/prophet_predictions_ritualni_poslugi_plus_original_data.RData") )
+save( prophet_predictions_rytualni_posluhy_plus_original_data, file = paste("../../R_Data/prophet_predictions_rytualni_posluhy_plus_original_data.RData") )
 
 # Creating a sumbset with predicitons only
-prophet_predictions_ritualni_poslugi_plus_original_data_subset <- 
-  prophet_predictions_ritualni_poslugi_plus_original_data[, c("ds", "year_month_text", "y", "yhat", "yhat_lower", "yhat_upper", "p_scores", "p_scores_lower", "p_scores_upper", "raw_y_minus_yhat_upper") ]
+prophet_predictions_rytualni_posluhy_plus_original_data_subset <- 
+  prophet_predictions_rytualni_posluhy_plus_original_data[, c("ds", "year_month_text", "y", "yhat", "yhat_lower", "yhat_upper", "p_scores", "p_scores_lower", "p_scores_upper", "raw_y_minus_yhat_upper") ]
 
 # Saving the data as RData file.
-save( prophet_predictions_ritualni_poslugi_plus_original_data_subset, file = paste("../R_Data/prophet_predictions_ritualni_poslugi_plus_original_data_subset.RData") )
+save( prophet_predictions_rytualni_posluhy_plus_original_data_subset, file = paste("../../R_Data/prophet_predictions_rytualni_posluhy_plus_original_data_subset.RData") )
 
 # Min and Max
-p_score_min_ritualni_poslugi <- min( c(prophet_predictions_ritualni_poslugi_plus_original_data_subset$p_scores) )
-p_score_max_ritualni_poslugi <- max( c(prophet_predictions_ritualni_poslugi_plus_original_data_subset$p_scores) )
+p_score_min_rytualni_posluhy <- min( c(prophet_predictions_rytualni_posluhy_plus_original_data_subset$p_scores) )
+p_score_max_rytualni_posluhy <- max( c(prophet_predictions_rytualni_posluhy_plus_original_data_subset$p_scores) )
 
 
 
@@ -510,7 +510,7 @@ p_score_max_ritualni_poslugi <- max( c(prophet_predictions_ritualni_poslugi_plus
 
 
 # Generating pdf output.
-pdf( paste( "../Plots/FigureTBD03a.pdf", sep = ""), height = 15, width = 25)
+pdf( paste( "../../Plots/FigureTBD03a.pdf", sep = ""), height = 15, width = 25)
 # Defining the number of plots
 par( par(mfrow=c(3,2)),  mar=c(7.1, 5.1, 5.1, 2.1)  )
 # par( par(mfrow=c(3,2), by.col = TRUE),  mar=c(7.1, 5.1, 5.1, 2.1)  )
@@ -732,28 +732,28 @@ text(x, y, txt, cex = 4)
 
 
 
-# pominki
+# pomynky
 
 # Second plot
 
-lower_index_pominki <- max(which(prophet_predictions_pominki_plus_original_data_subset$ds < cut_date)) + 1
-upper_index_pominki <- length(prophet_predictions_pominki_plus_original_data_subset$p_scores_upper)
-range_pominki <- c(lower_index_pominki:upper_index_pominki)
-pandemic_data_length = upper_index_pominki - max(which(prophet_predictions_grob_plus_original_data_subset$ds < pandemic_start))
-range_pominki_last18 <- c((upper_index_pominki - pandemic_data_length + 1):upper_index_pominki)
+lower_index_pomynky <- max(which(prophet_predictions_pomynky_plus_original_data_subset$ds < cut_date)) + 1
+upper_index_pomynky <- length(prophet_predictions_pomynky_plus_original_data_subset$p_scores_upper)
+range_pomynky <- c(lower_index_pomynky:upper_index_pomynky)
+pandemic_data_length = upper_index_pomynky - max(which(prophet_predictions_grob_plus_original_data_subset$ds < pandemic_start))
+range_pomynky_last18 <- c((upper_index_pomynky - pandemic_data_length + 1):upper_index_pomynky)
 
-barplot( prophet_predictions_pominki_plus_original_data_subset$p_scores_upper[range_pominki], 
-         col= c( rep("#005BBB", 2), rep("#FFD500", (length(range_pominki)-2)) ), 
+barplot( prophet_predictions_pomynky_plus_original_data_subset$p_scores_upper[range_pomynky], 
+         col= c( rep("#005BBB", 2), rep("#FFD500", (length(range_pomynky)-2)) ), 
          legend = TRUE, 
          border =  TRUE, 
          #xlim = c(1, 5), 
-         ylim = c(p_score_min_pominki-15, p_score_max_pominki+15), 
+         ylim = c(p_score_min_pomynky-15, p_score_max_pomynky+15), 
          args.legend = list(bty="n", border=TRUE), 
          ylab = "", 
          xlab = "", 
          main = "P-Scores (in Percent) for 2020-2021\nGoogle Trend: \"pominki\"",
-         # names.arg = as.character(p_scores_frame_pominki_jan_june$Month), 
-         names.arg = prophet_predictions_pominki_plus_original_data_subset$year_month_text[range_pominki], 
+         # names.arg = as.character(p_scores_frame_pomynky_jan_june$Month), 
+         names.arg = prophet_predictions_pomynky_plus_original_data_subset$year_month_text[range_pomynky], 
          cex.names = 1.25, 
          cex.lab = 2, 
          cex.axis = 1.75,
@@ -789,16 +789,16 @@ text(x, y, txt, cex = 4)
 
 
 
-# pominki
+# pomynky
 
 # Fifths graph
 
-value_combine <- c(prophet_predictions_pominki_plus_original_data_subset$yhat_upper, 
-                   prophet_predictions_pominki_plus_original_data_subset$y)
+value_combine <- c(prophet_predictions_pomynky_plus_original_data_subset$yhat_upper, 
+                   prophet_predictions_pomynky_plus_original_data_subset$y)
 
 
-plot(x = as.integer(prophet_predictions_pominki_plus_original_data_subset$ds),
-     y = prophet_predictions_pominki_plus_original_data_subset$yhat_upper,
+plot(x = as.integer(prophet_predictions_pomynky_plus_original_data_subset$ds),
+     y = prophet_predictions_pomynky_plus_original_data_subset$yhat_upper,
      col = "#005BBB",
      # col = color_01, 
      lwd = 5,
@@ -823,8 +823,8 @@ plot(x = as.integer(prophet_predictions_pominki_plus_original_data_subset$ds),
      cex.main = 1.6,
      cex.sub = 2
 )
-lines(x = as.integer(prophet_predictions_pominki_plus_original_data_subset$ds),
-      y = prophet_predictions_pominki_plus_original_data_subset$yhat_upper,
+lines(x = as.integer(prophet_predictions_pomynky_plus_original_data_subset$ds),
+      y = prophet_predictions_pomynky_plus_original_data_subset$yhat_upper,
       col = "#005BBB",
       #col = "#00bb61",
       # col = color_01, 
@@ -833,8 +833,8 @@ lines(x = as.integer(prophet_predictions_pominki_plus_original_data_subset$ds),
       # pch = shape_01,
       # pch = 17,
       type = "p")
-lines(x = as.integer(prophet_predictions_pominki_plus_original_data_subset$ds)[range_pominki_last18],
-      y = prophet_predictions_pominki_plus_original_data_subset$yhat_upper[range_pominki_last18],
+lines(x = as.integer(prophet_predictions_pomynky_plus_original_data_subset$ds)[range_pomynky_last18],
+      y = prophet_predictions_pomynky_plus_original_data_subset$yhat_upper[range_pomynky_last18],
       # col = "#005BBB",
       col = "#FFD500",
       # col = color_01, 
@@ -843,8 +843,8 @@ lines(x = as.integer(prophet_predictions_pominki_plus_original_data_subset$ds)[r
       # pch = shape_01,
       # pch = 17,
       type = "l")
-lines(x = as.integer(prophet_predictions_pominki_plus_original_data_subset$ds)[range_pominki_last18],
-      y = prophet_predictions_pominki_plus_original_data_subset$yhat_upper[range_pominki_last18],
+lines(x = as.integer(prophet_predictions_pomynky_plus_original_data_subset$ds)[range_pomynky_last18],
+      y = prophet_predictions_pomynky_plus_original_data_subset$yhat_upper[range_pomynky_last18],
       #col = "#005BBB",
       col = "#FFD500",
       # col = color_01, 
@@ -853,8 +853,8 @@ lines(x = as.integer(prophet_predictions_pominki_plus_original_data_subset$ds)[r
       # pch = shape_01,
       # pch = 17,
       type = "p")
-lines(x = as.integer(prophet_predictions_pominki_plus_original_data_subset$ds),
-      y = prophet_predictions_pominki_plus_original_data_subset$y,
+lines(x = as.integer(prophet_predictions_pomynky_plus_original_data_subset$ds),
+      y = prophet_predictions_pomynky_plus_original_data_subset$y,
       #col = "#005BBB",
       col = "#00bb61",
       # col = color_01, 
@@ -863,8 +863,8 @@ lines(x = as.integer(prophet_predictions_pominki_plus_original_data_subset$ds),
       # pch = shape_01,
       # pch = 17,
       type = "l")
-lines(x = as.integer(prophet_predictions_pominki_plus_original_data_subset$ds),
-      y = prophet_predictions_pominki_plus_original_data_subset$y,
+lines(x = as.integer(prophet_predictions_pomynky_plus_original_data_subset$ds),
+      y = prophet_predictions_pomynky_plus_original_data_subset$y,
       #col = "#005BBB",
       col = "#00bb61",
       # col = color_01, 
@@ -893,20 +893,20 @@ legend( x = "topleft",
 # X-axis
 # labels FAQ -> http://www.r-bloggers.com/rotated-axis-labels-in-r-plots/
 # Creating labels by month and converting.
-initial_date <- min(as.integer(prophet_predictions_pominki_plus_original_data_subset$ds))
-final_date   <- max(as.integer(prophet_predictions_pominki_plus_original_data_subset$ds))
-number_of_dates <- length( as.integer(prophet_predictions_pominki_plus_original_data_subset$ds) )
+initial_date <- min(as.integer(prophet_predictions_pomynky_plus_original_data_subset$ds))
+final_date   <- max(as.integer(prophet_predictions_pomynky_plus_original_data_subset$ds))
+number_of_dates <- length( as.integer(prophet_predictions_pomynky_plus_original_data_subset$ds) )
 
 
 # Indexes to display
-x_indexes_to_display <-  seq( from  =  1, to  = length(prophet_predictions_pominki_plus_original_data_subset$ds),  by = 5 )
-# x_indexes_to_display <-  prophet_predictions_pominki_plus_original_data_subset$ds
+x_indexes_to_display <-  seq( from  =  1, to  = length(prophet_predictions_pomynky_plus_original_data_subset$ds),  by = 5 )
+# x_indexes_to_display <-  prophet_predictions_pomynky_plus_original_data_subset$ds
 # x_indexes_to_display[1] <- 1
 # Actual lab elements
-x_tlab <- prophet_predictions_pominki_plus_original_data_subset$ds[x_indexes_to_display]
+x_tlab <- prophet_predictions_pomynky_plus_original_data_subset$ds[x_indexes_to_display]
 # ctual lab labels
-# x_lablist  <- as.character( p_scores_frame_pominki_jan_june$Month )
-x_lablist  <- as.character( prophet_predictions_pominki_plus_original_data_subset$year_month_text[x_indexes_to_display] )
+# x_lablist  <- as.character( p_scores_frame_pomynky_jan_june$Month )
+x_lablist  <- as.character( prophet_predictions_pomynky_plus_original_data_subset$year_month_text[x_indexes_to_display] )
 axis(1, at = x_tlab, labels = FALSE)
 text(x = x_tlab, y=par()$usr[3]-0.03*(par()$usr[4]-par()$usr[3]), labels = x_lablist, srt=45, adj=1, xpd=TRUE, cex = 1.5)
 
@@ -1163,7 +1163,7 @@ dev.off()
 
 
 # Generating pdf output.
-pdf( paste( "../Plots/FigureTBD03b.pdf", sep = ""), height = 15, width = 25)
+pdf( paste( "../../Plots/FigureTBD03b.pdf", sep = ""), height = 15, width = 25)
 # Defining the number of plots
 par( par(mfrow=c(3,2)),  mar=c(7.1, 5.1, 5.1, 2.1)  )
 # par( par(mfrow=c(3,2), by.col = TRUE),  mar=c(7.1, 5.1, 5.1, 2.1)  )
@@ -1383,28 +1383,28 @@ text(x, y, txt, cex = 4)
 
 
 
-# pominki
+# pomynky
 
 # Second plot
 
-lower_index_pominki <- max(which(prophet_predictions_pominki_plus_original_data_subset$ds < cut_date)) + 1
-upper_index_pominki <- length(prophet_predictions_pominki_plus_original_data_subset$p_scores_upper)
-range_pominki <- c(lower_index_pominki:upper_index_pominki)
-pandemic_data_length = upper_index_pominki - max(which(prophet_predictions_pominki_plus_original_data_subset$ds < pandemic_start))
-range_pominki_last18 <- c((upper_index_pominki - pandemic_data_length + 1):upper_index_pominki)
+lower_index_pomynky <- max(which(prophet_predictions_pomynky_plus_original_data_subset$ds < cut_date)) + 1
+upper_index_pomynky <- length(prophet_predictions_pomynky_plus_original_data_subset$p_scores_upper)
+range_pomynky <- c(lower_index_pomynky:upper_index_pomynky)
+pandemic_data_length = upper_index_pomynky - max(which(prophet_predictions_pomynky_plus_original_data_subset$ds < pandemic_start))
+range_pomynky_last18 <- c((upper_index_pomynky - pandemic_data_length + 1):upper_index_pomynky)
 
-barplot( prophet_predictions_pominki_plus_original_data_subset$p_scores_upper[range_pominki], 
-         col= c( rep("#005BBB", 2), rep("#FFD500", (length(range_pominki)-2)) ), 
+barplot( prophet_predictions_pomynky_plus_original_data_subset$p_scores_upper[range_pomynky], 
+         col= c( rep("#005BBB", 2), rep("#FFD500", (length(range_pomynky)-2)) ), 
          legend = TRUE, 
          border =  TRUE, 
          #xlim = c(1, 5), 
-         ylim = c(p_score_min_pominki-15, p_score_max_pominki+15), 
+         ylim = c(p_score_min_pomynky-15, p_score_max_pomynky+15), 
          args.legend = list(bty="n", border=TRUE), 
          ylab = "", 
          xlab = "", 
-         main = "P-Scores (in Percent) for 2020-2021\nGoogle Trend: \"pominki\"",
-         # names.arg = as.character(p_scores_frame_pominki_jan_june$Month), 
-         names.arg = prophet_predictions_pominki_plus_original_data_subset$year_month_text[range_pominki], 
+         main = "P-Scores (in Percent) for 2020-2021\nGoogle Trend: \"pomynky\"",
+         # names.arg = as.character(p_scores_frame_pomynky_jan_june$Month), 
+         names.arg = prophet_predictions_pomynky_plus_original_data_subset$year_month_text[range_pomynky], 
          cex.names = 1.25, 
          cex.lab = 2, 
          cex.axis = 1.75,
@@ -1440,16 +1440,16 @@ text(x, y, txt, cex = 4)
 
 
 
-# pominki
+# pomynky
 
 # Fifths graph
 
-value_combine <- c(prophet_predictions_pominki_plus_original_data_subset$yhat_upper, 
-                   prophet_predictions_pominki_plus_original_data_subset$y)
+value_combine <- c(prophet_predictions_pomynky_plus_original_data_subset$yhat_upper, 
+                   prophet_predictions_pomynky_plus_original_data_subset$y)
 
 
-plot(x = as.integer(prophet_predictions_pominki_plus_original_data_subset$ds),
-     y = prophet_predictions_pominki_plus_original_data_subset$yhat_upper,
+plot(x = as.integer(prophet_predictions_pomynky_plus_original_data_subset$ds),
+     y = prophet_predictions_pomynky_plus_original_data_subset$yhat_upper,
      col = "#005BBB",
      # col = color_01, 
      lwd = 5,
@@ -1458,7 +1458,7 @@ plot(x = as.integer(prophet_predictions_pominki_plus_original_data_subset$ds),
      # pch = 17,
      type = "l",
      # main = paste( colnames(proporions_all_locations_data_baseline)[compartment],  sep = ""),
-     main = "Fitted (2015-2019) and Predicted (2020-21) \nvs 2015-2021 Data\nGoogle Trend: \"pominki\"",
+     main = "Fitted (2015-2019) and Predicted (2020-21) \nvs 2015-2021 Data\nGoogle Trend: \"pomynky\"",
      # xlim = c( intersected_data$death_covid19,  combined_date_max  ),
      ylim = c( min(value_combine),
                max(value_combine) * 1.175 ),
@@ -1474,8 +1474,8 @@ plot(x = as.integer(prophet_predictions_pominki_plus_original_data_subset$ds),
      cex.main = 1.6,
      cex.sub = 2
 )
-lines(x = as.integer(prophet_predictions_pominki_plus_original_data_subset$ds),
-      y = prophet_predictions_pominki_plus_original_data_subset$yhat_upper,
+lines(x = as.integer(prophet_predictions_pomynky_plus_original_data_subset$ds),
+      y = prophet_predictions_pomynky_plus_original_data_subset$yhat_upper,
       col = "#005BBB",
       #col = "#00bb61",
       # col = color_01, 
@@ -1484,8 +1484,8 @@ lines(x = as.integer(prophet_predictions_pominki_plus_original_data_subset$ds),
       # pch = shape_01,
       # pch = 17,
       type = "p")
-lines(x = as.integer(prophet_predictions_pominki_plus_original_data_subset$ds)[range_pominki_last18],
-      y = prophet_predictions_pominki_plus_original_data_subset$yhat_upper[range_pominki_last18],
+lines(x = as.integer(prophet_predictions_pomynky_plus_original_data_subset$ds)[range_pomynky_last18],
+      y = prophet_predictions_pomynky_plus_original_data_subset$yhat_upper[range_pomynky_last18],
       # col = "#005BBB",
       col = "#FFD500",
       # col = color_01, 
@@ -1494,8 +1494,8 @@ lines(x = as.integer(prophet_predictions_pominki_plus_original_data_subset$ds)[r
       # pch = shape_01,
       # pch = 17,
       type = "l")
-lines(x = as.integer(prophet_predictions_pominki_plus_original_data_subset$ds)[range_pominki_last18],
-      y = prophet_predictions_pominki_plus_original_data_subset$yhat_upper[range_pominki_last18],
+lines(x = as.integer(prophet_predictions_pomynky_plus_original_data_subset$ds)[range_pomynky_last18],
+      y = prophet_predictions_pomynky_plus_original_data_subset$yhat_upper[range_pomynky_last18],
       #col = "#005BBB",
       col = "#FFD500",
       # col = color_01, 
@@ -1504,8 +1504,8 @@ lines(x = as.integer(prophet_predictions_pominki_plus_original_data_subset$ds)[r
       # pch = shape_01,
       # pch = 17,
       type = "p")
-lines(x = as.integer(prophet_predictions_pominki_plus_original_data_subset$ds),
-      y = prophet_predictions_pominki_plus_original_data_subset$y,
+lines(x = as.integer(prophet_predictions_pomynky_plus_original_data_subset$ds),
+      y = prophet_predictions_pomynky_plus_original_data_subset$y,
       #col = "#005BBB",
       col = "#00bb61",
       # col = color_01, 
@@ -1514,8 +1514,8 @@ lines(x = as.integer(prophet_predictions_pominki_plus_original_data_subset$ds),
       # pch = shape_01,
       # pch = 17,
       type = "l")
-lines(x = as.integer(prophet_predictions_pominki_plus_original_data_subset$ds),
-      y = prophet_predictions_pominki_plus_original_data_subset$y,
+lines(x = as.integer(prophet_predictions_pomynky_plus_original_data_subset$ds),
+      y = prophet_predictions_pomynky_plus_original_data_subset$y,
       #col = "#005BBB",
       col = "#00bb61",
       # col = color_01, 
@@ -1544,20 +1544,20 @@ legend( x = "topleft",
 # X-axis
 # labels FAQ -> http://www.r-bloggers.com/rotated-axis-labels-in-r-plots/
 # Creating labels by month and converting.
-initial_date <- min(as.integer(prophet_predictions_pominki_plus_original_data_subset$ds))
-final_date   <- max(as.integer(prophet_predictions_pominki_plus_original_data_subset$ds))
-number_of_dates <- length( as.integer(prophet_predictions_pominki_plus_original_data_subset$ds) )
+initial_date <- min(as.integer(prophet_predictions_pomynky_plus_original_data_subset$ds))
+final_date   <- max(as.integer(prophet_predictions_pomynky_plus_original_data_subset$ds))
+number_of_dates <- length( as.integer(prophet_predictions_pomynky_plus_original_data_subset$ds) )
 
 
 # Indexes to display
-x_indexes_to_display <-  seq( from  =  1, to  = length(prophet_predictions_pominki_plus_original_data_subset$ds),  by = 5 )
-# x_indexes_to_display <-  prophet_predictions_pominki_plus_original_data_subset$ds
+x_indexes_to_display <-  seq( from  =  1, to  = length(prophet_predictions_pomynky_plus_original_data_subset$ds),  by = 5 )
+# x_indexes_to_display <-  prophet_predictions_pomynky_plus_original_data_subset$ds
 # x_indexes_to_display[1] <- 1
 # Actual lab elements
-x_tlab <- prophet_predictions_pominki_plus_original_data_subset$ds[x_indexes_to_display]
+x_tlab <- prophet_predictions_pomynky_plus_original_data_subset$ds[x_indexes_to_display]
 # ctual lab labels
-# x_lablist  <- as.character( p_scores_frame_pominki_jan_june$Month )
-x_lablist  <- as.character( prophet_predictions_pominki_plus_original_data_subset$year_month_text[x_indexes_to_display] )
+# x_lablist  <- as.character( p_scores_frame_pomynky_jan_june$Month )
+x_lablist  <- as.character( prophet_predictions_pomynky_plus_original_data_subset$year_month_text[x_indexes_to_display] )
 axis(1, at = x_tlab, labels = FALSE)
 text(x = x_tlab, y=par()$usr[3]-0.03*(par()$usr[4]-par()$usr[3]), labels = x_lablist, srt=45, adj=1, xpd=TRUE, cex = 1.5)
 
@@ -1591,28 +1591,28 @@ text(x, y, txt, cex = 4)
 
 
 
-# ritualni_poslugi
+# rytualni_posluhy
 
 # Third plot
 
-lower_index_ritualni_poslugi <- max(which(prophet_predictions_ritualni_poslugi_plus_original_data_subset$ds < cut_date)) + 1
-upper_index_ritualni_poslugi <- length(prophet_predictions_ritualni_poslugi_plus_original_data_subset$p_scores_upper)
-range_ritualni_poslugi <- c(lower_index_ritualni_poslugi:upper_index_ritualni_poslugi)
-pandemic_data_length = upper_index_ritualni_poslugi - max(which(prophet_predictions_ritualni_poslugi_plus_original_data_subset$ds < pandemic_start))
-range_ritualni_poslugi_last18 <- c((upper_index_ritualni_poslugi - pandemic_data_length + 1):upper_index_ritualni_poslugi)
+lower_index_rytualni_posluhy <- max(which(prophet_predictions_rytualni_posluhy_plus_original_data_subset$ds < cut_date)) + 1
+upper_index_rytualni_posluhy <- length(prophet_predictions_rytualni_posluhy_plus_original_data_subset$p_scores_upper)
+range_rytualni_posluhy <- c(lower_index_rytualni_posluhy:upper_index_rytualni_posluhy)
+pandemic_data_length = upper_index_rytualni_posluhy - max(which(prophet_predictions_rytualni_posluhy_plus_original_data_subset$ds < pandemic_start))
+range_rytualni_posluhy_last18 <- c((upper_index_rytualni_posluhy - pandemic_data_length + 1):upper_index_rytualni_posluhy)
 
-barplot( prophet_predictions_ritualni_poslugi_plus_original_data_subset$p_scores_upper[range_ritualni_poslugi], 
-         col= c( rep("#005BBB", 2), rep("#FFD500", (length(range_ritualni_poslugi)-2)) ), 
+barplot( prophet_predictions_rytualni_posluhy_plus_original_data_subset$p_scores_upper[range_rytualni_posluhy], 
+         col= c( rep("#005BBB", 2), rep("#FFD500", (length(range_rytualni_posluhy)-2)) ), 
          legend = TRUE, 
          border =  TRUE, 
          #xlim = c(1, 5), 
-         ylim = c(p_score_min_ritualni_poslugi-15, p_score_max_ritualni_poslugi+15), 
+         ylim = c(p_score_min_rytualni_posluhy-15, p_score_max_rytualni_posluhy+15), 
          args.legend = list(bty="n", border=TRUE), 
          ylab = "", 
          xlab = "", 
-         main = "P-Scores (in Percent) for 2020-2021\nGoogle Trend: \"ritualni poslugi\"",
-         # names.arg = as.character(p_scores_frame_ritualni_poslugi_jan_june$Month), 
-         names.arg = prophet_predictions_ritualni_poslugi_plus_original_data_subset$year_month_text[range_ritualni_poslugi], 
+         main = "P-Scores (in Percent) for 2020-2021\nGoogle Trend: \"rytualni posluhy\"",
+         # names.arg = as.character(p_scores_frame_rytualni_posluhy_jan_june$Month), 
+         names.arg = prophet_predictions_rytualni_posluhy_plus_original_data_subset$year_month_text[range_rytualni_posluhy], 
          cex.names = 1.25, 
          cex.lab = 2, 
          cex.axis = 1.75,
@@ -1651,16 +1651,16 @@ text(x, y, txt, cex = 4)
 
 
 
-# ritualni_poslugi
+# rytualni_posluhy
 
 # Fifths graph
 
-value_combine <- c(prophet_predictions_ritualni_poslugi_plus_original_data_subset$yhat_upper, 
-                   prophet_predictions_ritualni_poslugi_plus_original_data_subset$y)
+value_combine <- c(prophet_predictions_rytualni_posluhy_plus_original_data_subset$yhat_upper, 
+                   prophet_predictions_rytualni_posluhy_plus_original_data_subset$y)
 
 
-plot(x = as.integer(prophet_predictions_ritualni_poslugi_plus_original_data_subset$ds),
-     y = prophet_predictions_ritualni_poslugi_plus_original_data_subset$yhat_upper,
+plot(x = as.integer(prophet_predictions_rytualni_posluhy_plus_original_data_subset$ds),
+     y = prophet_predictions_rytualni_posluhy_plus_original_data_subset$yhat_upper,
      col = "#005BBB",
      # col = color_01, 
      lwd = 5,
@@ -1669,7 +1669,7 @@ plot(x = as.integer(prophet_predictions_ritualni_poslugi_plus_original_data_subs
      # pch = 17,
      type = "l",
      # main = paste( colnames(proporions_all_locations_data_baseline)[compartment],  sep = ""),
-     main = "Fitted (2015-2019) and Predicted (2020-21) \nvs 2015-2021 Data\nGoogle Trend: \"ritualni poslugi\"",
+     main = "Fitted (2015-2019) and Predicted (2020-21) \nvs 2015-2021 Data\nGoogle Trend: \"rytualni posluhy\"",
      # xlim = c( intersected_data$death_covid19,  combined_date_max  ),
      ylim = c( min(value_combine),
                max(value_combine) * 1.01 ),
@@ -1685,8 +1685,8 @@ plot(x = as.integer(prophet_predictions_ritualni_poslugi_plus_original_data_subs
      cex.main = 1.6,
      cex.sub = 2
 )
-lines(x = as.integer(prophet_predictions_ritualni_poslugi_plus_original_data_subset$ds),
-      y = prophet_predictions_ritualni_poslugi_plus_original_data_subset$yhat_upper,
+lines(x = as.integer(prophet_predictions_rytualni_posluhy_plus_original_data_subset$ds),
+      y = prophet_predictions_rytualni_posluhy_plus_original_data_subset$yhat_upper,
       col = "#005BBB",
       #col = "#00bb61",
       # col = color_01, 
@@ -1695,8 +1695,8 @@ lines(x = as.integer(prophet_predictions_ritualni_poslugi_plus_original_data_sub
       # pch = shape_01,
       # pch = 17,
       type = "p")
-lines(x = as.integer(prophet_predictions_ritualni_poslugi_plus_original_data_subset$ds)[range_ritualni_poslugi_last18],
-      y = prophet_predictions_ritualni_poslugi_plus_original_data_subset$yhat_upper[range_ritualni_poslugi_last18],
+lines(x = as.integer(prophet_predictions_rytualni_posluhy_plus_original_data_subset$ds)[range_rytualni_posluhy_last18],
+      y = prophet_predictions_rytualni_posluhy_plus_original_data_subset$yhat_upper[range_rytualni_posluhy_last18],
       # col = "#005BBB",
       col = "#FFD500",
       # col = color_01, 
@@ -1705,8 +1705,8 @@ lines(x = as.integer(prophet_predictions_ritualni_poslugi_plus_original_data_sub
       # pch = shape_01,
       # pch = 17,
       type = "l")
-lines(x = as.integer(prophet_predictions_ritualni_poslugi_plus_original_data_subset$ds)[range_ritualni_poslugi_last18],
-      y = prophet_predictions_ritualni_poslugi_plus_original_data_subset$yhat_upper[range_ritualni_poslugi_last18],
+lines(x = as.integer(prophet_predictions_rytualni_posluhy_plus_original_data_subset$ds)[range_rytualni_posluhy_last18],
+      y = prophet_predictions_rytualni_posluhy_plus_original_data_subset$yhat_upper[range_rytualni_posluhy_last18],
       #col = "#005BBB",
       col = "#FFD500",
       # col = color_01, 
@@ -1715,8 +1715,8 @@ lines(x = as.integer(prophet_predictions_ritualni_poslugi_plus_original_data_sub
       # pch = shape_01,
       # pch = 17,
       type = "p")
-lines(x = as.integer(prophet_predictions_ritualni_poslugi_plus_original_data_subset$ds),
-      y = prophet_predictions_ritualni_poslugi_plus_original_data_subset$y,
+lines(x = as.integer(prophet_predictions_rytualni_posluhy_plus_original_data_subset$ds),
+      y = prophet_predictions_rytualni_posluhy_plus_original_data_subset$y,
       #col = "#005BBB",
       col = "#00bb61",
       # col = color_01, 
@@ -1725,8 +1725,8 @@ lines(x = as.integer(prophet_predictions_ritualni_poslugi_plus_original_data_sub
       # pch = shape_01,
       # pch = 17,
       type = "l")
-lines(x = as.integer(prophet_predictions_ritualni_poslugi_plus_original_data_subset$ds),
-      y = prophet_predictions_ritualni_poslugi_plus_original_data_subset$y,
+lines(x = as.integer(prophet_predictions_rytualni_posluhy_plus_original_data_subset$ds),
+      y = prophet_predictions_rytualni_posluhy_plus_original_data_subset$y,
       #col = "#005BBB",
       col = "#00bb61",
       # col = color_01, 
@@ -1755,20 +1755,20 @@ legend( x = "topleft",
 # X-axis
 # labels FAQ -> http://www.r-bloggers.com/rotated-axis-labels-in-r-plots/
 # Creating labels by month and converting.
-initial_date <- min(as.integer(prophet_predictions_ritualni_poslugi_plus_original_data_subset$ds))
-final_date   <- max(as.integer(prophet_predictions_ritualni_poslugi_plus_original_data_subset$ds))
-number_of_dates <- length( as.integer(prophet_predictions_ritualni_poslugi_plus_original_data_subset$ds) )
+initial_date <- min(as.integer(prophet_predictions_rytualni_posluhy_plus_original_data_subset$ds))
+final_date   <- max(as.integer(prophet_predictions_rytualni_posluhy_plus_original_data_subset$ds))
+number_of_dates <- length( as.integer(prophet_predictions_rytualni_posluhy_plus_original_data_subset$ds) )
 
 
 # Indexes to display
-x_indexes_to_display <-  seq( from  =  1, to  = length(prophet_predictions_ritualni_poslugi_plus_original_data_subset$ds),  by = 5 )
-# x_indexes_to_display <-  prophet_predictions_ritualni_poslugi_plus_original_data_subset$ds
+x_indexes_to_display <-  seq( from  =  1, to  = length(prophet_predictions_rytualni_posluhy_plus_original_data_subset$ds),  by = 5 )
+# x_indexes_to_display <-  prophet_predictions_rytualni_posluhy_plus_original_data_subset$ds
 # x_indexes_to_display[1] <- 1
 # Actual lab elements
-x_tlab <- prophet_predictions_ritualni_poslugi_plus_original_data_subset$ds[x_indexes_to_display]
+x_tlab <- prophet_predictions_rytualni_posluhy_plus_original_data_subset$ds[x_indexes_to_display]
 # ctual lab labels
-# x_lablist  <- as.character( p_scores_frame_ritualni_poslugi_jan_june$Month )
-x_lablist  <- as.character( prophet_predictions_ritualni_poslugi_plus_original_data_subset$year_month_text[x_indexes_to_display] )
+# x_lablist  <- as.character( p_scores_frame_rytualni_posluhy_jan_june$Month )
+x_lablist  <- as.character( prophet_predictions_rytualni_posluhy_plus_original_data_subset$year_month_text[x_indexes_to_display] )
 axis(1, at = x_tlab, labels = FALSE)
 text(x = x_tlab, y=par()$usr[3]-0.03*(par()$usr[4]-par()$usr[3]), labels = x_lablist, srt=45, adj=1, xpd=TRUE, cex = 1.5)
 

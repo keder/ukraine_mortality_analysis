@@ -37,12 +37,12 @@ library(htmltab)
 
 # Fix 2021.04.27
 # Reeading individual pdf files
-ukraine_demographics_path <- "../Data/Ukraine_data/demographics.csv"
+ukraine_demographics_path <- "../data/demographics.csv"
 
 demographics_aggregated_2011_2020_detailed = read.csv(file = ukraine_demographics_path)
 
 # Saving the data as RData file.
-save(demographics_aggregated_2011_2020_detailed, file = paste("../R_Data/demographics_aggregated_2011_2020_detailed.RData"))
+save(demographics_aggregated_2011_2020_detailed, file = paste("../../R_Data/demographics_aggregated_2011_2020_detailed.RData"))
 
 demographics_aggregated_2011_2020 = data.frame(t(colSums(demographics_aggregated_2011_2020_detailed[which(demographics_aggregated_2011_2020_detailed$Age_Group < 70),-1])))
 ages_70 = c(70:79, "80 and over")
@@ -51,4 +51,4 @@ demographics_aggregated_2011_2020 = rbind(demographics_aggregated_2011_2020, dem
 demographics_aggregated_2011_2020$Age_Group = c("65-69", "70Up", "AllAges")
 
 # Saving the data as RData file.
-save(demographics_aggregated_2011_2020, file = paste("../R_Data/demographics_aggregated_2011_2020.RData"))
+save(demographics_aggregated_2011_2020, file = paste("../../R_Data/demographics_aggregated_2011_2020.RData"))

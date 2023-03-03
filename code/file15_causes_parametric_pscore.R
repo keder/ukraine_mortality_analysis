@@ -19,7 +19,7 @@ library(readxl)
 # library("prophet") - libary for time series forecasting.
 library("prophet")
 
-load(file = "../R_Data/mortality_causes_data.RData")
+load(file = "../../R_Data/mortality_causes_data.RData")
 
 pandemic_start <- as.Date("2020-03-15")
 
@@ -128,7 +128,7 @@ for (i in 2:ncol(mortality_causes_data))
     p_score_min <- min(prophet_pscores[, i])
     p_score_max <- max(prophet_pscores[, i])
 
-    pdf(paste0("../Plots/causes/prophet_pscores_", cause_names[i], ".pdf"), height = 15, width = 25)
+    pdf(paste0("../../Plots/causes/prophet_pscores_", cause_names[i], ".pdf"), height = 15, width = 25)
     # Definign the number of plots
     par(par(mfrow = c(2, 1)), mar = c(5.5, 5.1, 5.1, 2.1))
 
@@ -366,6 +366,6 @@ for (i in 2:ncol(mortality_causes_data))
 }
 
 # Saving the data as RData file.
-save(prophet_pscores, file = paste("../R_Data/prophet_pscores.RData"))
-save(prophet_pscores_lower, file = paste("../R_Data/prophet_pscores_lower.RData"))
-save(prophet_pscores_upper, file = paste("../R_Data/prophet_pscores_upper.RData"))
+save(prophet_pscores, file = paste("../../R_Data/prophet_pscores.RData"))
+save(prophet_pscores_lower, file = paste("../../R_Data/prophet_pscores_lower.RData"))
+save(prophet_pscores_upper, file = paste("../../R_Data/prophet_pscores_upper.RData"))

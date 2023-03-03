@@ -30,18 +30,18 @@ library(lmtest)
 
 
 # Loading the trends data as RData file.
-load( file = paste("../R_Data/google_trends_grob_data.RData") )
-load( file = paste("../R_Data/google_trends_pominki_data.RData") )
-load( file = paste("../R_Data/google_trends_ritualnie_uslugi_data.RData") )
-load( file = paste("../R_Data/google_trends_truna_data.RData") )
-load( file = paste("../R_Data/google_trends_ritualni_poslugi_data.RData") )
+load( file = paste("../../R_Data/google_trends_grob_data.RData") )
+load( file = paste("../../R_Data/google_trends_pomynky_data.RData") )
+load( file = paste("../../R_Data/google_trends_ritualnie_uslugi_data.RData") )
+load( file = paste("../../R_Data/google_trends_truna_data.RData") )
+load( file = paste("../../R_Data/google_trends_rytualni_posluhy_data.RData") )
 dim(google_trends_grob_data)
-dim(google_trends_pominki_data)
+dim(google_trends_pomynky_data)
 dim(google_trends_ritualnie_uslugi_data)
 ls()
 
 # Loading the mortality data as RData file.
-load( file = paste("../R_Data/ukraine_un_mortality_data_month_only_since_2015.RData") )
+load( file = paste("../../R_Data/ukraine_un_mortality_data_month_only_since_2015.RData") )
 dim(ukraine_un_mortality_data_month_only_since_2015)
 ls()
 
@@ -86,40 +86,40 @@ ccf_grob_scaled_smoothed <- ccf(x = merged_grob$incidence_scaled, y = merged_gro
 
 
 
-# pominki time series
-merged_pominki <- base::merge( x = google_trends_pominki_data, y = ukraine_un_mortality_data_month_only_since_2015, by.x = "Date", by.y =  "date_fixed"   )
+# pomynky time series
+merged_pomynky <- base::merge( x = google_trends_pomynky_data, y = ukraine_un_mortality_data_month_only_since_2015, by.x = "Date", by.y =  "date_fixed"   )
 # Geberating standardized values
-merged_pominki$pominki_scaled  <- 100 * merged_pominki$pominki / median(merged_pominki$pominki)
-merged_pominki$value_scaled <- 100 * merged_pominki$Value / median(merged_pominki$Value)
-sum(!merged_pominki$pominki_scaled  == merged_pominki$pominki)
+merged_pomynky$pomynky_scaled  <- 100 * merged_pomynky$pomynky / median(merged_pomynky$pomynky)
+merged_pomynky$value_scaled <- 100 * merged_pomynky$Value / median(merged_pomynky$Value)
+sum(!merged_pomynky$pomynky_scaled  == merged_pomynky$pomynky)
 
 
 # Add integer dates
-merged_pominki$Date_integer <- as.integer(merged_pominki$Date)
+merged_pomynky$Date_integer <- as.integer(merged_pomynky$Date)
 
 
 # loess fit_incidence_scaled
-loess_fit_pominki_incidence_scaled <- loess( value_scaled ~ Date_integer, data = merged_pominki, span = 0.25 )
-summary(loess_fit_pominki_incidence_scaled)
-names(loess_fit_pominki_incidence_scaled)
+loess_fit_pomynky_incidence_scaled <- loess( value_scaled ~ Date_integer, data = merged_pomynky, span = 0.25 )
+summary(loess_fit_pomynky_incidence_scaled)
+names(loess_fit_pomynky_incidence_scaled)
 
 # Predicted values
-merged_pominki$incidence_scaled <- predict(loess_fit_pominki_incidence_scaled)
+merged_pomynky$incidence_scaled <- predict(loess_fit_pomynky_incidence_scaled)
 
 
 
 # loess fit_predictor_scaled
-loess_fit_pominki_predictor_scaled <- loess( pominki_scaled ~ Date_integer, data = merged_pominki, span = 0.25 )
-summary(loess_fit_pominki_predictor_scaled)
-names(loess_fit_pominki_predictor_scaled)
+loess_fit_pomynky_predictor_scaled <- loess( pomynky_scaled ~ Date_integer, data = merged_pomynky, span = 0.25 )
+summary(loess_fit_pomynky_predictor_scaled)
+names(loess_fit_pomynky_predictor_scaled)
 
 # Predicted values
-merged_pominki$predictor_scaled <- predict(loess_fit_pominki_predictor_scaled)
+merged_pomynky$predictor_scaled <- predict(loess_fit_pomynky_predictor_scaled)
 
 
 # Creating ccf objects
-ccf_pominki_scaled          <- ccf(x = merged_pominki$value_scaled,     y = merged_pominki$pominki_scaled  )
-ccf_pominki_scaled_smoothed <- ccf(x = merged_pominki$incidence_scaled, y = merged_pominki$predictor_scaled  )
+ccf_pomynky_scaled          <- ccf(x = merged_pomynky$value_scaled,     y = merged_pomynky$pomynky_scaled  )
+ccf_pomynky_scaled_smoothed <- ccf(x = merged_pomynky$incidence_scaled, y = merged_pomynky$predictor_scaled  )
 
 
 
@@ -207,40 +207,40 @@ ccf_truna_scaled_smoothed <- ccf(x = merged_truna$incidence_scaled, y = merged_t
 
 
 
-# ritualni_poslugi time series
-merged_ritualni_poslugi <- base::merge( x = google_trends_ritualni_poslugi_data, y = ukraine_un_mortality_data_month_only_since_2015, by.x = "Date", by.y =  "date_fixed"   )
+# rytualni_posluhy time series
+merged_rytualni_posluhy <- base::merge( x = google_trends_rytualni_posluhy_data, y = ukraine_un_mortality_data_month_only_since_2015, by.x = "Date", by.y =  "date_fixed"   )
 # Geberating standardized values
-merged_ritualni_poslugi$ritualni_poslugi_scaled  <- 100 * merged_ritualni_poslugi$ritualni_poslugi / median(merged_ritualni_poslugi$ritualni_poslugi)
-merged_ritualni_poslugi$value_scaled <- 100 * merged_ritualni_poslugi$Value / median(merged_ritualni_poslugi$Value)
-sum(!merged_ritualni_poslugi$ritualni_poslugi_scaled  == merged_ritualni_poslugi$ritualni_poslugi)
+merged_rytualni_posluhy$rytualni_posluhy_scaled  <- 100 * merged_rytualni_posluhy$rytualni_posluhy / median(merged_rytualni_posluhy$rytualni_posluhy)
+merged_rytualni_posluhy$value_scaled <- 100 * merged_rytualni_posluhy$Value / median(merged_rytualni_posluhy$Value)
+sum(!merged_rytualni_posluhy$rytualni_posluhy_scaled  == merged_rytualni_posluhy$rytualni_posluhy)
 
 
 # Add integer dates
-merged_ritualni_poslugi$Date_integer <- as.integer(merged_ritualni_poslugi$Date)
+merged_rytualni_posluhy$Date_integer <- as.integer(merged_rytualni_posluhy$Date)
 
 
 # loess fit_incidence_scaled
-loess_fit_ritualni_poslugi_incidence_scaled <- loess( value_scaled ~ Date_integer, data = merged_ritualni_poslugi, span = 0.25 )
-summary(loess_fit_ritualni_poslugi_incidence_scaled)
-names(loess_fit_ritualni_poslugi_incidence_scaled)
+loess_fit_rytualni_posluhy_incidence_scaled <- loess( value_scaled ~ Date_integer, data = merged_rytualni_posluhy, span = 0.25 )
+summary(loess_fit_rytualni_posluhy_incidence_scaled)
+names(loess_fit_rytualni_posluhy_incidence_scaled)
 
 # Predicted values
-merged_ritualni_poslugi$incidence_scaled <- predict(loess_fit_ritualni_poslugi_incidence_scaled)
+merged_rytualni_posluhy$incidence_scaled <- predict(loess_fit_rytualni_posluhy_incidence_scaled)
 
 
 
 # loess fit_predictor_scaled
-loess_fit_ritualni_poslugi_predictor_scaled <- loess( ritualni_poslugi_scaled ~ Date_integer, data = merged_ritualni_poslugi, span = 0.25 )
-summary(loess_fit_ritualni_poslugi_predictor_scaled)
-names(loess_fit_ritualni_poslugi_predictor_scaled)
+loess_fit_rytualni_posluhy_predictor_scaled <- loess( rytualni_posluhy_scaled ~ Date_integer, data = merged_rytualni_posluhy, span = 0.25 )
+summary(loess_fit_rytualni_posluhy_predictor_scaled)
+names(loess_fit_rytualni_posluhy_predictor_scaled)
 
 # Predicted values
-merged_ritualni_poslugi$predictor_scaled <- predict(loess_fit_ritualni_poslugi_predictor_scaled)
+merged_rytualni_posluhy$predictor_scaled <- predict(loess_fit_rytualni_posluhy_predictor_scaled)
 
 
 # Creating ccf objects
-ccf_ritualni_poslugi_scaled          <- ccf(x = merged_ritualni_poslugi$value_scaled,     y = merged_ritualni_poslugi$ritualni_poslugi_scaled  )
-ccf_ritualni_poslugi_scaled_smoothed <- ccf(x = merged_ritualni_poslugi$incidence_scaled, y = merged_ritualni_poslugi$predictor_scaled  )
+ccf_rytualni_posluhy_scaled          <- ccf(x = merged_rytualni_posluhy$value_scaled,     y = merged_rytualni_posluhy$rytualni_posluhy_scaled  )
+ccf_rytualni_posluhy_scaled_smoothed <- ccf(x = merged_rytualni_posluhy$incidence_scaled, y = merged_rytualni_posluhy$predictor_scaled  )
 
 
 
@@ -249,7 +249,7 @@ ccf_ritualni_poslugi_scaled_smoothed <- ccf(x = merged_ritualni_poslugi$incidenc
 
 
 # Generating pdf output.
-pdf( paste( "../Plots/FigureTBD05a.pdf", sep = ""), height = 8, width = 20)
+pdf( paste( "../../Plots/FigureTBD05a.pdf", sep = ""), height = 8, width = 20)
 # Definign the number of plots
 par( par(mfrow=c(2,5)),  mar=c(5.1, 5.1, 3, 2.1)  )
 
@@ -270,8 +270,8 @@ plot(ccf_grob_scaled,
 
 
 # Second plot
-# pominki
-plot(ccf_pominki_scaled,
+# pomynky
+plot(ccf_pomynky_scaled,
      col = "#005BBB",
      lwd = 5,
      main = "Scaled CCF for \"pominki\"",
@@ -309,13 +309,26 @@ plot(ccf_truna_scaled,
      cex.sub = 2
 )
 
-
-# Third plot
-# ritualni_poslugi
-plot(ccf_ritualni_poslugi_scaled,
+# Fifth plot
+# pomynky
+plot(ccf_pomynky_scaled,
      col = "#005BBB",
      lwd = 5,
-     main = "Scaled CCF for \"ritualni poslugi\"",
+     main = "Scaled and Smoothed CCF for \"pomynky\"",
+     cex = 1,
+     cex.axis = 1.55,
+     cex.lab = 1.55,
+     cex.main = 1.55,
+     cex.sub = 2
+)
+
+
+# Third plot
+# rytualni_posluhy
+plot(ccf_rytualni_posluhy_scaled,
+     col = "#005BBB",
+     lwd = 5,
+     main = "Scaled CCF for \"rytualni posluhy\"",
      cex = 1,
      cex.axis = 1.55,
      cex.lab = 1.55,
@@ -340,8 +353,8 @@ plot(ccf_grob_scaled_smoothed,
 
 
 # Fifth plot
-# pominki
-plot(ccf_pominki_scaled_smoothed,
+# pomynky
+plot(ccf_pomynky_scaled_smoothed,
      col = "#005BBB",
      lwd = 5,
      main = "Scaled and Smoothed CCF for \"pominki\"",
@@ -379,13 +392,26 @@ plot(ccf_truna_scaled_smoothed,
      cex.sub = 2
 )
 
-
-# Sixth plot
-# ritualni_poslugi
-plot(ccf_ritualni_poslugi_scaled_smoothed,
+# Fifth plot
+# pomynky
+plot(ccf_pomynky_scaled_smoothed,
      col = "#005BBB",
      lwd = 5,
-     main = "Scaled and Smoothed CCF for \"ritualni poslugi\"",
+     main = "Scaled and Smoothed CCF for \"pomynky\"",
+     cex = 1,
+     cex.axis = 1.55,
+     cex.lab = 1.55,
+     cex.main = 1.55,
+     cex.sub = 2
+)
+
+
+# Sixth plot
+# rytualni_posluhy
+plot(ccf_rytualni_posluhy_scaled_smoothed,
+     col = "#005BBB",
+     lwd = 5,
+     main = "Scaled and Smoothed CCF for \"rytualni posluhy\"",
      cex = 1,
      cex.axis = 1.55,
      cex.lab = 1.55,

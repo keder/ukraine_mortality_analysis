@@ -17,7 +17,7 @@ library(methods)
 # Loading package requred to read library(readxl)
 library(readxl)
 
-load(file = "../R_Data/mortality_causes_data.RData")
+load(file = "../../R_Data/mortality_causes_data.RData")
 
 pandemic_start <- as.Date("2020-03-15")
 
@@ -56,7 +56,7 @@ for (i in 1:nrow(mortality_causes_data)) {
 }
 
 plot_pscore_graph <- function(name, y_values, x_values, params) {
-    pdf(paste0("../Plots/causes/pscore_", gsub("\\s+", "_", name), ".pdf"), height = 15, width = 25)
+    pdf(paste0("../../Plots/causes/pscore_", gsub("\\s+", "_", name), ".pdf"), height = 15, width = 25)
     par( par(mfrow=c(2,1)),  mar=c(5.5, 5.1, 5.1, 2.1)  )
 
     pandemic_data_length <- length(y_values) - max(which(x_values < pandemic_start))
