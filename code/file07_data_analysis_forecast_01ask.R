@@ -33,6 +33,8 @@ rm(list = ls(all = TRUE))
 
 # install.packages("forecast")
 # library("forecast") - libary for time series forecasting.
+library("aTSA")
+library("stats")
 library("forecast")
 
 # install.packages("prophet")
@@ -86,8 +88,18 @@ names(data_to_feed_truncated_five)
 AutoArimaModel_object_five <- Arima(as.vector(data_to_feed_truncated_five$y), order = c(12, 0, 12), include.drift = FALSE)
 AutoArimaModel_object_five
 
+arima_forecast <- function(x, h) {
+      return(forecast(Arima(x, order = c(12, 0, 12), include.drift = FALSE), h = h))
+}
+
 prediction_count_for_five <- dim(ukraine_un_mortality_data_month_only_since_2015)[1] - max(which(ukraine_un_mortality_data_month_only_since_2015$date_fixed < pandemic_start))
 AutoArimaModel_object_five_forecast <- forecast(AutoArimaModel_object_five, h = prediction_count_for_five)
+# Diagnostics of forecast
+pdf(paste("../../Plots/arima_predictions_five_plus_original_data_subset_diag.pdf", sep = ""), height = 15, width = 25)
+tsdiag(AutoArimaModel_object_five, plot=TRUE, cex=3, color="blue")
+dev.off()
+save(AutoArimaModel_object_five_forecast, file = paste("../../R_Data/arima_predictions_five_plus_original_data_subset_residuals.RData"))
+print(Box.test(AutoArimaModel_object_five_forecast$residuals, lag=12))
 
 # Saving values
 data_to_feed_full_five$y_hat <- c(AutoArimaModel_object_five$fitted, AutoArimaModel_object_five_forecast$mean)

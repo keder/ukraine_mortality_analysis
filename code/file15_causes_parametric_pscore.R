@@ -121,6 +121,12 @@ for (i in 2:ncol(mortality_causes_data))
     # Fixing dates
     prophet_predictions$ds <- as.Date(prophet_predictions$ds)
 
+    # Forecast diagnostics 
+    cv_results = cross_validation(prophet_object, period=30, initial = 365*4, horizon=365, units="days")
+    prophet_predictions_diag = performance_metrics(cv_results)
+    save(prophet_predictions_diag, file = paste0("../../R_Data/prophet_predictions_", cause_names[i], "_diag.RData"))
+
+
     prophet_pscores[, i] <- 100 * (values - prophet_predictions$yhat) / prophet_predictions$yhat
     prophet_pscores_lower[, i] <- 100 * (values - prophet_predictions$yhat_lower) / prophet_predictions$yhat_lower
     prophet_pscores_upper[, i] <- 100 * (values - prophet_predictions$yhat_upper) / prophet_predictions$yhat_upper

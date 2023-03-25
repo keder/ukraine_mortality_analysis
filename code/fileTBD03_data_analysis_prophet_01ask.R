@@ -86,6 +86,11 @@ data_to_feed_full_grob_only <- subset( data_to_feed_full_grob, select = -c(y) )
 prophet_predictions_grob <- predict(prophet_object_grob, data_to_feed_full_grob_only )
 # Fixing dates
 prophet_predictions_grob$ds <- as.Date(prophet_predictions_grob$ds)
+# Forecast diagnostics 
+cv_results = cross_validation(prophet_object_grob, period=30, initial = 365*4, horizon=365, units="days")
+prophet_predictions_grob_diag = performance_metrics(cv_results)
+save(prophet_predictions_grob_diag, file = paste0("../../R_Data/prophet_predictions_grob_diag.RData"))
+
 
 
 
@@ -181,6 +186,10 @@ data_to_feed_full_pomynky_only <- subset( data_to_feed_full_pomynky, select = -c
 prophet_predictions_pomynky <- predict(prophet_object_pomynky, data_to_feed_full_pomynky_only )
 # Fixing dates
 prophet_predictions_pomynky$ds <- as.Date(prophet_predictions_pomynky$ds)
+# Forecast diagnostics 
+cv_results = cross_validation(prophet_object_pomynky, period=30, initial = 365*4, horizon=365, units="days")
+prophet_predictions_pomynky_diag = performance_metrics(cv_results)
+save(prophet_predictions_pomynky_diag, file = paste0("../../R_Data/prophet_predictions_pomynky_diag.RData"))
 
 
 
@@ -271,6 +280,11 @@ data_to_feed_full_ritualnie_uslugi_only <- subset( data_to_feed_full_ritualnie_u
 prophet_predictions_ritualnie_uslugi <- predict(prophet_object_ritualnie_uslugi, data_to_feed_full_ritualnie_uslugi_only )
 # Fixing dates
 prophet_predictions_ritualnie_uslugi$ds <- as.Date(prophet_predictions_ritualnie_uslugi$ds)
+# Forecast diagnostics 
+cv_results = cross_validation(prophet_object_ritualnie_uslugi, period=30, initial = 365*4, horizon=365, units="days")
+prophet_predictions_ritualnie_uslugi_diag = performance_metrics(cv_results)
+save(prophet_predictions_ritualnie_uslugi_diag, file = paste0("../../R_Data/prophet_predictions_ritualnie_uslugi_diag.RData"))
+
 
 
 
@@ -357,6 +371,10 @@ data_to_feed_full_truna_only <- subset( data_to_feed_full_truna, select = -c(y) 
 prophet_predictions_truna <- predict(prophet_object_truna, data_to_feed_full_truna_only )
 # Fixing dates
 prophet_predictions_truna$ds <- as.Date(prophet_predictions_truna$ds)
+# Forecast diagnostics 
+cv_results = cross_validation(prophet_object_truna, period=30, initial = 365*4, horizon=365, units="days")
+prophet_predictions_truna_diag = performance_metrics(cv_results)
+save(prophet_predictions_truna_diag, file = paste0("../../R_Data/prophet_predictions_truna_diag.RData"))
 
 
 
@@ -447,6 +465,10 @@ data_to_feed_full_rytualni_posluhy_only <- subset( data_to_feed_full_rytualni_po
 prophet_predictions_rytualni_posluhy <- predict(prophet_object_rytualni_posluhy, data_to_feed_full_rytualni_posluhy_only )
 # Fixing dates
 prophet_predictions_rytualni_posluhy$ds <- as.Date(prophet_predictions_rytualni_posluhy$ds)
+# Forecast diagnostics 
+cv_results = cross_validation(prophet_object_rytualni_posluhy, period=30, initial = 365*4, horizon=365, units="days")
+prophet_predictions_rytualni_posluhy_diag = performance_metrics(cv_results)
+save(prophet_predictions_rytualni_posluhy_diag, file = paste0("../../R_Data/prophet_predictions_rytualni_posluhy_diag.RData"))
 
 
 

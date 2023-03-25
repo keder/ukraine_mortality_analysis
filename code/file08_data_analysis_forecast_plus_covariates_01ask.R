@@ -119,6 +119,13 @@ AutoArimaModel_object_five <-  Arima( y = as.vector(data_to_feed_truncated_five$
 
 pandemic_data_length_five <- dim(ukraine_un_mortality_data_month_only_since_2015)[1] - max(which(ukraine_un_mortality_data_month_only_since_2015$date_fixed < pandemic_start))
 AutoArimaModel_object_five_forecast <- forecast(AutoArimaModel_object_five, xreg = data_to_feed_truncated_five$Age65Up[(number_of_records_five - (pandemic_data_length_five - 1)):number_of_records_five], h = pandemic_data_length_five)
+# Diagnostics of forecast
+# Diagnostics of forecast
+pdf(paste("../../Plots/arima_predictions_five_plus_covariates_subset_diag.pdf", sep = ""), height = 15, width = 25)
+tsdiag(AutoArimaModel_object_five, plot=TRUE)
+dev.off()
+save(AutoArimaModel_object_five_forecast, file = paste("../../R_Data/arima_predictions_five_plus_covariates_residuals.RData"))
+print(Box.test(AutoArimaModel_object_five_forecast$residuals, lag=12))
 
 # Saving values
 data_to_feed_full_five$y_hat <- head(c(AutoArimaModel_object_five$fitted, AutoArimaModel_object_five_forecast$mean), dim(data_to_feed_full_five)[1])

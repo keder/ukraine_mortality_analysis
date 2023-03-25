@@ -112,6 +112,11 @@ data_to_feed_full_five_dates_only <- subset(data_to_feed_full_five, select = -c(
 prophet_predictions_five <- predict(prophet_object_five, data_to_feed_full_five_dates_only)
 # Fixing dates
 prophet_predictions_five$ds <- as.Date(prophet_predictions_five$ds)
+# Forecast diagnostics 
+forecast_length <- nrow(ukraine_un_mortality_data_month_only_since_2015) - number_of_records_five
+cv_results = cross_validation(prophet_object_five, period=30, initial = 365*4, horizon=horizon, units="days")
+prophet_predictions_five_plus_original_data_Age65Up_diag = performance_metrics(cv_results)
+save(prophet_predictions_five_plus_original_data_Age65Up_diag, file = paste("../../R_Data/prophet_predictions_five_plus_original_data_Age65Up_diag.RData"))
 
 
 # Summaries for mortalities

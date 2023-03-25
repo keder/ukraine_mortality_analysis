@@ -84,6 +84,16 @@ data_to_feed_full_five_dates_only <- subset(data_to_feed_full_five, select = -c(
 prophet_predictions_five <- predict(prophet_object_five, data_to_feed_full_five_dates_only)
 # Fixing dates
 prophet_predictions_five$ds <- as.Date(prophet_predictions_five$ds)
+# Forecast diagnostics 
+horizon <- 365
+last_date <- max(data_to_feed_truncated_five$ds)
+# cutoffs = data_to_feed_truncated_five$ds[data_to_feed_truncated_five$ds < (last_date-horizon)]
+# cutoffs = cutoffs[2:length(cutoffs)]
+# print(cutoffs)
+cv_results = cross_validation(prophet_object_five, period=30, initial = 365*4, horizon=horizon, units="days")
+prophet_predictions_five_plus_original_data_diag = performance_metrics(prophet_predictions_five)
+save(prophet_predictions_five_plus_original_data_diag, file = paste("../../R_Data/prophet_predictions_five_plus_original_data_diag.RData"))
+
 
 
 # Summaries for mortalities

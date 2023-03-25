@@ -41,7 +41,7 @@ rm(list=ls(all=TRUE))
 library("prophet")
 
 
-
+pandemic_start <- as.Date("2020-03-15")
 
 # Reading previous datasets
 
@@ -98,6 +98,10 @@ data_to_feed_full_five_dates_only <- data.frame( ds = c( as.character( data_to_f
 prophet_predictions_extra_year <- predict(prophet_object_five, data_to_feed_full_five_dates_only )
 # Fixing dates
 prophet_predictions_extra_year$ds <- as.Date(prophet_predictions_extra_year$ds)
+# Forecast diagnostics 
+cv_results = cross_validation(prophet_object_five, period=30, initial = 365*4, horizon=365, units="days")
+prophet_predictions_extra_year_diag = performance_metrics(cv_results)
+save(prophet_predictions_extra_year_diag, file = paste("../../R_Data/prophet_predictions_extra_year_diag.RData"))
 
 
 # Summaries for mortalities
