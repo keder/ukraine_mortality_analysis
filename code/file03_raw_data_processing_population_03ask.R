@@ -31,10 +31,6 @@ library(XML)
 # library(RCurl)
 library(rlist)
 
-# Alternative way to read html tables
-library(htmltab)
-
-
 # Fix 2021.04.27
 # Reeading individual pdf files
 ukraine_demographics_path <- "../data/demographics.csv"

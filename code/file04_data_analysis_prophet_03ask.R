@@ -91,7 +91,7 @@ last_date <- max(data_to_feed_truncated_five$ds)
 # cutoffs = cutoffs[2:length(cutoffs)]
 # print(cutoffs)
 cv_results = cross_validation(prophet_object_five, period=30, initial = 365*4, horizon=horizon, units="days")
-prophet_predictions_five_plus_original_data_diag = performance_metrics(prophet_predictions_five)
+prophet_predictions_five_plus_original_data_diag = performance_metrics(cv_results)
 save(prophet_predictions_five_plus_original_data_diag, file = paste("../../R_Data/prophet_predictions_five_plus_original_data_diag.RData"))
 
 
